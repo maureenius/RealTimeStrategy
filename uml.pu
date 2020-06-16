@@ -1,0 +1,202 @@
+@startuml name
+
+namespace Utils {
+    class Utils {
+        + {static}String GetDescription()
+    }
+
+
+}
+
+namespace Goods {
+    abstract GoodsEntity {
+        + GoodsType goodsType
+        - int quality
+        - int transportCost
+    }
+
+    class Goods {
+
+    }
+
+    enum GoodsType {
+        + FLOUR
+        + SUGAR
+        + COOKIE
+    }
+
+    GoodsEntity <|-- Goods
+    Goods *- GoodsType
+
+    Utils.Utils <.. GoodsEntity
+}
+
+namespace Race {
+    enum RaceType {
+        + HUMAN
+        + ELF
+    }
+
+    abstract RaceEntity {
+        + RaceType raceType
+        + String name
+        - [ConsumptionTrait] consumptionTraits
+        - double faithWeight
+    }
+
+    class ConsumptionTrait {
+        - Goods.GoodsType consumptionGoods
+        - double consumptionWeight
+    }
+
+    RaceEntity *- RaceType
+    RaceEntity *- ConsumptionTrait
+    ConsumptionTrait *- Goods.GoodsType
+    Utils.Utils <.. RaceEntity
+}
+
+namespace World {
+    class World {
+        + void DoOneTurn()
+        - Town.TownEntity towns
+        - Territory.TerritoryEntity territories
+        - Region.RegionEntity regions
+        - Route.RouteEntity routes
+        - Goods.GoodsEntity goods
+        - Race.RaceEntity races
+    }
+
+    World o-- Town.TownEntity
+    World o-- Territory.TerritoryEntity
+    World o-- Region.RegionEntity
+    World o-- Route.RouteEntity
+    World o-- Goods.GoodsEntity
+    World o-- Race.RaceEntity
+}
+
+namespace Territory {
+    abstract TerritoryEntity {
+        - [Town.TownEntity] ownedTowns
+        - [CommandEntity] selectedCommands
+        - int money 
+        - int faith
+        + void DoOneTurn()
+    }
+
+    class PlayerTerritory {
+    }
+
+    class AITerritory {
+
+    }
+
+    abstract CommandEntity {
+        
+    }
+
+    TerritoryEntity o-- CommandEntity
+    TerritoryEntity o-- Town.TownEntity
+    TerritoryEntity <|-- PlayerTerritory
+    TerritoryEntity <|-- AITerritory
+}
+
+namespace Town {
+    enum TownType {
+        + Port
+        + Inland
+    }
+
+    abstract TownEntity {
+        - int id
+        - String name
+        - TownType townType
+        - [Pop] pops
+        - [Route] connectedRoutes
+        + void DoOneTurn()
+        - void Produce()
+        - void Consume()
+        + void CollectFaith()
+        + void Export(Route)
+        + void Inport(Route)
+    }
+
+    class Port {
+        
+    }
+
+    class Inland {
+        
+    }
+
+    class ProduceAbility {
+        - Goods.GoodsEntity inputGoods
+        - Goods.GoodsEntity outputGoods
+        - int produceAmount
+        + Goods.GoodsEntity produce()
+    }
+
+    class Store {
+        - Goods.GoodsEntity goods
+        - int amount
+        - int amountLimit
+    }
+
+    class Pop {
+        - Race.RaceEntity race
+        - int population
+    }
+
+    TownEntity *- TownType
+    TownEntity <|-- Port
+    TownEntity <|-- Inland
+    TownEntity o-- ProduceAbility
+    TownEntity o-- Store
+    TownEntity *- Pop
+
+    Store o-- Goods.GoodsEntity
+    Store <.. ProduceAbility
+
+    Goods.GoodsEntity <.. ProduceAbility
+
+    Pop *- Race.RaceEntity
+}
+
+namespace Region {
+    abstract RegionEntity {
+        - [City.CityEntity] cities
+        - [Share] shares
+    }
+
+    class Share {
+        - Territory.TerritoryEntity owner
+        - int shareWeight
+    }
+
+    RegionEntity o-- Town.TownEntity
+    RegionEntity o-- Route.RouteEntity
+}
+
+namespace Route {
+    abstract RouteEntity {
+        - City.CityEntity vartex1
+        - City.CityEntity vartex2
+        - int transportLimit
+        + void PushCargo()
+        + void TakeCargo()
+    }
+
+    class BusinessRoute {
+
+    }
+
+    class Cargo {
+        - Goods.GoodsEntity goods
+        - int amount
+        - int countdown
+    }
+
+    RouteEntity <|-- BusinessRoute
+    RouteEntity <. Town.TownEntity
+}
+
+@enduml
