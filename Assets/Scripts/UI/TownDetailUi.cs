@@ -23,7 +23,7 @@ namespace UI
         private void Start()
         {
             Observable.Interval(TimeSpan.FromMilliseconds(milliSecForUpdate))
-                .Where(_ => selectedTown != null)
+                .Where(_ => selectedTown != null && gameObject.activeInHierarchy)
                 .Subscribe(_ => UpdateTownDetail())
                 .AddTo(this);
         }

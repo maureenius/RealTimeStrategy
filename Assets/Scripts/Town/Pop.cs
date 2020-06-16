@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Assets.Scripts.Race;
 using Assets.Scripts.Goods;
 using Assets.Scripts.Town.Building;
+using ControllerInfo;
 
 namespace Assets.Scripts.Town {
     public class Pop: IProducable, INamed {
@@ -16,12 +17,11 @@ namespace Assets.Scripts.Town {
         public IList<ProduceAbility> ProduceAbilities { get; }
         public PopSlot WorkSlot { get; private set; }
 
-        public Pop(RaceEntity _race, PopSlot initialSlot)
+        public Pop(RaceEntity race)
         {
             Id = Guid.NewGuid();
-            Race = _race;
+            Race = race;
             ProduceAbilities = new List<ProduceAbility>();
-            WorkSlot = initialSlot;
 
             Name = Race.Name;
             TypeName = Race.Name;
@@ -45,6 +45,22 @@ namespace Assets.Scripts.Town {
         public void GetJob(PopSlot slot)
         {
             WorkSlot = slot;
+        }
+
+        public string GetWorkSlotTypeName()
+        {
+            return WorkSlot == null ? "無職" : WorkSlot.TypeName;
+        }
+
+        public PopSlotInfo ToInfo()
+        {
+            if (WorkSlot == null)
+            {
+                return new PopSlotInfo(Id, Name, TypeName);
+            }
+
+            return new PopSlotInfo(WorkSlot.Id, WorkSlot.Name, WorkSlot.TypeName, 
+                Id, Name, TypeName);
         }
     }
     

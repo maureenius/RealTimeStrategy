@@ -10,6 +10,8 @@ using Assets.Scripts.Town.Building;
 using Assets.Scripts.Town.Terrain;
 using Assets.Scripts.Util;
 using ControllerInfo;
+using ModestTree;
+using UnityEngine;
 using static Assets.Scripts.Goods.GoodsTypeMethod;
 
 namespace Assets.Scripts.Town {
@@ -25,7 +27,7 @@ namespace Assets.Scripts.Town {
         public readonly string TownName;
         public readonly TownType TownType;
         private IList<Pop> pops = new List<Pop>();
-        private IList<PopSlot> popSlots = new List<PopSlot>();
+        private IList<PopSlot> vacantSlots = new List<PopSlot>();
         
         private IList<Storage> storages = new List<Storage>();
         private IList<IBuildable> buildings = new List<IBuildable>();
@@ -43,33 +45,11 @@ namespace Assets.Scripts.Town {
             InitializePops(_raceEntity, _popNum);
         }
 
-        public void DevInitializePopSlots()
-        {
-            // 農場6
-            var pa = new ProduceAbility(GlobalGoods.GetInstance().FindByName("普通の小麦"), 3);
-            var farm = new SimpleProducer("農場", pa, 5);
-            for (var i = 0; i < 6; i++)
-            {
-                popSlots.Add(new PopSlot(farm));
-            }
-        }
-        
-        public Pop AddPop(RaceEntity race)
-        {
-            var unemployedSlot = new PopSlot();
-            popSlots.Add(unemployedSlot);
-            
-            var pop = new Pop(race, unemployedSlot);
-            pops.Add(pop);
-
-            return pop;
-        }
-
         public void InitializePops(RaceEntity race, int num) {
             pops.Clear();
             for(var i = 0; i < num; i++)
             {
-                AddPop(race);
+                pops.Add(new Pop(race));
             }
         }
 
@@ -96,9 +76,21 @@ namespace Assets.Scripts.Town {
 
         public List<(string slotTypeName, IEnumerable<PopSlotInfo>)> GetPopSlotInfo()
         {
-            var allInfo = popSlots.Select(slot => slot.ToInfo()).ToList();
+            var allInfo = pops.Select(pop => pop.ToInfo()).ToList();
+            allInfo.AddRange(vacantSlots.Select(slot => slot.ToInfo()));
             var slotNames = allInfo.GroupBy(info => info.SlotTypeName).Select(grouping => grouping.Key);
             return slotNames.Select(name => (name, allInfo.Where(info => info.SlotName == name))).ToList();
+        }
+        
+        public void Build(IBuildable template)
+        {
+            if (!(template.Clone() is IBuildable building)) return;
+            
+            buildings.Add(building);
+            for (var i = 0; i < building.ProduceNum; i++)
+            {
+                vacantSlots.Add(new PopSlot(building));
+            }
         }
 
         private void Produce() {
@@ -140,12 +132,11 @@ namespace Assets.Scripts.Town {
         {
             GetUnemployed().ForEach(pop =>
             {
-                var emptySlot = popSlots
-                    .FirstOrDefault(slot => slot.Pop == null && slot.TypeName != "無職");
-                if (emptySlot == null) return;
-                
-                pop.GetJob(emptySlot);
-                emptySlot.PutPop(pop);
+                if (vacantSlots.IsEmpty()) return;
+
+                var targetSlot = vacantSlots.First();
+                pop.GetJob(targetSlot);
+                vacantSlots.Remove(targetSlot);
             });
         }
 

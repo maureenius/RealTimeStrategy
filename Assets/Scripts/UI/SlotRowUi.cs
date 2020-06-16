@@ -63,12 +63,38 @@ namespace UI
 
         private Sprite FindSlotBackgroundSprite(string typeName)
         {
-            return Array.Find(slotBackgroundImages, sprite => sprite.name.Equals(typeName));
+            var filename = "";
+            switch (typeName)
+            {
+                case "無職":
+                    filename = "Unemployed";
+                    break;
+                case "農場":
+                    filename = "Farm";
+                    break;
+                default:
+                    throw new InvalidOperationException(typeName);
+            }
+            return Array.Find(slotBackgroundImages, sprite => sprite.name.Equals(filename));
         }
         
         private Sprite FindRaceFaceSprite(string typeName)
         {
-            return Array.Find(raceFaceImages, sprite => sprite.name.Equals(typeName));
+            if (typeName == null) return null;
+            
+            var filename = "";
+            switch (typeName)
+            {
+                case "人間":
+                    filename = "Human";
+                    break;
+                case "エルフ":
+                    filename = "Elf";
+                    break;
+                default:
+                    throw new InvalidOperationException(typeName);
+            }
+            return Array.Find(raceFaceImages, sprite => sprite.name.Equals(filename));
         }
     }
 }

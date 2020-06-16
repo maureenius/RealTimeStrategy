@@ -14,14 +14,11 @@ namespace Assets.Scripts.Town.Building {
         string TypeName { get; }
     }
 
-    public interface IBuildable : INamed, ICloneable
+    public interface IBuildable : INamed, ICloneable, IHasProduceAbility
     {
         // IEnumerable<TerrainEntity> buildableTerrain;
-    }
-
-    public interface IWorkable : INamed {
-        int WorkerLimit { get; }
-        bool CanWork(Pop pop);
+        int ProduceNum { get; }
+        PopSlot SlotTemplate { get; }
     }
 
     public interface IHasProduceAbility

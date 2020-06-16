@@ -97,8 +97,6 @@ namespace Assets.Scripts.World {
                 Regions.First(r => r.Name == regionName).AttachTowns(town);
                 Territories.First(t => t.Name == territoryName).AttachTowns(town);
 
-                town.DevInitializePopSlots();
-                
                 return town;
             }
 
@@ -107,6 +105,9 @@ namespace Assets.Scripts.World {
             Towns.Add(SetTown(3, "首都マクシムス", TownType.INLAND, "人間"));
             Towns.Add(SetTown(4, "ポートランド", TownType.PORT, "人間"));
             Towns.Add(SetTown(5, "クラフトランド", TownType.INLAND, "人間"));
+            
+            // Territory毎の初期化
+            Territories.ForEach(territory => territory.InitializeTowns());
         }
 
         private void InitializeRoutes()

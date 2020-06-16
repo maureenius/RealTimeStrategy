@@ -10,16 +10,17 @@ namespace ControllerInfo
         public Guid WorkerGuid { get; }
         public string WorkerName { get; }
         public string WorkerRaceName { get; }
-
-        public PopSlotInfo(Guid slotGuid, string slotName, string slotTypeName)
+        
+        public PopSlotInfo(Guid workerGuid, string workerName, string workerRaceName)
         {
-            SlotGuid = slotGuid;
-            SlotName = slotName;
-            SlotTypeName = slotTypeName;
-            WorkerGuid = Guid.Empty;
-            WorkerName = "";
-            WorkerRaceName = "";
+            SlotGuid = Guid.Empty;
+            SlotName = "無職";
+            SlotTypeName = "無職";
+            WorkerGuid = workerGuid;
+            WorkerName = workerName;
+            WorkerRaceName = workerRaceName;
         }
+        
         public PopSlotInfo(Guid slotGuid, string slotName, string slotTypeName,
             Guid workerGuid, string workerName, string workerRaceName)
         {
