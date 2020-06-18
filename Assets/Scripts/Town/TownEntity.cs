@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Net;
 using Assets.Scripts.Global;
 using Assets.Scripts.Goods;
 using Assets.Scripts.Route;
@@ -57,7 +59,6 @@ namespace Assets.Scripts.Town {
             OptimizeWorkers();
             Produce();
             Consume();
-            //CollectFaith();
             Import();
             Export();
         }
@@ -76,10 +77,15 @@ namespace Assets.Scripts.Town {
 
         public List<(string slotTypeName, IEnumerable<PopSlotInfo>)> GetPopSlotInfo()
         {
-            var allInfo = pops.Select(pop => pop.ToInfo()).ToList();
+            var allInfo = pops.Select(pop => pop.ToSlotInfo()).ToList();
             allInfo.AddRange(vacantSlots.Select(slot => slot.ToInfo()));
             var slotNames = allInfo.GroupBy(info => info.SlotTypeName).Select(grouping => grouping.Key);
             return slotNames.Select(name => (name, allInfo.Where(info => info.SlotName == name))).ToList();
+        }
+
+        public PopInfo GetPopInfo(Guid popId)
+        {
+            return pops.First(pop => pop.Id.Equals(popId)).ToInfo();
         }
         
         public void Build(IBuildable template)
@@ -111,7 +117,12 @@ namespace Assets.Scripts.Town {
                 pop.RequestProducts().ToList().ForEach(trait =>
                 {
                     var storage = GetStorageByGoodsType(trait.GoodsType);
-                    storage.Consume((int)trait.ConsumptionWeight);
+                    if (storage == null || storage.Amount < (int)trait.Weight)
+                    {
+                        pop.Shortage();
+                        return;
+                    }
+                    storage.Consume((int)trait.Weight);
                 });
             });
         }
@@ -140,11 +151,11 @@ namespace Assets.Scripts.Town {
             });
         }
 
-        private Storage GetStorage(Goods.GoodsEntity target) {
+        private Storage GetStorage(GoodsEntity target) {
             return storages.FirstOrDefault(storage => storage.Goods.Name == target.Name);
         }
 
-        private Storage GetStorageByGoodsType(Goods.GoodsType goodsType) {
+        private Storage GetStorageByGoodsType(GoodsType goodsType) {
             return storages.FirstOrDefault(storage => storage.Goods.GoodsType == goodsType);
         }
 
@@ -162,7 +173,7 @@ namespace Assets.Scripts.Town {
                 case TownType.INLAND:
                     return new Inland(_id, _townName, _townType, _race);
                 default:
-                    throw new System.ArgumentException(_townType.ToString());
+                    throw new ArgumentException(_townType.ToString());
             }
         }
     }

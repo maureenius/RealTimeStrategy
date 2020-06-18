@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using Assets.Scripts.Race;
 using Assets.Scripts.Goods;
 using Assets.Scripts.Town.Building;
+using Assets.Scripts.Util;
 using ControllerInfo;
+using UnityEngine;
 
 namespace Assets.Scripts.Town {
     public class Pop: IProducable, INamed {
@@ -14,7 +16,8 @@ namespace Assets.Scripts.Town {
         public string Name { get; }
         public string TypeName { get; }
         public RaceEntity Race { get; private set; }
-        public IList<ProduceAbility> ProduceAbilities { get; }
+        public List<ProduceAbility> ProduceAbilities { get; }
+        public IList<ConsumptionTrait> Consumptions { get; }
         public PopSlot WorkSlot { get; private set; }
 
         public Pop(RaceEntity race)
@@ -22,6 +25,7 @@ namespace Assets.Scripts.Town {
             Id = Guid.NewGuid();
             Race = race;
             ProduceAbilities = new List<ProduceAbility>();
+            Consumptions = new List<ConsumptionTrait>(race.ConsumptionTraits);
 
             Name = Race.Name;
             TypeName = Race.Name;
@@ -33,18 +37,13 @@ namespace Assets.Scripts.Town {
 
         public List<Cargo> Produce()
         {
-            var produceAbility = new List<ProduceAbility>(this.ProduceAbilities);
-            if (WorkSlot is IHasProduceAbility producableWorkplace)
-            {
-                produceAbility.AddRange(producableWorkplace.ProduceAbilities);
-            }
-            
-            return produceAbility.Select(pa => new Cargo(pa.OutputGoods, pa.ProduceAmount)).ToList();
+            return ProduceAbilities.Select(pa => new Cargo(pa.OutputGoods, pa.ProduceAmount)).ToList();
         }
 
         public void GetJob(PopSlot slot)
         {
             WorkSlot = slot;
+            ProduceAbilities.AddRange(WorkSlot.ProduceAbilities);
         }
 
         public string GetWorkSlotTypeName()
@@ -52,7 +51,12 @@ namespace Assets.Scripts.Town {
             return WorkSlot == null ? "無職" : WorkSlot.TypeName;
         }
 
-        public PopSlotInfo ToInfo()
+        public void Shortage()
+        {
+            Debug.Log("資源が足りません");
+        }
+
+        public PopSlotInfo ToSlotInfo()
         {
             if (WorkSlot == null)
             {
@@ -62,10 +66,18 @@ namespace Assets.Scripts.Town {
             return new PopSlotInfo(WorkSlot.Id, WorkSlot.Name, WorkSlot.TypeName, 
                 Id, Name, TypeName);
         }
+
+        public PopInfo ToInfo()
+        {
+            return new PopInfo(Id, Name, TypeName,
+                Consumptions.Select(trait => (trait.GoodsType.GetDescription(), trait.Weight)),
+                ProduceAbilities.Select(pa => (pa.OutputGoods.Name, (double)pa.ProduceAmount)),
+                WorkSlot?.Id ?? Guid.Empty, GetWorkSlotTypeName());
+        }
     }
     
     public interface IProducable {
-        IList<ProduceAbility> ProduceAbilities { get; }
+        List<ProduceAbility> ProduceAbilities { get; }
         List<Cargo> Produce();
     }
 }

@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using ControllerInfo;
+using Manager;
 using TMPro;
+using UniRx;
+using UniRx.Triggers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,12 +22,16 @@ namespace UI
 
         private Sprite[] slotBackgroundImages;
         private Sprite[] raceFaceImages;
+        private TownController town;
+        private PopContainerUi popContainerUi;
         
-        public void Initialize(string title, IEnumerable<PopSlotInfo> infos, Sprite[] slotImages, Sprite[] raceImages)
+        public void Initialize(string title, IEnumerable<PopSlotInfo> infos, Sprite[] slotImages, Sprite[] raceImages, TownController parentTown)
         {
             slotName.text = title;
             slotBackgroundImages = slotImages;
             raceFaceImages = raceImages;
+            town = parentTown;
+            popContainerUi = FindObjectOfType<PopContainerUi>();
             
             infos.ToList().ForEach(AddSlot);
         }
@@ -38,7 +45,13 @@ namespace UI
             if (info.WorkerGuid != Guid.Empty)
             {
                 var pop = Instantiate(popImagePrefab, container.transform);
-                pop.GetComponent<Image>().sprite = FindRaceFaceSprite(info.WorkerRaceName);
+                var popFaceSprite = FindRaceFaceSprite(info.WorkerRaceName);
+                pop.GetComponent<Image>().sprite = popFaceSprite;
+                
+                var trigger = pop.gameObject.AddComponent<ObservableEventTrigger>();
+                trigger.OnPointerDownAsObservable()
+                    .Subscribe(_ => popContainerUi.UpdateView(town.GetPopInfo(info.WorkerGuid), popFaceSprite))
+                    .AddTo(this);
             }
         }
 

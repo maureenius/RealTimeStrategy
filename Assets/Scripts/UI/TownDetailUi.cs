@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using ControllerInfo;
 using Manager;
-using TMPro;
 using UniRx;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -13,6 +9,7 @@ namespace UI
     public class TownDetailUi : MonoBehaviour
     {
         [SerializeField] private int milliSecForUpdate = 1000;
+        [SerializeField] private PopContainerUi popContainerUi;
         [SerializeField] private GameObject popSlotRowPrefab;
         [SerializeField] private GameObject slotContainer;
 
@@ -38,6 +35,7 @@ namespace UI
             if (raceFaceImages == null) LoadSprites();
             gameObject.SetActive(true);
             UpdateTownDetail();
+            popContainerUi.RefreshView();
         }
 
         private void ClearSlotContainer()
@@ -56,7 +54,8 @@ namespace UI
             {
                 var (slotTypeName, popSlotInfos) = info;
                 
-                AddSlotRow().GetComponent<SlotRowUi>().Initialize(slotTypeName, popSlotInfos, slotBackgroundImages, raceFaceImages);
+                AddSlotRow().GetComponent<SlotRowUi>()
+                    .Initialize(slotTypeName, popSlotInfos, slotBackgroundImages, raceFaceImages, selectedTown);
             });
         }
 

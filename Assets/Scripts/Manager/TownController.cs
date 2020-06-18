@@ -1,11 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Town;
-using Assets.Scripts.Town;
 using Assets.Scripts.Util;
 using ControllerInfo;
-using TMPro;
 using UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -30,6 +29,11 @@ namespace Manager
         public List<(string slotTypeName, IEnumerable<PopSlotInfo>)> GetPopSlotInfo()
         {
             return townModel.GetPopSlotInfo();
+        }
+
+        public PopInfo GetPopInfo(Guid popId)
+        {
+            return townModel.GetPopInfo(popId);
         }
 
         private void AddSelectEvents()
