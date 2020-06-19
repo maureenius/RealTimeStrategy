@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Assets.Scripts.Goods;
+using Assets.Scripts.Race;
 using Assets.Scripts.Town.Terrain;
 using static Assets.Scripts.Util.Util;
 
@@ -14,15 +15,20 @@ namespace Assets.Scripts.Town.Building {
         string TypeName { get; }
     }
 
-    public interface IBuildable : INamed, ICloneable, IHasProduceAbility
+    public interface IBuildable : INamed, ICloneable
     {
         // IEnumerable<TerrainEntity> buildableTerrain;
-        int ProduceNum { get; }
+        int SlotNum { get; }
         PopSlot SlotTemplate { get; }
     }
 
     public interface IHasProduceAbility
     {
         IList<ProduceAbility> ProduceAbilities { get; }
+    }
+
+    public interface IHasConsumptionTrait
+    {
+        IList<ConsumptionTrait> ConsumptionTraits { get; }
     }
 }

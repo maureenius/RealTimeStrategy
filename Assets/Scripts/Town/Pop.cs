@@ -17,7 +17,7 @@ namespace Assets.Scripts.Town {
         public string TypeName { get; }
         public RaceEntity Race { get; private set; }
         public List<ProduceAbility> ProduceAbilities { get; }
-        public IList<ConsumptionTrait> Consumptions { get; }
+        public List<ConsumptionTrait> Consumptions { get; }
         public PopSlot WorkSlot { get; private set; }
 
         public Pop(RaceEntity race)
@@ -43,7 +43,8 @@ namespace Assets.Scripts.Town {
         public void GetJob(PopSlot slot)
         {
             WorkSlot = slot;
-            ProduceAbilities.AddRange(WorkSlot.ProduceAbilities);
+            if (WorkSlot.ProduceAbilities != null) ProduceAbilities.AddRange(WorkSlot.ProduceAbilities);
+            if (WorkSlot.ConsumptionTraits != null) Consumptions.AddRange(WorkSlot.ConsumptionTraits);
         }
 
         public string GetWorkSlotTypeName()

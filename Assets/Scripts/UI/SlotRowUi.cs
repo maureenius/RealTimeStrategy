@@ -82,7 +82,13 @@ namespace UI
                 case "無職":
                     filename = "Unemployed";
                     break;
-                case "農場":
+                case "小麦農場":
+                    filename = "Farm";
+                    break;
+                case "さとうきび畑":
+                    filename = "Farm";
+                    break;
+                case "菓子工房":
                     filename = "Farm";
                     break;
                 default:

@@ -46,6 +46,8 @@ namespace Assets.Scripts.World {
             // debug
             // ひとまず小麦を生成
             GlobalGoods.GetInstance().Register(GoodsFactory.Create(GoodsType.FLOUR, "普通の小麦"));
+            GlobalGoods.GetInstance().Register(GoodsFactory.Create(GoodsType.SUGAR, "普通の砂糖"));
+            GlobalGoods.GetInstance().Register(GoodsFactory.Create(GoodsType.COOKIE, "普通のクッキー"));
         }
 
         private void InitializeRegion() {

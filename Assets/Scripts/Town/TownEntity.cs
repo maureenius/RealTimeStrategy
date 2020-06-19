@@ -39,7 +39,7 @@ namespace Assets.Scripts.Town {
         
         private bool isCapital;
 
-        public TownEntity(int _id, string _townName, TownType _townType, RaceEntity _raceEntity, int _popNum = 3, int _divisionNum = 10){
+        public TownEntity(int _id, string _townName, TownType _townType, RaceEntity _raceEntity, int _popNum = 5, int _divisionNum = 10){
             Id = _id;
             TownName = _townName;
             TownType = _townType;
@@ -93,7 +93,7 @@ namespace Assets.Scripts.Town {
             if (!(template.Clone() is IBuildable building)) return;
             
             buildings.Add(building);
-            for (var i = 0; i < building.ProduceNum; i++)
+            for (var i = 0; i < building.SlotNum; i++)
             {
                 vacantSlots.Add(new PopSlot(building));
             }

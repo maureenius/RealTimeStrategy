@@ -52,21 +52,19 @@ namespace Assets.Scripts.Territory {
 
         private void InitializeBuildingTemplate()
         {
-            AddBuildingTemplate(Farm());
+            AddBuildingTemplate(BuildingDatabase.FlourFarm());
+            AddBuildingTemplate(BuildingDatabase.SugarCaneField());
+            AddBuildingTemplate(BuildingDatabase.Confectionery());
         }
         
         public override void InitializeTowns()
         {
             towns.ToList().ForEach(town =>
             {
-                town.Build(buildingTemplates.First(template => template.Name == "農場"));
+                town.Build(buildingTemplates.First(template => template.Name == "小麦農場"));
+                town.Build(buildingTemplates.First(template => template.Name == "さとうきび畑"));
+                town.Build(buildingTemplates.First(template => template.Name == "菓子工房"));
             });
-        }
-
-        private SimpleProducer Farm()
-        {
-            var pa = new ProduceAbility(GlobalGoods.GetInstance().FindByName("普通の小麦"), 3);
-            return new SimpleProducer("農場", pa, 5);
         }
     }
 

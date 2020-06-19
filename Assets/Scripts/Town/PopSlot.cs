@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Assets.Scripts.Goods;
+using Assets.Scripts.Race;
 using Assets.Scripts.Town.Building;
 using Assets.Scripts.Town.Terrain;
 using ControllerInfo;
@@ -13,6 +14,7 @@ namespace Assets.Scripts.Town
         public string Name { get; }
         public string TypeName { get; }
         public IList<ProduceAbility> ProduceAbilities { get; }
+        public IList<ConsumptionTrait> ConsumptionTraits { get; }
         private IBuildable Source { get; }
 
         public PopSlot(IBuildable source)
@@ -21,7 +23,8 @@ namespace Assets.Scripts.Town
             Id = Guid.NewGuid();
             Name = Source.Name;
             TypeName = Source.TypeName;
-            ProduceAbilities = Source.ProduceAbilities;
+            if (Source is IHasProduceAbility pa) ProduceAbilities = pa.ProduceAbilities;
+            if (Source is IHasConsumptionTrait ct) ConsumptionTraits = ct.ConsumptionTraits;
         }
 
         public PopSlotInfo ToInfo()

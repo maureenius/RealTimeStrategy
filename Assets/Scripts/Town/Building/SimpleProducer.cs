@@ -7,12 +7,12 @@ using Assets.Scripts.Goods;
 using static Assets.Scripts.Util.Util;
 
 namespace Assets.Scripts.Town.Building {
-    public class SimpleProducer : IBuildable {
+    public class SimpleProducer : IBuildable, IHasProduceAbility {
         public Guid Id { get; }
         public string Name { get; }
         public string TypeName { get; }
         public IList<ProduceAbility> ProduceAbilities { get; }
-        public int ProduceNum { get; }
+        public int SlotNum { get; }
         public PopSlot SlotTemplate { get; }
 
         public SimpleProducer(string name, ProduceAbility produceAbility, int workerLimit) {
@@ -21,7 +21,7 @@ namespace Assets.Scripts.Town.Building {
             TypeName = name;
             ProduceAbilities = new List<ProduceAbility>();
             ProduceAbilities.Add(produceAbility);
-            ProduceNum = workerLimit;
+            SlotNum = workerLimit;
         }
 
         public bool CanWork(Pop pop) {
