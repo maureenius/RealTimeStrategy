@@ -8,6 +8,7 @@ using Assets.Scripts.Global;
 using Assets.Scripts.Goods;
 using Assets.Scripts.Route;
 using Assets.Scripts.Race;
+using Assets.Scripts.Territory;
 using Assets.Scripts.Town.Building;
 using Assets.Scripts.Town.Terrain;
 using Assets.Scripts.Util;
@@ -36,6 +37,7 @@ namespace Assets.Scripts.Town {
 
         private IList<IRoute> exportRoute = new List<IRoute>();
         private IList<IRoute> importRoute = new List<IRoute>();
+        private IList<ExportPlan> exportPlans = new List<ExportPlan>();
         
         private bool isCapital;
 
@@ -73,6 +75,28 @@ namespace Assets.Scripts.Town {
             } else {
                 exportRoute.Add(route);
             }
+        }
+
+        public void RemoveRoute(IRoute route, bool isImport)
+        {
+            if (isImport)
+            {
+                importRoute.Remove(route);
+            }
+            else
+            {
+                exportRoute.Remove(route);
+            }
+        }
+
+        public void AddExportPlan(ExportPlan plan)
+        {
+            exportPlans.Add(plan);
+        }
+
+        public void RemoveExportPlan(ExportPlan plan)
+        {
+            exportPlans.Remove(plan);
         }
 
         public List<(string slotTypeName, IEnumerable<PopSlotInfo>)> GetPopSlotInfo()
@@ -137,6 +161,7 @@ namespace Assets.Scripts.Town {
             });
         }
         private void Export() {
+            
         }
 
         private void OptimizeWorkers()

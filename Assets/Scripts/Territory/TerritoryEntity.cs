@@ -15,6 +15,7 @@ namespace Assets.Scripts.Territory {
         public string Name { get; private set; }
         protected IList<IBuildable> buildingTemplates = new List<IBuildable>();
         protected IList<ICommand> reservedCommands = new List<ICommand>();
+        protected IList<ExportPlan> exportPlans = new List<ExportPlan>();
 
         public TerritoryEntity(string name) {
             Name = name;
@@ -28,6 +29,12 @@ namespace Assets.Scripts.Territory {
         public void AttachTowns(IEnumerable<TownEntity> attachedTowns)
         {
             towns = towns.Union(attachedTowns).ToList();
+        }
+
+        public Util.Util.StatusCode AddExportPlan(ExportPlan plan)
+        {
+            if (!towns.Contains(plan.Sender)) return Util.Util.StatusCode.FAIL;
+            return Util.Util.StatusCode.SUCCESS;
         }
 
         public abstract void InitializeTowns();
@@ -65,6 +72,22 @@ namespace Assets.Scripts.Territory {
                 town.Build(buildingTemplates.First(template => template.Name == "さとうきび畑"));
                 town.Build(buildingTemplates.First(template => template.Name == "菓子工房"));
             });
+        }
+    }
+
+    public struct ExportPlan
+    {
+        public TownEntity Sender { get; }
+        public TownEntity Receiver { get; }
+        public GoodsEntity Goods { get; }
+        public int Amount { get; }
+        
+        public ExportPlan(TownEntity sender, TownEntity receiver, GoodsEntity goods, int amount)
+        {
+            Sender = sender;
+            Receiver = receiver;
+            Goods = goods;
+            Amount = amount;
         }
     }
 

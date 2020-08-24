@@ -4,18 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Assets.Scripts.Goods;
+using Assets.Scripts.Town;
 using static Assets.Scripts.Util.Util;
 
 namespace Assets.Scripts.Route {
     internal class Route : IRoute {
         public int Capacity { get; private set; }
+        public TownEntity Sender { get; }
+        public TownEntity Receiver { get; }
 
         private readonly Queue<(Cargo cargo, int timer)> cargos = new Queue<(Cargo cargo, int timer)>();
         private readonly int length;
 
-        public Route(int capacity, int length) {
+        public Route(int capacity, int length, TownEntity sender, TownEntity receiver) {
             Capacity = capacity;
             this.length = length;
+            Sender = sender;
+            Receiver = receiver;
         }
 
         public void DoOneTurn() {
