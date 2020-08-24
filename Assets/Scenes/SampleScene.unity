@@ -1915,7 +1915,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   milliSecForUpdate: 1000
-  popContainerUi: {fileID: 1839974809}
+  popContainerUi: {fileID: 0}
   popSlotRowPrefab: {fileID: 2347103476166769467, guid: eea86b913e47af74699fa93b68a6e835,
     type: 3}
   slotContainer: {fileID: 752578039}
