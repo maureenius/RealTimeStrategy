@@ -1,7 +1,7 @@
-﻿using Assets.Scripts.Route;
+﻿using Model.Route;
 using UnityEngine;
 
-namespace Route
+namespace Manager
 {
     public class RouteController : MonoBehaviour
     {

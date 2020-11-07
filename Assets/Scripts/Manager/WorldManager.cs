@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Linq;
+using Model.World;
+using Presenter;
 using UnityEngine;
-using Assets.Scripts.World;
 using TMPro;
 using UniRx;
 
@@ -53,11 +54,16 @@ namespace Manager
 
         private void InitializeTowns()
         {
-            var townObjects = townParent.GetComponentsInChildren<TownController>();
+            var townPresenters = townParent.GetComponentsInChildren<TownPresenter>();
 
-            world.Towns.ForEach(townModel =>
+            if (townPresenters.Length != world.Towns.Count)
             {
-                townObjects.FirstOrDefault(t => t.id == townModel.Id)?.Initialize(townModel);
+                throw new ArgumentException("townのpresentersとmodelの数が一致しません");
+            }
+            
+            world.Towns.ForEach(entity =>
+            {
+                townPresenters.First(presenter => presenter.townId == entity.Id).SetTown(entity);
             });
         }
     }

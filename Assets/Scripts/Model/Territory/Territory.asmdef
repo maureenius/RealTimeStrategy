@@ -1,0 +1,17 @@
+{
+    "name": "Territory",
+    "references": [
+        "GUID:8adf6238827c1be4aaf8c370be3ce2ac",
+        "GUID:23e7cb83ea955dc49952e6e2fbc78423",
+        "GUID:a85aa5ce370f9bb4f94fd7e0fd2f3f9c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,15 @@
+{
+    "name": "Race",
+    "references": [
+        "GUID:a85aa5ce370f9bb4f94fd7e0fd2f3f9c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

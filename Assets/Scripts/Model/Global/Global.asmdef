@@ -1,0 +1,16 @@
+{
+    "name": "Global",
+    "references": [
+        "GUID:a85aa5ce370f9bb4f94fd7e0fd2f3f9c",
+        "GUID:b79334901f7893f4f943a5a71a3f9d1d"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
