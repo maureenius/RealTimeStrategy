@@ -54,17 +54,7 @@ namespace Manager
 
         private void InitializeTowns()
         {
-            var townPresenters = townParent.GetComponentsInChildren<TownPresenter>();
-
-            if (townPresenters.Length != world.Towns.Count)
-            {
-                throw new ArgumentException("townのpresentersとmodelの数が一致しません");
-            }
-            
-            world.Towns.ForEach(entity =>
-            {
-                townPresenters.First(presenter => presenter.townId == entity.Id).SetTown(entity);
-            });
+            townParent.GetComponent<TownsPresenter>().Initialize(world.Towns);
         }
     }
 }

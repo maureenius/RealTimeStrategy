@@ -106,10 +106,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8178139738992187285}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c72d33da65211a4d9e9478891aed1b5, type: 3}
+  m_Script: {fileID: 11500000, guid: 9547846c27194047a088bef78977f3a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  townOutlineName: TownOutline
+  townId: 0
 --- !u!114 &1544996599064481925
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,7 +128,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 4195321510762589943}
-          m_TargetAssemblyTypeName: Presenter.TownPresenter, Presenter
+          m_TargetAssemblyTypeName: View.TownView, View
           m_MethodName: OnClicked
           m_Mode: 0
           m_Arguments:

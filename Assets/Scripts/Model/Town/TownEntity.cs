@@ -7,6 +7,7 @@ using Model.Goods;
 using Model.Race;
 using Model.Town.Building;
 using Model.Town.TownDetail;
+using UniRx;
 
 namespace Model.Town {
     public enum TownType {
@@ -22,7 +23,7 @@ namespace Model.Town {
         public readonly TownType TownType;
         private IList<Pop> pops = new List<Pop>();
         private IList<PopSlot> vacantSlots = new List<PopSlot>();
-        
+
         private IList<Storage> storages = new List<Storage>();
         private IList<IBuildable> buildings = new List<IBuildable>();
 
@@ -47,6 +48,9 @@ namespace Model.Town {
                 pops.Add(new Pop(race));
             }
         }
+        
+        private readonly Subject<Unit> _turnPassedSubject = new Subject<Unit>();
+        public IObservable<Unit> OnTurnPassed => _turnPassedSubject;
 
         public void DoOneTurn() {
             OptimizeWorkers();
@@ -54,9 +58,11 @@ namespace Model.Town {
             Consume();
             // Import();
             // Export();
+            
+            _turnPassedSubject.OnNext(Unit.Default);
         }
 
-        public List<(string goodsTypeName, int amount)> GetStoredProducts() {
+        public IEnumerable<(string goodsTypeName, int amount)> GetStoredProducts() {
             return storages.Select(s => (goodsTypeName: s.Goods.GoodsType.GetNameJpn(), amount: s.Amount)).ToList();
         }
 

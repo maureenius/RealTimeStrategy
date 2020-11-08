@@ -3,7 +3,8 @@
     "references": [
         "Town",
         "View",
-        "Util"
+        "Util",
+        "UniRx"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
