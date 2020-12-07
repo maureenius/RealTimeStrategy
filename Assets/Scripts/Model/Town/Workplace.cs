@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using ControllerInfo;
+using System.Linq;
 using Model.Goods;
 using Model.Race;
 using Model.Town.Building;
@@ -8,7 +8,21 @@ using Model.Util;
 
 namespace Model.Town
 {
-    public class PopSlot : INamed, IHasProduceAbility
+    public readonly struct WorkplaceData
+    {
+        public Guid SlotGuid { get; }
+        public string SlotName { get; }
+        public string SlotTypeName { get; }
+
+        public WorkplaceData(Guid slotGuid, string slotName, string slotTypeName)
+        {
+            SlotGuid = slotGuid;
+            SlotName = slotName;
+            SlotTypeName = slotTypeName;
+        }
+    }
+    
+    public class Workplace : INamed, IHasProduceAbility
     {
         public Guid Id { get; }
         public string Name { get; }
@@ -17,7 +31,7 @@ namespace Model.Town
         public IList<ConsumptionTrait> ConsumptionTraits { get; }
         private IBuildable Source { get; }
 
-        public PopSlot(IBuildable source)
+        public Workplace(IBuildable source)
         {
             Source = source;
             Id = Guid.NewGuid();
@@ -27,10 +41,9 @@ namespace Model.Town
             if (Source is IHasConsumptionTrait ct) ConsumptionTraits = ct.ConsumptionTraits;
         }
 
-        public PopSlotInfo ToInfo()
+        public WorkplaceData ToData()
         {
-            return new PopSlotInfo(Id, Name, TypeName, 
-                Guid.Empty, null, null);
+            return new WorkplaceData(Id, Name, TypeName);
         }
     }
 }

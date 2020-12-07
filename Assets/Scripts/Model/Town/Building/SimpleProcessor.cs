@@ -13,7 +13,7 @@ namespace Model.Town.Building
         public int SlotNum { get; }
         public IList<ProduceAbility> ProduceAbilities { get; }
         public IList<ConsumptionTrait> ConsumptionTraits { get; }
-        public PopSlot SlotTemplate { get; }
+        public Workplace SlotTemplate { get; }
 
         public SimpleProcessor(string name, ProduceAbility produceAbility, IEnumerable<ConsumptionTrait> consumptionTraits,
             int slotNum)

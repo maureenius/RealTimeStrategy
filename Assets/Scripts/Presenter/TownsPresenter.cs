@@ -12,6 +12,8 @@ namespace Presenter
 {
     public class TownsPresenter : MonoBehaviour
     {
+        [SerializeField] private Transform townRoot;
+        
         public IReadOnlyReactiveProperty<int> SelectedTownId => _selectedTownId;
         private IReactiveProperty<int> _selectedTownId = new IntReactiveProperty();
         private List<TownEntity> _entities;
@@ -19,13 +21,14 @@ namespace Presenter
         
         private readonly Subject<int> _outlineChangeSubject = new Subject<int>();
         public IObservable<int> OnOutlineChanged => _outlineChangeSubject;
+        public IObservable<int> OnDetailChanged => _outlineChangeSubject;
 
         public void Initialize(IEnumerable<TownEntity> entities)
         {
             _entities = new List<TownEntity>(entities);
             _entities.ForEach(InitializeTown);
 
-            _views = transform.GetComponentsInChildren<TownView>().ToList();
+            _views = townRoot.GetComponentsInChildren<TownView>().ToList();
             _views.ForEach(view =>
             {
                 view.OnSelected

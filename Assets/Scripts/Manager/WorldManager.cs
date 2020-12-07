@@ -11,8 +11,7 @@ namespace Manager
     public class WorldManager : MonoBehaviour
     {
         [SerializeField] private int milliSecForOneTurn = 1000;
-
-        [SerializeField] private GameObject townParent;
+        
         [SerializeField] private TextMeshProUGUI dateText;
         [SerializeField] private GameObject pauseImage;
         [SerializeField] private GameObject playImage;
@@ -54,7 +53,7 @@ namespace Manager
 
         private void InitializeTowns()
         {
-            townParent.GetComponent<TownsPresenter>().Initialize(world.Towns);
+            GetComponent<TownsPresenter>().Initialize(world.Towns);
         }
     }
 }

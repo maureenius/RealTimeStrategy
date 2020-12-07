@@ -10,7 +10,7 @@ namespace Model.Town.Building {
         // IEnumerable<TerrainEntity> buildableTerrain;
         int SlotNum { get; }
         string TypeName { get; }
-        PopSlot SlotTemplate { get; }
+        Workplace SlotTemplate { get; }
     }
 
     public interface IHasProduceAbility

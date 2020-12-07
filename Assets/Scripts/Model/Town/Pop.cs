@@ -1,14 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ControllerInfo;
 using Model.Goods;
 using Model.Race;
 using Model.Util;
 using UnityEngine;
-using INamed = Model.Util.INamed;
 
 namespace Model.Town {
+    public readonly struct PopData
+    {
+        public Guid Id { get; }
+        public string Name { get; }
+        public string TypeName { get; }
+        public List<(string goodsName, double amount)> Consumptions { get; }
+        public List<(string goodsName, double amount)> Produces { get; }
+        public Guid WorkplaceGuid { get; }
+        public string WorkplaceName { get; }
+
+        public PopData(Guid id, string name, string typeName,
+            IEnumerable<(string goodsName, double amount)> consumptions, 
+            IEnumerable<(string goodsName, double amount)> produces,
+            Guid workplaceGuid, string workplaceName)
+        {
+            Id = id;
+            Name = name;
+            TypeName = typeName;
+            Consumptions = consumptions.ToList();
+            Produces = produces.ToList();
+            WorkplaceGuid = workplaceGuid;
+            WorkplaceName = workplaceName;
+        }
+    }
+    
     public class Pop: IProducable, Util.INamed {
         public Guid Id { get; }
         public string Name { get; }
@@ -16,7 +39,7 @@ namespace Model.Town {
         public RaceEntity Race { get; private set; }
         public List<ProduceAbility> ProduceAbilities { get; }
         public List<ConsumptionTrait> Consumptions { get; }
-        public PopSlot WorkSlot { get; private set; }
+        public Workplace WorkSlot { get; private set; }
 
         public Pop(RaceEntity race)
         {
@@ -38,7 +61,7 @@ namespace Model.Town {
             return ProduceAbilities.Select(pa => new Cargo(pa.OutputGoods, pa.ProduceAmount)).ToList();
         }
 
-        public void GetJob(PopSlot slot)
+        public void GetJob(Workplace slot)
         {
             WorkSlot = slot;
             if (WorkSlot.ProduceAbilities != null) ProduceAbilities.AddRange(WorkSlot.ProduceAbilities);
@@ -55,20 +78,9 @@ namespace Model.Town {
             Debug.Log("資源が足りません");
         }
 
-        public PopSlotInfo ToSlotInfo()
+        public PopData ToData()
         {
-            if (WorkSlot == null)
-            {
-                return new PopSlotInfo(Id, Name, TypeName);
-            }
-
-            return new PopSlotInfo(WorkSlot.Id, WorkSlot.Name, WorkSlot.TypeName, 
-                Id, Name, TypeName);
-        }
-
-        public PopInfo ToInfo()
-        {
-            return new PopInfo(Id, Name, TypeName,
+            return new PopData(Id, Name, TypeName,
                 Consumptions.Select(trait => (trait.GoodsType.GetDescription(), trait.Weight)),
                 ProduceAbilities.Select(pa => (pa.OutputGoods.Name, (double)pa.ProduceAmount)),
                 WorkSlot?.Id ?? Guid.Empty, GetWorkSlotTypeName());

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using ControllerInfo;
 using Model.Goods;
 using Model.Race;
 using Model.Town.Building;
@@ -22,7 +21,8 @@ namespace Model.Town {
         public readonly string TownName;
         public readonly TownType TownType;
         private IList<Pop> pops = new List<Pop>();
-        private IList<PopSlot> vacantSlots = new List<PopSlot>();
+        private IList<Workplace> workplaces = new List<Workplace>();
+        private IList<Workplace> vacantWorkplaces = new List<Workplace>();
 
         private IList<Storage> storages = new List<Storage>();
         private IList<IBuildable> buildings = new List<IBuildable>();
@@ -96,17 +96,21 @@ namespace Model.Town {
         //     exportPlans.Remove(plan);
         // }
 
-        public List<(string slotTypeName, IEnumerable<PopSlotInfo>)> GetPopSlotInfo()
+        // public List<(string slotTypeName, IEnumerable<WorkplaceInfo>)> GetPopSlotInfo()
+        // {
+        //     var popInfos = pops.Select(pop => pop.ToInfo());
+        //     var slotNames = allInfo.GroupBy(info => info.SlotTypeName).Select(grouping => grouping.Key);
+        //     return slotNames.Select(name => (name, allInfo.Where(info => info.SlotName == name))).ToList();
+        // }
+
+        public List<PopData> GetPopData()
         {
-            var allInfo = pops.Select(pop => pop.ToSlotInfo()).ToList();
-            allInfo.AddRange(vacantSlots.Select(slot => slot.ToInfo()));
-            var slotNames = allInfo.GroupBy(info => info.SlotTypeName).Select(grouping => grouping.Key);
-            return slotNames.Select(name => (name, allInfo.Where(info => info.SlotName == name))).ToList();
+            return pops.Select(pop => pop.ToData()).ToList();
         }
 
-        public PopInfo GetPopInfo(Guid popId)
+        public List<WorkplaceData> GetWorkplaces()
         {
-            return pops.First(pop => pop.Id.Equals(popId)).ToInfo();
+            return workplaces.Select(ws => ws.ToData()).ToList();
         }
         
         public void Build(IBuildable template)
@@ -116,7 +120,7 @@ namespace Model.Town {
             buildings.Add(building);
             for (var i = 0; i < building.SlotNum; i++)
             {
-                vacantSlots.Add(new PopSlot(building));
+                vacantWorkplaces.Add(new Workplace(building));
             }
         }
 
@@ -165,11 +169,11 @@ namespace Model.Town {
         {
             GetUnemployed().ForEach(pop =>
             {
-                if (vacantSlots.Count == 0) return;
+                if (vacantWorkplaces.Count == 0) return;
 
-                var targetSlot = vacantSlots.First();
+                var targetSlot = vacantWorkplaces.First();
                 pop.GetJob(targetSlot);
-                vacantSlots.Remove(targetSlot);
+                vacantWorkplaces.Remove(targetSlot);
             });
         }
 

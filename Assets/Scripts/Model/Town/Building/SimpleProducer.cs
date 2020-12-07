@@ -10,7 +10,7 @@ namespace Model.Town.Building {
         public string TypeName { get; }
         public IList<ProduceAbility> ProduceAbilities { get; }
         public int SlotNum { get; }
-        public PopSlot SlotTemplate { get; }
+        public Workplace SlotTemplate { get; }
 
         public SimpleProducer(string name, ProduceAbility produceAbility, int workerLimit) {
             Id = Guid.NewGuid();

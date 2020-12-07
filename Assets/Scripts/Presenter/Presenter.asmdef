@@ -4,7 +4,8 @@
         "Town",
         "View",
         "Util",
-        "UniRx"
+        "UniRx",
+        "Database"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

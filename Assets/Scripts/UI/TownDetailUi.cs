@@ -1,5 +1,4 @@
 ﻿// using System;
-// using Manager;
 // using UniRx;
 // using UnityEngine;
 // using UnityEngine.EventSystems;
@@ -8,7 +7,7 @@
 // {
 //     public class TownDetailUi : MonoBehaviour
 //     {
-//         [SerializeField] private int milliSecForUpdate = 1000;
+//         // [SerializeField] private int milliSecForUpdate = 1000;
 //         [SerializeField] private PopContainerUi popContainerUi;
 //         [SerializeField] private GameObject popSlotRowPrefab;
 //         [SerializeField] private GameObject slotContainer;
