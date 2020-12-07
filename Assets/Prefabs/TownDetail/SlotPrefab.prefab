@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1390586398686392137}
   - component: {fileID: 5499085071163251904}
+  - component: {fileID: 4737851469158377898}
   m_Layer: 5
-  m_Name: SlotContainerPrefab
+  m_Name: SlotPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,7 +46,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1386506703774618835}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1679637790, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
@@ -56,3 +57,19 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &4737851469158377898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1386506703774618835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a55a79d6c3c4f30b5fd0d3e50de67fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slotImagePrefab: {fileID: 1917149299150651559, guid: 8bb560a2e4bf4ca45b8c01055804580d,
+    type: 3}
+  popImagePrefab: {fileID: 7531938732359423930, guid: 20608d330045f8c4b97e8b6b300786f7,
+    type: 3}

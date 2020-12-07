@@ -22,7 +22,6 @@ namespace Model.Town {
         public readonly TownType TownType;
         private IList<Pop> pops = new List<Pop>();
         private IList<Workplace> workplaces = new List<Workplace>();
-        private IList<Workplace> vacantWorkplaces = new List<Workplace>();
 
         private IList<Storage> storages = new List<Storage>();
         private IList<IBuildable> buildings = new List<IBuildable>();
@@ -120,7 +119,7 @@ namespace Model.Town {
             buildings.Add(building);
             for (var i = 0; i < building.SlotNum; i++)
             {
-                vacantWorkplaces.Add(new Workplace(building));
+                workplaces.Add(new Workplace(building));
             }
         }
 
@@ -167,13 +166,15 @@ namespace Model.Town {
 
         private void OptimizeWorkers()
         {
+            var vacant = GetVacantWorkplaces();
+            
             GetUnemployed().ForEach(pop =>
             {
-                if (vacantWorkplaces.Count == 0) return;
+                if (vacant.Count == 0) return;
 
-                var targetSlot = vacantWorkplaces.First();
+                var targetSlot = vacant.First();
                 pop.GetJob(targetSlot);
-                vacantWorkplaces.Remove(targetSlot);
+                vacant.Remove(targetSlot);
             });
         }
 
@@ -188,6 +189,11 @@ namespace Model.Town {
         private List<Pop> GetUnemployed()
         {
             return pops.Where(pop => pop.WorkSlot == null).ToList();
+        }
+
+        private List<Workplace> GetVacantWorkplaces()
+        {
+            return workplaces.Where(ws => !pops.Select(pop => pop.WorkSlot).Contains(ws)).ToList();
         }
     }
 

@@ -6,9 +6,9 @@ namespace View
 {
     public class PopSlotRowView : MonoBehaviour
     {
-        [SerializeField] private GameObject popSlotRow;
-        [SerializeField] private GameObject popSlotPrefab;
         [SerializeField] private TextMeshProUGUI title;
+        [SerializeField] private GameObject popSlotPrefab;
+        [SerializeField] private Transform slotContainer;
 
         public void Initialize(PopSlotRowViewData data)
         {
@@ -21,7 +21,8 @@ namespace View
         
         private void AddSlot(PopSlotViewData data)
         {
-            Instantiate(popSlotPrefab, popSlotRow.transform, true);
+            var slot = Instantiate(popSlotPrefab, slotContainer, true);
+            slot.GetComponent<PopSlotView>().Initialize(data);
         }
     }
 

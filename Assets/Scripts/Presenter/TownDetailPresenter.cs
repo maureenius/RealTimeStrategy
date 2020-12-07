@@ -62,15 +62,18 @@ namespace Presenter
                 {
                     var worker = pops.FirstOrDefault(pop => pop.WorkplaceGuid == wpData.SlotGuid);
 
-                    var viewData = new PopSlotViewData(wpData.SlotGuid,
-                        wpData.SlotName,
-                        wpData.SlotTypeName,
-                        imageDatabase.FindSlotBackground(wpData.SlotName),
-                        worker.Id, 
-                        worker.Name, 
-                        worker.TypeName,
-                        imageDatabase.FindRaceFaceImage(worker.Name)
-                        );
+                    var viewData = worker.Id != Guid.Empty
+                        ? new PopSlotViewData(wpData.SlotGuid,
+                            wpData.SlotName,
+                            wpData.SlotTypeName,
+                            imageDatabase.FindSlotBackground(wpData.SlotName),
+                            worker.Id,
+                            worker.Name,
+                            worker.TypeName,
+                            imageDatabase.FindRaceFaceImage(worker.Name)
+                        )
+                        : new PopSlotViewData(wpData.SlotGuid, wpData.SlotName, wpData.SlotTypeName,
+                            imageDatabase.FindSlotBackground(wpData.SlotName));
 
                     return viewData;
                 })) 

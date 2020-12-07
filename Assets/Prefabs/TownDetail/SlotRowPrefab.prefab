@@ -98,10 +98,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e24d9634fbdf40b0b19a4820ab542417, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  popSlotRow: {fileID: 7808727678892076990}
-  popSlotPrefab: {fileID: 1917149299150651559, guid: 8bb560a2e4bf4ca45b8c01055804580d,
-    type: 3}
   title: {fileID: 2347103477462250127}
+  popSlotPrefab: {fileID: 1386506703774618835, guid: 231e5a8b6ed2f12498729528899e625e,
+    type: 3}
+  slotContainer: {fileID: 6284170998574546600}
+  popSlotRow: {fileID: 7808727678892076990}
+  popPrefab: {fileID: 0}
 --- !u!1 &2347103476974157107
 GameObject:
   m_ObjectHideFlags: 0

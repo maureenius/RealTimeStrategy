@@ -1,11 +1,24 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace View
 {
     public class PopSlotView : MonoBehaviour
     {
+        [SerializeField] private GameObject slotImagePrefab;
+        [SerializeField] private GameObject popImagePrefab;
         
+        public void Initialize(PopSlotViewData data)
+        {
+            var background = Instantiate(slotImagePrefab, transform);
+            background.GetComponent<Image>().sprite = data.SlotBackgroundImage;
+
+            if (data.WorkerGuid == Guid.Empty) return;
+
+            var pop = Instantiate(popImagePrefab, transform);
+            pop.GetComponent<Image>().sprite = data.WorkerImage;
+        }
     }
 
     public readonly struct PopSlotViewData

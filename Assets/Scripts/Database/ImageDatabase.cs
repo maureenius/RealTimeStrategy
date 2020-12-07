@@ -41,6 +41,9 @@ namespace Database
                 case "人間":
                     filename = "Human";
                     break;
+                case "エルフ":
+                    filename = "Elf";
+                    break;
                 default:
                     throw new InvalidOperationException(typename);
             }
