@@ -19,11 +19,26 @@ namespace View
         public void Initialize(PopSlotViewData arg)
         {
             data = arg;
-            background.GetComponent<Image>().sprite = data.SlotBackgroundImage;
 
-            if (arg.WorkerGuid == Guid.Empty) return;
+            if (arg.SlotGuid == Guid.Empty)
+            {
+                background.GetComponent<Image>().sprite = null;
+                background.GetComponent<Image>().color = new Color(255, 255, 255, 0);
+            }
+            else
+            {
+                background.GetComponent<Image>().sprite = data.SlotBackgroundImage;
+            }
 
-            pop.GetComponent<Image>().sprite = data.WorkerImage;
+            if (arg.WorkerGuid == Guid.Empty)
+            {
+                pop.GetComponent<Image>().sprite = null;
+                pop.GetComponent<Image>().color = new Color(255, 255, 255, 0);
+            }
+            else
+            {
+                pop.GetComponent<Image>().sprite = data.WorkerImage;
+            }
         }
 
         public void OnClicked(BaseEventData e)
