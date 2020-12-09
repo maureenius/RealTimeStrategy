@@ -12,17 +12,23 @@ namespace View
         [SerializeField] private TextMeshProUGUI popProduct;
         [SerializeField] private TextMeshProUGUI popConsumption;
 
-        private void Start()
+        public void UpdatePop(PopSlotViewData data)
         {
-            RefreshView();
+            popFace.sprite = data.WorkerImage;
+            popName.text = data.WorkerName;
         }
 
-        private void RefreshView()
+        public void RefreshView()
         {
-            popFace.gameObject.SetActive(false);
+            popFace.sprite = null;
             popName.text = "";
             popProduct.text = "";
             popConsumption.text = "";
+        }
+        
+        private void Start()
+        {
+            RefreshView();
         }
     }
 }

@@ -1755,6 +1755,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   popSlotRowPrefab: {fileID: 2347103476166769467, guid: eea86b913e47af74699fa93b68a6e835,
     type: 3}
+  popContainer: {fileID: 1839974809}
   slotContainer: {fileID: 752578039}
 --- !u!1 &410752676
 GameObject:

@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TMPro;
+using UniRx;
 using UnityEngine;
 
 namespace View
@@ -9,6 +11,9 @@ namespace View
         [SerializeField] private TextMeshProUGUI title;
         [SerializeField] private GameObject popSlotPrefab;
         [SerializeField] private Transform slotContainer;
+        
+        private readonly Subject<PopSlotViewData> _onPopSelectedSubject = new Subject<PopSlotViewData>();
+        public IObservable<PopSlotViewData> OnPopSelected => _onPopSelectedSubject;
 
         public void Initialize(PopSlotRowViewData data)
         {
@@ -21,8 +26,12 @@ namespace View
         
         private void AddSlot(PopSlotViewData data)
         {
-            var slot = Instantiate(popSlotPrefab, slotContainer, true);
-            slot.GetComponent<PopSlotView>().Initialize(data);
+            var slot = Instantiate(popSlotPrefab, slotContainer, true).GetComponent<PopSlotView>();
+            slot.Initialize(data);
+            slot.OnSelected
+                .Where(slotData => slotData.WorkerGuid != Guid.Empty)
+                .Subscribe(slotData => _onPopSelectedSubject.OnNext(slotData))
+                .AddTo(this);
         }
     }
 

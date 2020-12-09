@@ -1,23 +1,33 @@
 ﻿using System;
+using UniRx;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace View
 {
     public class PopSlotView : MonoBehaviour
     {
-        [SerializeField] private GameObject slotImagePrefab;
-        [SerializeField] private GameObject popImagePrefab;
+        [SerializeField] private GameObject background;
+        [SerializeField] private GameObject pop;
+        private PopSlotViewData data;
         
-        public void Initialize(PopSlotViewData data)
+        private readonly Subject<PopSlotViewData> _onSelectedSubject = new Subject<PopSlotViewData>();
+        public IObservable<PopSlotViewData> OnSelected => _onSelectedSubject;
+        
+        public void Initialize(PopSlotViewData arg)
         {
-            var background = Instantiate(slotImagePrefab, transform);
+            data = arg;
             background.GetComponent<Image>().sprite = data.SlotBackgroundImage;
 
-            if (data.WorkerGuid == Guid.Empty) return;
+            if (arg.WorkerGuid == Guid.Empty) return;
 
-            var pop = Instantiate(popImagePrefab, transform);
             pop.GetComponent<Image>().sprite = data.WorkerImage;
+        }
+
+        public void OnClicked(BaseEventData e)
+        {
+            _onSelectedSubject.OnNext(data);
         }
     }
 

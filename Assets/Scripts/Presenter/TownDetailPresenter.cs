@@ -23,6 +23,7 @@ namespace Presenter
                 .AddTo(this);
 
             townsPresenter.OnDetailChanged
+                .Where(_ => isActiveAndEnabled)
                 .Where(townId => townId != 0)
                 .Select(townId => townsPresenter.FindEntityById(townId))
                 .Subscribe(UpdateDetail)
@@ -37,13 +38,7 @@ namespace Presenter
 
         private void UpdateDetail(TownEntity entity)
         {
-            UpdatePopContainer(entity);
             UpdateDivisionContainer(entity);
-        }
-
-        private void UpdatePopContainer(TownEntity entity)
-        {
-            
         }
 
         private void UpdateDivisionContainer(TownEntity entity)

@@ -11,6 +11,7 @@ namespace View
     {
 
         [SerializeField] private GameObject popSlotRowPrefab;
+        [SerializeField] private PopContainerView popContainer;
         [SerializeField] private GameObject slotContainer;
         
         private readonly Subject<Unit> _onOpenedSubject = new Subject<Unit>();
@@ -30,7 +31,7 @@ namespace View
         {
             gameObject.SetActive(false);
         }
-
+        
         public void UpdateDivisionContainer(IEnumerable<PopSlotRowViewData> popSlotRowViewData)
         {
             ClearSlots();
@@ -41,12 +42,22 @@ namespace View
             }
         }
 
-        private GameObject AddPopSlot(PopSlotRowViewData data)
+        private void UpdatePopContainer(PopSlotViewData data)
         {
-            var obj = Instantiate(popSlotRowPrefab, slotContainer.transform, true);
-            obj.GetComponent<PopSlotRowView>().Initialize(data);
-            
-            return obj;
+            popContainer.RefreshView();
+            popContainer.UpdatePop(data);
+        }
+        
+        private PopSlotRowView AddPopSlot(PopSlotRowViewData data)
+        {
+            var rowView = Instantiate(popSlotRowPrefab, slotContainer.transform, true).GetComponent<PopSlotRowView>();
+            rowView.Initialize(data);
+
+            rowView.OnPopSelected
+                .Subscribe(UpdatePopContainer)
+                .AddTo(this);
+
+            return rowView;
         }
 
         private void ClearSlots()
