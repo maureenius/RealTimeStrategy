@@ -65,7 +65,9 @@ namespace Presenter
                             worker.Id,
                             worker.Name,
                             worker.TypeName,
-                            imageDatabase.FindRaceFaceImage(worker.Name)
+                            imageDatabase.FindRaceFaceImage(worker.Name),
+                            worker.Consumptions,
+                            worker.Produces
                         )
                         : new PopSlotViewData(wpData.SlotGuid, wpData.SlotName, wpData.SlotTypeName,
                             imageDatabase.FindSlotBackground(wpData.SlotName));
@@ -76,7 +78,8 @@ namespace Presenter
 
             var unemployedSlots = pops
                 .Where(pop => pop.WorkplaceGuid.Equals(Guid.Empty))
-                .Select(pop => new PopSlotViewData(pop.Id, pop.Name, pop.TypeName, imageDatabase.FindRaceFaceImage(pop.Name)))
+                .Select(pop => new PopSlotViewData(pop.Id, pop.Name, pop.TypeName, imageDatabase.FindRaceFaceImage(pop.Name),
+                    pop.Consumptions, pop.Produces))
                 .ToList();
             
             results.Add(new PopSlotRowViewData("無職", unemployedSlots));

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -42,7 +43,26 @@ namespace View
         public string WorkerRaceName { get; }
         public Sprite WorkerImage { get; }
         
-        public PopSlotViewData(Guid workerGuid, string workerName, string workerRaceName, Sprite workerImage)
+        public List<(string goodsName, double amount)> Consumptions { get; }
+        
+        public List<(string goodsName, double amount)> Produces { get; }
+
+        public PopSlotViewData(Guid slotGuid, string slotName, string slotTypeName, Sprite backgroundImage)
+        {
+            SlotGuid = slotGuid;
+            SlotName = slotName;
+            SlotTypeName = slotTypeName;
+            SlotBackgroundImage = backgroundImage;
+            WorkerGuid = Guid.Empty;
+            WorkerName = null;
+            WorkerRaceName = null;
+            WorkerImage = null;
+            Consumptions = new List<(string goodsName, double amount)>();
+            Produces = new List<(string goodsName, double amount)>();
+        }
+        
+        public PopSlotViewData(Guid workerGuid, string workerName, string workerRaceName, Sprite workerImage,
+            IEnumerable<(string goodsName, double amount)> consumptions, IEnumerable<(string goodsName, double amount)> produces)
         {
             SlotGuid = Guid.Empty;
             SlotName = "無職";
@@ -52,10 +72,13 @@ namespace View
             WorkerName = workerName;
             WorkerRaceName = workerRaceName;
             WorkerImage = workerImage;
+            Consumptions = new List<(string goodsName, double amount)>(consumptions);
+            Produces = new List<(string goodsName, double amount)>(produces);
         }
         
         public PopSlotViewData(Guid slotGuid, string slotName, string slotTypeName, Sprite slotBackgroundImage,
-            Guid workerGuid, string workerName, string workerRaceName, Sprite workerImage)
+            Guid workerGuid, string workerName, string workerRaceName, Sprite workerImage,
+            IEnumerable<(string goodsName, double amount)> consumptions, IEnumerable<(string goodsName, double amount)> produces)
         {
             SlotGuid = slotGuid;
             SlotName = slotName;
@@ -65,6 +88,8 @@ namespace View
             WorkerName = workerName;
             WorkerRaceName = workerRaceName;
             WorkerImage = workerImage;
+            Consumptions = new List<(string goodsName, double amount)>(consumptions);
+            Produces = new List<(string goodsName, double amount)>(produces);
         }
     }
 }

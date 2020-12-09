@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,14 +17,16 @@ namespace View
         {
             popFace.sprite = data.WorkerImage;
             popName.text = data.WorkerName;
+            popProduct.text = string.Join("\n", data.Produces.Select(x => $"{x.goodsName}：{x.amount.ToString()}"));
+            popConsumption.text = string.Join("\n", data.Consumptions.Select(x => $"{x.goodsName}：{x.amount.ToString()}"));
         }
 
         public void RefreshView()
         {
             popFace.sprite = null;
             popName.text = "";
-            popProduct.text = "";
             popConsumption.text = "";
+            popProduct.text = "";
         }
         
         private void Start()
