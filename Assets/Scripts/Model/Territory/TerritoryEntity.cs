@@ -92,4 +92,16 @@ namespace Model.Territory {
             return new Territory(_name);
         }
     }
+
+    public struct TerritoryRate
+    {
+        public readonly TerritoryEntity Territory;
+        public double Rate;
+
+        public TerritoryRate(TerritoryEntity territory, double rate)
+        {
+            Territory = territory;
+            Rate = rate;
+        }
+    }
 }

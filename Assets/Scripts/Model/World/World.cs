@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Model.Commerce;
 using Model.Global;
 using Model.Goods;
 using Model.Race;
@@ -13,9 +14,9 @@ using Model.Town.Building;
 namespace Model.World {
     public class World {
         public readonly List<TownEntity> Towns = new List<TownEntity>();
+        public readonly List<CommerceEntity> Commerces = new List<CommerceEntity>();
         public readonly List<TerritoryEntity> Territories = new List<TerritoryEntity>();
         public readonly List<RegionEntity> Regions = new List<RegionEntity>();
-        public readonly RouteLayer RouteLayer = new RouteLayer();
 
         public DateTime Date = new DateTime(1000, 1, 1);
 
@@ -25,13 +26,15 @@ namespace Model.World {
             InitializeRegion();
             InitializeTerritory();
             InitializeTown();
+            InitializeCommerces();
             InitializeRoutes();
         }
 
         public void DoOneTurn() {
             Date = Date.AddDays(1);
             Territories.ForEach(territory => territory.DoOneTurn());
-            RouteLayer.DoOneTurn();
+            Commerces.ForEach(commerce => commerce.DoOneTurn());
+            RouteLayer.GetInstance().DoOneTurn();
         }
 
         private void InitializeRaces() {
@@ -111,15 +114,20 @@ namespace Model.World {
             Territories.ForEach(territory => territory.InitializeTowns());
         }
 
+        private void InitializeCommerces()
+        {
+            
+        }
+
         private void InitializeRoutes()
         {
             // debug
             // 1-2-3-4
             //     |-5 に繋ぐ
-            RouteLayer.Connect(Towns.First(t => t.Id == 1), Towns.First(t => t.Id == 2), 100, 3);
-            RouteLayer.Connect(Towns.First(t => t.Id == 2), Towns.First(t => t.Id == 3), 100, 3);
-            RouteLayer.Connect(Towns.First(t => t.Id == 3), Towns.First(t => t.Id == 4), 100, 3);
-            RouteLayer.Connect(Towns.First(t => t.Id == 3), Towns.First(t => t.Id == 5), 100, 3);
+            RouteLayer.GetInstance().Connect(Towns.First(t => t.Id == 1), Towns.First(t => t.Id == 2), 100, 3);
+            RouteLayer.GetInstance().Connect(Towns.First(t => t.Id == 2), Towns.First(t => t.Id == 3), 100, 3);
+            RouteLayer.GetInstance().Connect(Towns.First(t => t.Id == 3), Towns.First(t => t.Id == 4), 100, 3);
+            RouteLayer.GetInstance().Connect(Towns.First(t => t.Id == 3), Towns.First(t => t.Id == 5), 100, 3);
         }
     }
 }

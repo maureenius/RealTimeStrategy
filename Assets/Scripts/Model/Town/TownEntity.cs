@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -20,10 +21,10 @@ namespace Model.Town {
         public readonly int Id;
         public readonly string TownName;
         public readonly TownType TownType;
+        public IList<Storage> storages = new List<Storage>();
         private IList<Pop> pops = new List<Pop>();
         private IList<Workplace> workplaces = new List<Workplace>();
-
-        private IList<Storage> storages = new List<Storage>();
+        
         private IList<IBuildable> buildings = new List<IBuildable>();
 
         // private IList<IRoute> exportRoute = new List<IRoute>();
@@ -123,16 +124,21 @@ namespace Model.Town {
             }
         }
 
-        private void Produce() {
-            var products = pops.Select(pop => pop.Produce()).SelectMany(product => product).ToList();
-            products.ForEach(cargo => {
+        public void CarryIn(IEnumerable<Cargo> cargoes)
+        {
+            foreach (var cargo in cargoes)
+            {
                 var outputStorage = GetStorage(cargo.Goods);
                 if (outputStorage == null) {
                     outputStorage = new Storage(cargo.Goods, 1000);
                     storages.Add(outputStorage);
                 }
                 outputStorage.Store(cargo.Amount);
-            });
+            }
+        }
+
+        private void Produce() {
+            CarryIn(pops.Select(pop => pop.Produce()).SelectMany(product => product));
         }
 
         private void Consume() {

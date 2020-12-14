@@ -11,11 +11,10 @@ namespace Model.Town {
             AmountLimit = _amountLimit;
         }
 
-        public Util.Util.StatusCode Consume(int amount) {
-            if (!CanConsume(amount)) return Util.Util.StatusCode.FAIL;
+        public void Consume(int amount) {
+            if (!CanConsume(amount)) return;
 
             Amount -= amount;
-            return Util.Util.StatusCode.SUCCESS;
         }
 
         public void Store(int amount) {
