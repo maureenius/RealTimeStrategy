@@ -3,7 +3,14 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "View"
+        "View",
+        "Town",
+        "Global",
+        "Race",
+        "commerce",
+        "Territory",
+        "World",
+        "Route"
     ],
     "includePlatforms": [
         "Editor"

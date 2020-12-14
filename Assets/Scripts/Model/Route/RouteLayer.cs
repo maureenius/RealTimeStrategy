@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Model.Town;
 
@@ -20,17 +21,14 @@ namespace Model.Route {
         {
             routes.ToList().ForEach(route => route.DoOneTurn());
         }
+        
         public void Connect(TownEntity start, TownEntity end, int capacity, int length) {
-            // var addRoute = new Model.Route.Route(capacity, length, start, end);
-            // routes.Add(addRoute);
-            // start.SetRoute(addRoute, isImport: false);
-            // end.SetRoute(addRoute, isImport: true);
+            var addRoute = new Model.Route.Route(capacity, length, start, end);
+            routes.Add(addRoute);
         }
 
         public void Disconnect(IRoute route)
         {
-            // route.Sender.RemoveRoute(route, true);
-            // route.Receiver.RemoveRoute(route, false);
             routes.Remove(route);
         }
 

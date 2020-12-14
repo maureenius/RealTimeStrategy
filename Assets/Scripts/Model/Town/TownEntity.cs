@@ -31,12 +31,13 @@ namespace Model.Town {
         // private IList<IRoute> importRoute = new List<IRoute>();
         // private IList<ExportPlan> exportPlans = new List<ExportPlan>();
         
-        private bool isCapital;
+        public bool IsCapital { get; private set; }
 
-        public TownEntity(int _id, string _townName, TownType _townType, RaceEntity _raceEntity, int _popNum = 5, int _divisionNum = 10){
+        public TownEntity(int _id, string _townName, TownType _townType, RaceEntity _raceEntity, int _popNum = 5, int _divisionNum = 10, bool isCapital=false){
             Id = _id;
             TownName = _townName;
             TownType = _townType;
+            IsCapital = isCapital;
 
             InitializePops(_raceEntity, _popNum);
         }
@@ -65,14 +66,7 @@ namespace Model.Town {
         public IEnumerable<(string goodsTypeName, int amount)> GetStoredProducts() {
             return storages.Select(s => (goodsTypeName: s.Goods.GoodsType.GetNameJpn(), amount: s.Amount)).ToList();
         }
-
-        // public void SetRoute(IRoute route, bool isImport) {
-        //     if (isImport) {
-        //         importRoute.Add(route);
-        //     } else {
-        //         exportRoute.Add(route);
-        //     }
-        // }
+        
         //
         // public void RemoveRoute(IRoute route, bool isImport)
         // {
@@ -128,6 +122,8 @@ namespace Model.Town {
         {
             foreach (var cargo in cargoes)
             {
+                if (cargo == null) return;
+                
                 var outputStorage = GetStorage(cargo.Goods);
                 if (outputStorage == null) {
                     outputStorage = new Storage(cargo.Goods, 1000);
@@ -204,12 +200,12 @@ namespace Model.Town {
     }
 
     public static class TownFactory {
-        public static TownEntity Create(int _id, string _townName, TownType _townType, RaceEntity _race) {
+        public static TownEntity Create(int _id, string _townName, TownType _townType, RaceEntity _race, bool isCapital=false) {
             switch (_townType) {
                 case TownType.PORT:
-                    return new Port(_id, _townName, _townType, _race);
+                    return new Port(_id, _townName, _townType, _race, isCapital);
                 case TownType.INLAND:
-                    return new Inland(_id, _townName, _townType, _race);
+                    return new Inland(_id, _townName, _townType, _race, isCapital);
                 default:
                     throw new ArgumentException(_townType.ToString());
             }

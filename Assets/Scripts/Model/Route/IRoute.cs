@@ -16,7 +16,7 @@ namespace Model.Route {
         double FlowPower();
     }
     
-    public struct Tension
+    public class Tension
     {
         public readonly TerritoryEntity Territory;
         public bool IsForward;

@@ -46,6 +46,11 @@ namespace Model.Territory {
         {
             towns.ToList().ForEach(town => town.DoOneTurn());
         }
+
+        public bool IsOwn(TownEntity town)
+        {
+            return towns.Contains(town);
+        }
     }
 
     class Territory : TerritoryEntity {
@@ -93,7 +98,7 @@ namespace Model.Territory {
         }
     }
 
-    public struct TerritoryRate
+    public class TerritoryRate
     {
         public readonly TerritoryEntity Territory;
         public double Rate;

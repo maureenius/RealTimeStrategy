@@ -6,7 +6,7 @@ using Model.Town;
 using static Model.Util.Util;
 
 namespace Model.Route {
-    internal class Route : IRoute {
+    public class Route : IRoute {
         public int Capacity { get; }
         public bool isForward { get; }
         public TownEntity From { get; }
@@ -14,7 +14,7 @@ namespace Model.Route {
 
         private readonly Queue<(Cargo cargo, int timer)> cargos = new Queue<(Cargo cargo, int timer)>();
         private readonly int length;
-        private List<Tension> tensions;
+        private List<Tension> tensions = new List<Tension>();
 
         public Route(int capacity, int length, TownEntity from, TownEntity to) {
             Capacity = capacity;

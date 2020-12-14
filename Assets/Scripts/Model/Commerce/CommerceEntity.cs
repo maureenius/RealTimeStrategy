@@ -21,6 +21,12 @@ namespace Model.Commerce
         {
             this.town = town;
             monopolyRate = new List<TerritoryRate>(territories.Select(ter => new TerritoryRate(ter, 0f)));
+            if (town.IsCapital)
+            {
+                var territory = territories.First(ter => ter.IsOwn(town));
+                monopolyRate.First(rate => rate.Territory == territory).Rate = 1f;
+            }
+            
             routes = RouteLayer.GetInstance().GetConnectedRoutes(town);
             routes.ForEach(route =>
             {

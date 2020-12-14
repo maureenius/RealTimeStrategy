@@ -26,8 +26,8 @@ namespace Model.World {
             InitializeRegion();
             InitializeTerritory();
             InitializeTown();
-            InitializeCommerces();
             InitializeRoutes();
+            InitializeCommerces();
         }
 
         public void DoOneTurn() {
@@ -78,8 +78,8 @@ namespace Model.World {
             // ひとまず5都市を作成
 
             // 初期Pop3, 区画10, 農場2
-            TownEntity SetTown(int id, string name, TownType townType, string raceName) {
-                var town = TownFactory.Create(id, name, townType, GlobalRaces.GetInstance().FindByName(raceName));
+            TownEntity SetTown(int id, string name, TownType townType, string raceName, bool isCapital=false) {
+                var town = TownFactory.Create(id, name, townType, GlobalRaces.GetInstance().FindByName(raceName), isCapital);
 
                 // Regionに属させる
                 // Territoryに属させる
@@ -104,9 +104,9 @@ namespace Model.World {
                 return town;
             }
 
-            Towns.Add(SetTown(1, "原初の森", TownType.INLAND, "エルフ"));
+            Towns.Add(SetTown(1, "原初の森", TownType.INLAND, "エルフ", isCapital: true));
             Towns.Add(SetTown(2, "青碧の湖", TownType.PORT, "エルフ"));
-            Towns.Add(SetTown(3, "首都マクシムス", TownType.INLAND, "人間"));
+            Towns.Add(SetTown(3, "首都マクシムス", TownType.INLAND, "人間", isCapital: true));
             Towns.Add(SetTown(4, "ポートランド", TownType.PORT, "人間"));
             Towns.Add(SetTown(5, "クラフトランド", TownType.INLAND, "人間"));
             
@@ -116,7 +116,10 @@ namespace Model.World {
 
         private void InitializeCommerces()
         {
-            
+            foreach (var town in Towns)
+            {
+                Commerces.Add(new CommerceEntity(town, Territories));
+            }
         }
 
         private void InitializeRoutes()
