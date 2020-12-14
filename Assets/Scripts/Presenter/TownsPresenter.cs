@@ -50,6 +50,10 @@ namespace Presenter
         private void OnSelected(TownView view)
         {
             _selectedTownId.Value = view.townId;
+            foreach (var townView in _views.Where(v => v != view))
+            {
+                townView.OnUnselected();
+            }
         }
 
         private void InitializeTown(TownEntity town)
