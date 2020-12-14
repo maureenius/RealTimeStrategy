@@ -26,10 +26,6 @@ namespace Model.Town {
         private IList<Workplace> workplaces = new List<Workplace>();
         
         private IList<IBuildable> buildings = new List<IBuildable>();
-
-        // private IList<IRoute> exportRoute = new List<IRoute>();
-        // private IList<IRoute> importRoute = new List<IRoute>();
-        // private IList<ExportPlan> exportPlans = new List<ExportPlan>();
         
         public bool IsCapital { get; private set; }
 
@@ -66,36 +62,6 @@ namespace Model.Town {
         public IEnumerable<(string goodsTypeName, int amount)> GetStoredProducts() {
             return storages.Select(s => (goodsTypeName: s.Goods.GoodsType.GetNameJpn(), amount: s.Amount)).ToList();
         }
-        
-        //
-        // public void RemoveRoute(IRoute route, bool isImport)
-        // {
-        //     if (isImport)
-        //     {
-        //         importRoute.Remove(route);
-        //     }
-        //     else
-        //     {
-        //         exportRoute.Remove(route);
-        //     }
-        // }
-        //
-        // public void AddExportPlan(ExportPlan plan)
-        // {
-        //     exportPlans.Add(plan);
-        // }
-        //
-        // public void RemoveExportPlan(ExportPlan plan)
-        // {
-        //     exportPlans.Remove(plan);
-        // }
-
-        // public List<(string slotTypeName, IEnumerable<WorkplaceInfo>)> GetPopSlotInfo()
-        // {
-        //     var popInfos = pops.Select(pop => pop.ToInfo());
-        //     var slotNames = allInfo.GroupBy(info => info.SlotTypeName).Select(grouping => grouping.Key);
-        //     return slotNames.Select(name => (name, allInfo.Where(info => info.SlotName == name))).ToList();
-        // }
 
         public List<PopData> GetPopData()
         {
@@ -156,15 +122,6 @@ namespace Model.Town {
         private void CollectFaith() {
 
         }
-
-        // private void Import() {
-        //     importRoute.ToList().ForEach(ir => {
-        //         ir.TakeCargo();
-        //     });
-        // }
-        // private void Export() {
-        //     
-        // }
 
         private void OptimizeWorkers()
         {
