@@ -26,6 +26,11 @@ namespace Model.Global {
         public GoodsEntity FindByName(string name){
             return GoodsFactory.Copy(closedGoodsList.Find(g => g.Name == name));
         }
+        
+        public void Clear()
+        {
+            closedGoodsList.Clear();
+        }
 
         private GlobalGoods() {
             closedGoodsList = new List<GoodsEntity>();

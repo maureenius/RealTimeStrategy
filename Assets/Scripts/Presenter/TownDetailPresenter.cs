@@ -7,16 +7,20 @@ using UnityEngine;
 using View;
 using Database;
 
+#nullable enable
+
 namespace Presenter
 {
     public class TownDetailPresenter : MonoBehaviour
     {
-        [SerializeField] private TownsPresenter townsPresenter;
-        [SerializeField] private TownDetailView townDetailView;
-        [SerializeField] private ImageDatabase imageDatabase;
+        [SerializeField] private TownsPresenter? townsPresenter;
+        [SerializeField] private TownDetailView? townDetailView;
+        [SerializeField] private ImageDatabase? imageDatabase;
 
         private void Start()
         {
+            if(townsPresenter == null || townDetailView == null) throw new NullReferenceException();
+            
             townDetailView.OnOpened
                 .Where(_ => townsPresenter.SelectedTownId.Value > 0)
                 .Subscribe(_ => OnOpened())
@@ -32,6 +36,8 @@ namespace Presenter
 
         private void OnOpened()
         {
+            if(townsPresenter == null || townDetailView == null) throw new NullReferenceException();
+            
             UpdateDetail(townsPresenter.FindEntityById(townsPresenter.SelectedTownId.Value));
             townDetailView.ShowOverPanel();
         }
@@ -43,6 +49,8 @@ namespace Presenter
 
         private void UpdateDivisionContainer(TownEntity entity)
         {
+            if(townDetailView == null) throw new NullReferenceException();
+            
             var popData = entity.GetPopData();
             var workplaceData = entity.GetWorkplaces();
 
@@ -51,6 +59,8 @@ namespace Presenter
 
         private IEnumerable<PopSlotRowViewData> CreateRowData(IEnumerable<PopData> pops, IEnumerable<WorkplaceData> workplaces)
         {
+            if(imageDatabase == null) throw new NullReferenceException();
+            
             var results = (
                 from grouped in workplaces.GroupBy(ws => ws.SlotName) 
                 let data = new List<PopSlotViewData>(grouped.Select(wpData =>

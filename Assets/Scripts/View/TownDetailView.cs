@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 
+#nullable enable
+
 namespace View
 {
     public class TownDetailView : MonoBehaviour
     {
 
-        [SerializeField] private GameObject popSlotRowPrefab;
-        [SerializeField] private PopContainerView popContainer;
-        [SerializeField] private GameObject slotContainer;
+        [SerializeField] private GameObject? popSlotRowPrefab;
+        [SerializeField] private PopContainerView? popContainer;
+        [SerializeField] private GameObject? slotContainer;
         
         private readonly Subject<Unit> _onOpenedSubject = new Subject<Unit>();
         public IObservable<Unit> OnOpened => _onOpenedSubject;
@@ -42,13 +44,19 @@ namespace View
 
         private void UpdatePopContainer(PopSlotViewData data)
         {
+            if(popContainer == null) throw new NullReferenceException();
+            
             popContainer.RefreshView();
             popContainer.UpdatePop(data);
         }
         
         private void AddPopSlot(PopSlotRowViewData data)
         {
-            var rowView = Instantiate(popSlotRowPrefab, slotContainer.transform, true).GetComponent<PopSlotRowView>();
+            if(slotContainer == null) throw new NullReferenceException();
+            
+            var rowView = Instantiate(popSlotRowPrefab, slotContainer.transform, true)?.GetComponent<PopSlotRowView>();
+            if(rowView == null) throw new NullReferenceException();
+            
             rowView.Initialize(data);
 
             rowView.OnPopSelected
@@ -58,6 +66,8 @@ namespace View
 
         private void ClearSlots()
         {
+            if(slotContainer == null) throw new NullReferenceException();
+            
             foreach (Transform child in slotContainer.transform)
             {
                 Destroy(child.gameObject);

@@ -1,25 +1,32 @@
-﻿using Model.Town;
+﻿using System;
+using Model.Town;
 using Model.Util;
 using UniRx;
 using UnityEngine;
 using View;
 
+#nullable enable
+
 namespace Presenter
 {
     public class TownOutlinePresenter : MonoBehaviour
     {
-        [SerializeField] private TownsPresenter townsPresenter;
+        [SerializeField] private TownsPresenter? townsPresenter;
         
-        private TownOutlineView _view;
+        private TownOutlineView? _view;
 
         private void UpdateData(TownEntity entity)
         {
+            if (_view == null) throw new NullReferenceException();
+            
             _view.ShowOverPanel();
             _view.UpdateOutline(GetTownOutlineData(entity));
         }
         
         private void Start()
         {
+            if (townsPresenter == null) throw new NullReferenceException();
+            
             _view = GetComponent<TownOutlineView>();
 
             townsPresenter.SelectedTownId

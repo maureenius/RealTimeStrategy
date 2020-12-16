@@ -40,6 +40,8 @@ namespace Model.World {
         }
 
         private static void InitializeRaces() {
+            GlobalRaces.GetInstance().Clear();
+            
             // debug
             // ひとまずHumanとElfを生成
             GlobalRaces.GetInstance().Register(RaceFactory.Create("人間", RaceType.Human));
@@ -47,6 +49,8 @@ namespace Model.World {
         }
 
         private static void InitializeGoods() {
+            GlobalGoods.GetInstance().Clear();
+            
             // debug
             // ひとまず小麦を生成
             GlobalGoods.GetInstance().Register(GoodsFactory.Create(GoodsType.Flour, "普通の小麦"));

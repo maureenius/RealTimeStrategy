@@ -1,8 +1,9 @@
 ﻿using System;
 using UniRx;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using QuickOutline.Scripts;
+
+#nullable enable
 
 namespace View
 {
@@ -14,7 +15,7 @@ namespace View
         private readonly Subject<Unit> _onSelectedSubject = new Subject<Unit>();
         public IObservable<Unit> OnSelected => _onSelectedSubject;
 
-        public void OnClicked(BaseEventData e)
+        public void OnClicked()
         {
             GetComponent<Outline>().OutlineWidth = outlineWidth;
             _onSelectedSubject.OnNext(Unit.Default);

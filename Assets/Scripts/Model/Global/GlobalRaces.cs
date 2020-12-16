@@ -27,6 +27,11 @@ namespace Model.Global {
             return RaceFactory.Copy(closedRacesList.Find(r => r.Name == name));
         }
 
+        public void Clear()
+        {
+            closedRacesList.Clear();
+        }
+
         private GlobalRaces()
         {
             closedRacesList = new List<IRace>();

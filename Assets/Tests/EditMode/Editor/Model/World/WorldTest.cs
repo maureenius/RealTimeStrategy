@@ -1,6 +1,8 @@
 ﻿using System;
 using NUnit.Framework;
 
+#nullable enable
+
 namespace Tests.EditMode.Editor.Model.World
 {
     public class WorldTest

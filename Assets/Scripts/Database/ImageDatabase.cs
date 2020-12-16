@@ -1,54 +1,58 @@
 ﻿using System;
 using UnityEngine;
 
+#nullable enable
+
 namespace Database
 {
     public class ImageDatabase : MonoBehaviour
     {
-        public Sprite[] SlotBackgroundImages { get; private set; }
+        private Sprite[]? SlotBackgroundImages { get; set; }
 
-        public Sprite[] RaceFaceImages { get; private set; }
+        private Sprite[]? RaceFaceImages { get; set; }
         
         public Sprite FindSlotBackground(string typeName)
         {
-            string filename;
-            switch (typeName)
-            {
-                case "無職":
-                    filename = "Unemployed";
-                    break;
-                case "小麦農場":
-                    filename = "Farm";
-                    break;
-                case "さとうきび畑":
-                    filename = "Farm";
-                    break;
-                case "菓子工房":
-                    filename = "Farm";
-                    break;
-                default:
-                    throw new InvalidOperationException(typeName);
-            }
+            if (SlotBackgroundImages == null) throw new NullReferenceException();
             
+            string filename = typeName switch
+            {
+                "無職" => "Unemployed",
+                "小麦農場" => "Farm",
+                "さとうきび畑" => "Farm",
+                "菓子工房" => "Farm",
+                _ => throw new InvalidOperationException(typeName)
+            };
+
             return Array.Find(SlotBackgroundImages, sprite => sprite.name.Equals(filename));
         }
 
+        public Sprite FindNoneBackground()
+        {
+            if (SlotBackgroundImages == null) throw new NullReferenceException();
+            
+            return Array.Find(SlotBackgroundImages, sprite => sprite.name.Equals("None"));
+        }
+        
         public Sprite FindRaceFaceImage(string typename)
         {
-            string filename;
-            switch (typename)
+            if (RaceFaceImages == null) throw new NullReferenceException();
+            
+            string filename = typename switch
             {
-                case "人間":
-                    filename = "Human";
-                    break;
-                case "エルフ":
-                    filename = "Elf";
-                    break;
-                default:
-                    throw new InvalidOperationException(typename);
-            }
+                "人間" => "Human",
+                "エルフ" => "Elf",
+                _ => throw new InvalidOperationException(typename)
+            };
 
             return Array.Find(RaceFaceImages, sprite => sprite.name.Equals(filename));
+        }
+
+        public Sprite FindNoneRaceFaceImage()
+        {
+            if (RaceFaceImages == null) throw new NullReferenceException();
+            
+            return Array.Find(RaceFaceImages, sprite => sprite.name.Equals("None"));
         }
         
         private void LoadSprites()

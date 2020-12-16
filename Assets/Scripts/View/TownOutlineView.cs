@@ -1,15 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+
+#nullable enable
 
 namespace View
 {
     public class TownOutlineView : MonoBehaviour
     {
-        [SerializeField] private TextMeshProUGUI townNameText;
-        [SerializeField] private TextMeshProUGUI townTypeText;
-        [SerializeField] private List<TextMeshProUGUI> townStorageTexts;
+        [SerializeField] private TextMeshProUGUI? townNameText;
+        [SerializeField] private TextMeshProUGUI? townTypeText;
+        [SerializeField] private List<TextMeshProUGUI> townStorageTexts = new List<TextMeshProUGUI>();
         
         public void ShowOverPanel()
         {
@@ -23,16 +26,21 @@ namespace View
 
         public void UpdateOutline(TownOutlineData data)
         {
+            if(townNameText == null || townTypeText == null) throw new NullReferenceException();
+            
             townNameText.text = data.TownName;
             townTypeText.text = data.TownType;
-            townStorageTexts.ForEach(text =>
+            foreach (var text in townStorageTexts)
             {
-                var (goodsTypeName, amount) = data.Storages.FirstOrDefault();
-                if (goodsTypeName == null) return;
-
-                text.text = $"{goodsTypeName} ： {amount}";
-                data.Storages.RemoveAt(0);
-            });
+                text.text = string.Empty;
+            }
+            
+            foreach (var item in data.Storages
+                .Select((storage, index) => new { storage, index } )
+                .Where(item => item.index < townStorageTexts.Count))
+            {
+                townStorageTexts.ElementAt(item.index).text = $"{item.storage.goodsTypeName} ： {item.storage.amount}";
+            }
         }
     }
 

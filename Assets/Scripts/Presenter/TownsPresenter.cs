@@ -6,16 +6,18 @@ using UniRx;
 using UnityEngine;
 using View;
 
+#nullable enable
+
 namespace Presenter
 {
     public class TownsPresenter : MonoBehaviour
     {
-        [SerializeField] private Transform townRoot;
+        [SerializeField] private Transform? townRoot;
         
         public IReadOnlyReactiveProperty<int> SelectedTownId => _selectedTownId;
-        private IReactiveProperty<int> _selectedTownId = new IntReactiveProperty();
-        private List<TownEntity> _entities;
-        private List<TownView> _views;
+        private readonly IReactiveProperty<int> _selectedTownId = new IntReactiveProperty();
+        private List<TownEntity> _entities = new List<TownEntity>();
+        private List<TownView> _views = new List<TownView>();
         
         private readonly Subject<int> _outlineChangeSubject = new Subject<int>();
         public IObservable<int> OnOutlineChanged => _outlineChangeSubject;
@@ -23,6 +25,8 @@ namespace Presenter
 
         public void Initialize(IEnumerable<TownEntity> entities)
         {
+            if (townRoot == null) throw new NullReferenceException();
+            
             _entities = new List<TownEntity>(entities);
             _entities.ForEach(InitializeTown);
 

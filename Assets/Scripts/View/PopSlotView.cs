@@ -5,12 +5,14 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+#nullable enable
+
 namespace View
 {
     public class PopSlotView : MonoBehaviour
     {
-        [SerializeField] private GameObject background;
-        [SerializeField] private GameObject pop;
+        [SerializeField] private GameObject? background;
+        [SerializeField] private GameObject? pop;
         private PopSlotViewData data;
         
         private readonly Subject<PopSlotViewData> _onSelectedSubject = new Subject<PopSlotViewData>();
@@ -18,6 +20,8 @@ namespace View
         
         public void Initialize(PopSlotViewData arg)
         {
+            if(background == null || pop == null) throw new NullReferenceException();
+            
             data = arg;
 
             if (arg.SlotGuid == Guid.Empty)
@@ -50,13 +54,13 @@ namespace View
     public readonly struct PopSlotViewData
     {
         public Guid SlotGuid { get; }
-        public string SlotName { get; }
-        public string SlotTypeName { get; }
-        public Sprite SlotBackgroundImage { get; }
+        public string? SlotName { get; }
+        public string? SlotTypeName { get; }
+        public Sprite? SlotBackgroundImage { get; }
         public Guid WorkerGuid { get; }
-        public string WorkerName { get; }
-        public string WorkerRaceName { get; }
-        public Sprite WorkerImage { get; }
+        public string? WorkerName { get; }
+        public string? WorkerRaceName { get; }
+        public Sprite? WorkerImage { get; }
         
         public List<(string goodsName, double amount)> Consumptions { get; }
         
