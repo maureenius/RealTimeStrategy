@@ -46,7 +46,7 @@ namespace View
             popContainer.UpdatePop(data);
         }
         
-        private PopSlotRowView AddPopSlot(PopSlotRowViewData data)
+        private void AddPopSlot(PopSlotRowViewData data)
         {
             var rowView = Instantiate(popSlotRowPrefab, slotContainer.transform, true).GetComponent<PopSlotRowView>();
             rowView.Initialize(data);
@@ -54,8 +54,6 @@ namespace View
             rowView.OnPopSelected
                 .Subscribe(UpdatePopContainer)
                 .AddTo(this);
-
-            return rowView;
         }
 
         private void ClearSlots()
