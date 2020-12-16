@@ -1,26 +1,27 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Model.Goods;
 using Model.Town;
-using static Model.Util.Util;
 
 namespace Model.Route {
     public class Route : IRoute {
         public int Capacity { get; }
-        public bool isForward { get; }
-        public TownEntity From { get; }
+        public bool IsForward { get; }
+
+        public TownEntity From => from;
+
         public TownEntity To { get; }
 
         private readonly Queue<(Cargo cargo, int timer)> cargos = new Queue<(Cargo cargo, int timer)>();
         private readonly int length;
         private List<Tension> tensions = new List<Tension>();
+        private readonly TownEntity from;
 
         public Route(int capacity, int length, TownEntity from, TownEntity to) {
             Capacity = capacity;
-            isForward = true;
+            IsForward = true;
             this.length = length;
-            From = from;
+            this.from = from;
             To = to;
         }
 
@@ -31,7 +32,7 @@ namespace Model.Route {
         public void PushCargo(Cargo cargo) {
             if (cargo.Amount > Capacity) return;
 
-            cargos.Enqueue((cargo: cargo, timer: length));
+            cargos.Enqueue((cargo, timer: length));
         }
 
         public Cargo TakeCargo()
@@ -44,9 +45,9 @@ namespace Model.Route {
             return tensions.Sum(t => t.Power);
         }
 
-        public void UpdateTensions(IEnumerable<Tension> _tensions)
+        public void UpdateTensions(IEnumerable<Tension> argTensions)
         {
-            tensions = tensions.Union(_tensions).ToList();
+            tensions = tensions.Union(argTensions).ToList();
         }
     }
 }

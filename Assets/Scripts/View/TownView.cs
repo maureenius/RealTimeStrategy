@@ -2,7 +2,6 @@
 using UniRx;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using QuickOutline;
 using QuickOutline.Scripts;
 
 namespace View

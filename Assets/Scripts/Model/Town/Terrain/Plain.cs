@@ -1,14 +1,14 @@
 ﻿namespace Model.Town.Terrain {
     public sealed class Plain : TerrainEntity {
-        private static readonly Plain _plain = new Plain();
+        private static readonly Plain Instance = new Plain();
 
         public static Plain GetInstance() {
-            return _plain;
+            return Instance;
         }
 
         private Plain() {
             Name = "平地";
-            TerrainType = TerrainType.PLAIN;
+            TerrainType = TerrainType.Plain;
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Model.Town;
 
@@ -23,7 +22,7 @@ namespace Model.Route {
         }
         
         public void Connect(TownEntity start, TownEntity end, int capacity, int length) {
-            var addRoute = new Model.Route.Route(capacity, length, start, end);
+            var addRoute = new Route(capacity, length, start, end);
             routes.Add(addRoute);
         }
 

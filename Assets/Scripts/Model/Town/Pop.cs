@@ -32,7 +32,7 @@ namespace Model.Town {
         }
     }
     
-    public class Pop: IProducable, Util.INamed {
+    public class Pop: IProducable, INamed {
         public Guid Id { get; }
         public string Name { get; }
         public string TypeName { get; }

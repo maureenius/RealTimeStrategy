@@ -5,12 +5,12 @@ using Model.Race;
 
 namespace Model.Global {
     public sealed class GlobalRaces {
-        private static readonly GlobalRaces _globalRaces = new GlobalRaces();
+        private static readonly GlobalRaces Instance = new GlobalRaces();
 
         private readonly List<RaceEntity> closedRacesList;
 
         public static GlobalRaces GetInstance() {
-            return _globalRaces;
+            return Instance;
         }
 
         public void Register(RaceEntity race) {

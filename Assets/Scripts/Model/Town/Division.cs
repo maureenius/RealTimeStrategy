@@ -8,15 +8,14 @@ namespace Model.Town {
         private TerrainEntity terrain;
         public IBuildable Building { get; private set; }
 
-        public Division(int _id, TerrainType _terrainType) {
-            id = _id;
-            switch (_terrainType) {
-                case TerrainType.PLAIN:
-                    terrain = Plain.GetInstance();
-                    break;
-                default:
-                    throw new InvalidOperationException();
-            }
+        public Division(int id, TerrainType terrainType)
+        {
+            this.id = id;
+            terrain = terrainType switch
+            {
+                TerrainType.Plain => Plain.GetInstance(),
+                _ => throw new InvalidOperationException()
+            };
         }
 
         public void Build(IBuildable target) {
@@ -26,7 +25,7 @@ namespace Model.Town {
 
         public Util.Util.StatusCode Demolish() {
             Building = null;
-            return Util.Util.StatusCode.SUCCESS;
+            return Util.Util.StatusCode.Success;
         }
     }
 }

@@ -24,8 +24,8 @@ namespace Model.Town.Building
             var pa = new ProduceAbility(GlobalGoods.GetInstance().FindByName("普通のクッキー"), 3);
             var ct = new List<ConsumptionTrait>
             {
-                new ConsumptionTrait(GoodsType.FLOUR, 1),
-                new ConsumptionTrait(GoodsType.SUGAR, 1)
+                new ConsumptionTrait(GoodsType.Flour, 1),
+                new ConsumptionTrait(GoodsType.Sugar, 1)
             };
             return new SimpleProcessor("菓子工房", pa, ct,2);
         }

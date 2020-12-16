@@ -1,8 +1,8 @@
 ﻿using Model.Race;
 
 namespace Model.Town.TownDetail {
-    class Port : TownEntity {
-        public Port(int _id, string _townName, TownType _townType, RaceEntity _race, bool isCapital)
-            : base(_id, _townName, _townType, _race, isCapital: isCapital) { }
+    internal class Port : TownEntity {
+        public Port(int id, string townName, TownType townType, RaceEntity race, bool isCapital)
+            : base(id, townName, townType, race, isCapital: isCapital) { }
     }
 }

@@ -3,11 +3,11 @@
 namespace Model.Goods {
     public enum GoodsType {
         [Description("小麦")]
-        FLOUR,
+        Flour,
         [Description("砂糖")]
-        SUGAR,
+        Sugar,
         [Description("菓子")]
-        COOKIE
+        Cookie
     }
 
     public static class GoodsTypeMethod {
@@ -22,14 +22,14 @@ namespace Model.Goods {
         public GoodsType GoodsType { get; private set; }
         public string Name { get; private set; }
 
-        public GoodsEntity(GoodsType _goodsType, string _name) {
-            GoodsType = _goodsType;
-            Name = _name;
+        public GoodsEntity(GoodsType goodsType, string name) {
+            GoodsType = goodsType;
+            Name = name;
         }
     }
 
     public class GeneralGoods : GoodsEntity {
-        public GeneralGoods(GoodsType _goodsType, string _name) : base(_goodsType, _name) { }
+        public GeneralGoods(GoodsType goodsType, string name) : base(goodsType, name) { }
     }
 
     public static class GoodsFactory {

@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Model.Town;
-using Model.Util;
 using UniRx;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using View;
 
 namespace Presenter

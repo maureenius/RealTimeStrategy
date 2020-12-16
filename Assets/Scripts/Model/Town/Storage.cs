@@ -6,9 +6,9 @@ namespace Model.Town {
         public int Amount { get; private set; }
         public int AmountLimit { get; private set; }
 
-        public Storage(GoodsEntity _goods, int _amountLimit) {
-            Goods = _goods;
-            AmountLimit = _amountLimit;
+        public Storage(GoodsEntity goods, int amountLimit) {
+            Goods = goods;
+            AmountLimit = amountLimit;
         }
 
         public void Consume(int amount) {

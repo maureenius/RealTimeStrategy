@@ -7,8 +7,8 @@ namespace Model.Region {
         private IList<TownEntity> towns = new List<TownEntity>();
         public string Name { get; private set; }
 
-        public RegionEntity(string _name) {
-            Name = _name;
+        public RegionEntity(string name) {
+            Name = name;
         }
 
         public void AttachTowns(TownEntity attachedTown)
@@ -27,8 +27,8 @@ namespace Model.Region {
     }
 
     public static class RegionFactory {
-        public static RegionEntity Create(string _name) {
-            return new GeneralRegion(_name);
+        public static RegionEntity Create(string name) {
+            return new GeneralRegion(name);
         }
     }
 }

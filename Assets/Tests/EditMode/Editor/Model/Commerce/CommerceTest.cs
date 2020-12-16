@@ -15,15 +15,17 @@ namespace Tests.EditMode.Editor.Model.Commerce
         [SetUp]
         public void Constructor()
         {
-            GlobalRaces.GetInstance().Register(RaceFactory.Create("testRace", RaceType.HUMAN));
+            GlobalRaces.GetInstance().Register(RaceFactory.Create("testRace", RaceType.Human));
             var race = GlobalRaces.GetInstance().FindByName("testRace");
             var town = TownFactory.Create(0,
                 "testTown",
-                TownType.PORT,
+                TownType.Port,
                 race);
             var territories = new List<TerritoryEntity>(){TerritoryFactory.Create("testTerritory")};
             
             commerce = new CommerceEntity(town, territories);
+            
+            Assert.AreEqual(commerce, null);
         }
         
         [Test]

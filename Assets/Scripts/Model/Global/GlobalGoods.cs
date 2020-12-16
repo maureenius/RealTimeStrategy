@@ -5,12 +5,12 @@ using Model.Goods;
 
 namespace Model.Global {
     public sealed class GlobalGoods {
-        private static readonly GlobalGoods _globalGoods = new GlobalGoods();
+        private static readonly GlobalGoods Instance = new GlobalGoods();
         
-        private List<GoodsEntity> closedGoodsList; 
+        private readonly List<GoodsEntity> closedGoodsList; 
 
         public static GlobalGoods GetInstance() {
-            return _globalGoods;
+            return Instance;
         }
 
         public void Register(GoodsEntity goods) {

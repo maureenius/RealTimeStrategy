@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Model.Goods;
 using Model.Territory;
 using Model.Town;
@@ -12,7 +11,7 @@ namespace Model.Route {
         void DoOneTurn();
         void PushCargo(Cargo cargo);
         Cargo TakeCargo();
-        void UpdateTensions(IEnumerable<Tension> tensions);
+        void UpdateTensions(IEnumerable<Tension> argTensions);
         double FlowPower();
     }
     

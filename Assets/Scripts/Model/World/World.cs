@@ -40,16 +40,16 @@ namespace Model.World {
         private void InitializeRaces() {
             // debug
             // ひとまずHumanとElfを生成
-            GlobalRaces.GetInstance().Register(RaceFactory.Create("人間", RaceType.HUMAN));
-            GlobalRaces.GetInstance().Register(RaceFactory.Create("エルフ", RaceType.ELF));
+            GlobalRaces.GetInstance().Register(RaceFactory.Create("人間", RaceType.Human));
+            GlobalRaces.GetInstance().Register(RaceFactory.Create("エルフ", RaceType.Elf));
         }
 
         private void InitializeGoods() {
             // debug
             // ひとまず小麦を生成
-            GlobalGoods.GetInstance().Register(GoodsFactory.Create(GoodsType.FLOUR, "普通の小麦"));
-            GlobalGoods.GetInstance().Register(GoodsFactory.Create(GoodsType.SUGAR, "普通の砂糖"));
-            GlobalGoods.GetInstance().Register(GoodsFactory.Create(GoodsType.COOKIE, "普通のクッキー"));
+            GlobalGoods.GetInstance().Register(GoodsFactory.Create(GoodsType.Flour, "普通の小麦"));
+            GlobalGoods.GetInstance().Register(GoodsFactory.Create(GoodsType.Sugar, "普通の砂糖"));
+            GlobalGoods.GetInstance().Register(GoodsFactory.Create(GoodsType.Cookie, "普通のクッキー"));
         }
 
         private void InitializeRegion() {
@@ -104,11 +104,11 @@ namespace Model.World {
                 return town;
             }
 
-            Towns.Add(SetTown(1, "原初の森", TownType.INLAND, "エルフ", isCapital: true));
-            Towns.Add(SetTown(2, "青碧の湖", TownType.PORT, "エルフ"));
-            Towns.Add(SetTown(3, "首都マクシムス", TownType.INLAND, "人間", isCapital: true));
-            Towns.Add(SetTown(4, "ポートランド", TownType.PORT, "人間"));
-            Towns.Add(SetTown(5, "クラフトランド", TownType.INLAND, "人間"));
+            Towns.Add(SetTown(1, "原初の森", TownType.Inland, "エルフ", isCapital: true));
+            Towns.Add(SetTown(2, "青碧の湖", TownType.Port, "エルフ"));
+            Towns.Add(SetTown(3, "首都マクシムス", TownType.Inland, "人間", isCapital: true));
+            Towns.Add(SetTown(4, "ポートランド", TownType.Port, "人間"));
+            Towns.Add(SetTown(5, "クラフトランド", TownType.Inland, "人間"));
             
             // Territory毎の初期化
             Territories.ForEach(territory => territory.InitializeTowns());

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Globalization;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -17,8 +17,8 @@ namespace View
         {
             popFace.sprite = data.WorkerImage;
             popName.text = data.WorkerName;
-            popProduct.text = string.Join("\n", data.Produces.Select(x => $"{x.goodsName}：{x.amount.ToString()}"));
-            popConsumption.text = string.Join("\n", data.Consumptions.Select(x => $"{x.goodsName}：{x.amount.ToString()}"));
+            popProduct.text = string.Join("\n", data.Produces.Select(x => $"{x.goodsName}：{x.amount.ToString(CultureInfo.CurrentCulture)}"));
+            popConsumption.text = string.Join("\n", data.Consumptions.Select(x => $"{x.goodsName}：{x.amount.ToString(CultureInfo.CurrentCulture)}"));
         }
 
         public void RefreshView()

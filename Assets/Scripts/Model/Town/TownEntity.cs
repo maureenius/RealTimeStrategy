@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -12,37 +11,37 @@ using UniRx;
 namespace Model.Town {
     public enum TownType {
         [Description("港町")]
-        PORT,
+        Port,
         [Description("内陸")]
-        INLAND,
+        Inland,
     }
 
     public abstract class TownEntity {
         public readonly int Id;
         public readonly string TownName;
         public readonly TownType TownType;
-        public IList<Storage> storages = new List<Storage>();
-        private IList<Pop> pops = new List<Pop>();
-        private IList<Workplace> workplaces = new List<Workplace>();
-        
-        private IList<IBuildable> buildings = new List<IBuildable>();
-        
+        public IList<Storage> Storages { get; } = new List<Storage>();
+        public IList<Pop> Pops { get; } = new List<Pop>();
+        public IList<Workplace> Workplaces { get; } = new List<Workplace>();
+
+        public IList<IBuildable> Buildings { get; } = new List<IBuildable>();
+
         public bool IsCapital { get; private set; }
 
-        public TownEntity(int _id, string _townName, TownType _townType, RaceEntity _raceEntity, int _popNum = 5, int _divisionNum = 10, bool isCapital=false){
-            Id = _id;
-            TownName = _townName;
-            TownType = _townType;
+        public TownEntity(int id, string townName, TownType townType, RaceEntity raceEntity, int popNum = 5, int divisionNum = 10, bool isCapital=false){
+            Id = id;
+            TownName = townName;
+            TownType = townType;
             IsCapital = isCapital;
 
-            InitializePops(_raceEntity, _popNum);
+            InitializePops(raceEntity, popNum);
         }
 
         public void InitializePops(RaceEntity race, int num) {
-            pops.Clear();
+            Pops.Clear();
             for(var i = 0; i < num; i++)
             {
-                pops.Add(new Pop(race));
+                Pops.Add(new Pop(race));
             }
         }
         
@@ -60,27 +59,27 @@ namespace Model.Town {
         }
 
         public IEnumerable<(string goodsTypeName, int amount)> GetStoredProducts() {
-            return storages.Select(s => (goodsTypeName: s.Goods.GoodsType.GetNameJpn(), amount: s.Amount)).ToList();
+            return Storages.Select(s => (goodsTypeName: s.Goods.GoodsType.GetNameJpn(), amount: s.Amount)).ToList();
         }
 
         public List<PopData> GetPopData()
         {
-            return pops.Select(pop => pop.ToData()).ToList();
+            return Pops.Select(pop => pop.ToData()).ToList();
         }
 
         public List<WorkplaceData> GetWorkplaces()
         {
-            return workplaces.Select(ws => ws.ToData()).ToList();
+            return Workplaces.Select(ws => ws.ToData()).ToList();
         }
         
         public void Build(IBuildable template)
         {
             if (!(template.Clone() is IBuildable building)) return;
             
-            buildings.Add(building);
+            Buildings.Add(building);
             for (var i = 0; i < building.SlotNum; i++)
             {
-                workplaces.Add(new Workplace(building));
+                Workplaces.Add(new Workplace(building));
             }
         }
 
@@ -93,18 +92,18 @@ namespace Model.Town {
                 var outputStorage = GetStorage(cargo.Goods);
                 if (outputStorage == null) {
                     outputStorage = new Storage(cargo.Goods, 1000);
-                    storages.Add(outputStorage);
+                    Storages.Add(outputStorage);
                 }
                 outputStorage.Store(cargo.Amount);
             }
         }
 
         private void Produce() {
-            CarryIn(pops.Select(pop => pop.Produce()).SelectMany(product => product));
+            CarryIn(Pops.Select(pop => pop.Produce()).SelectMany(product => product));
         }
 
         private void Consume() {
-            pops.ToList().ForEach(pop =>
+            Pops.ToList().ForEach(pop =>
             {
                 pop.RequestProducts().ToList().ForEach(trait =>
                 {
@@ -117,10 +116,6 @@ namespace Model.Town {
                     storage.Consume((int)trait.Weight);
                 });
             });
-        }
-
-        private void CollectFaith() {
-
         }
 
         private void OptimizeWorkers()
@@ -138,34 +133,33 @@ namespace Model.Town {
         }
 
         private Storage GetStorage(GoodsEntity target) {
-            return storages.FirstOrDefault(storage => storage.Goods.Name == target.Name);
+            return Storages.FirstOrDefault(storage => storage.Goods.Name == target.Name);
         }
 
         private Storage GetStorageByGoodsType(GoodsType goodsType) {
-            return storages.FirstOrDefault(storage => storage.Goods.GoodsType == goodsType);
+            return Storages.FirstOrDefault(storage => storage.Goods.GoodsType == goodsType);
         }
 
         private List<Pop> GetUnemployed()
         {
-            return pops.Where(pop => pop.WorkSlot == null).ToList();
+            return Pops.Where(pop => pop.WorkSlot == null).ToList();
         }
 
         private List<Workplace> GetVacantWorkplaces()
         {
-            return workplaces.Where(ws => !pops.Select(pop => pop.WorkSlot).Contains(ws)).ToList();
+            return Workplaces.Where(ws => !Pops.Select(pop => pop.WorkSlot).Contains(ws)).ToList();
         }
     }
 
     public static class TownFactory {
-        public static TownEntity Create(int _id, string _townName, TownType _townType, RaceEntity _race, bool isCapital=false) {
-            switch (_townType) {
-                case TownType.PORT:
-                    return new Port(_id, _townName, _townType, _race, isCapital);
-                case TownType.INLAND:
-                    return new Inland(_id, _townName, _townType, _race, isCapital);
-                default:
-                    throw new ArgumentException(_townType.ToString());
-            }
+        public static TownEntity Create(int id, string townName, TownType townType, RaceEntity race, bool isCapital=false)
+        {
+            return townType switch
+            {
+                TownType.Port => new Port(id, townName, townType, race, isCapital),
+                TownType.Inland => new Inland(id, townName, townType, race, isCapital),
+                _ => throw new ArgumentException(townType.ToString())
+            };
         }
     }
 }

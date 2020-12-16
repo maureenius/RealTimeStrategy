@@ -7,11 +7,11 @@ using Model.Town.Building;
 
 namespace Model.Territory {
     public abstract class TerritoryEntity {
-        protected IList<TownEntity> towns = new List<TownEntity>();
+        protected IList<TownEntity> Towns = new List<TownEntity>();
         public string Name { get; private set; }
-        protected IList<IBuildable> buildingTemplates = new List<IBuildable>();
-        protected IList<ICommand> reservedCommands = new List<ICommand>();
-        protected IList<ExportPlan> exportPlans = new List<ExportPlan>();
+        protected readonly IList<IBuildable> BuildingTemplates = new List<IBuildable>();
+        protected IList<ICommand> ReservedCommands = new List<ICommand>();
+        protected IList<ExportPlan> ExportPlans = new List<ExportPlan>();
 
         public TerritoryEntity(string name) {
             Name = name;
@@ -19,37 +19,37 @@ namespace Model.Territory {
 
         public void AttachTowns(TownEntity attachedTown)
         {
-            towns.Add(attachedTown);
+            Towns.Add(attachedTown);
         }
         
         public void AttachTowns(IEnumerable<TownEntity> attachedTowns)
         {
-            towns = towns.Union(attachedTowns).ToList();
+            Towns = Towns.Union(attachedTowns).ToList();
         }
 
         public Util.Util.StatusCode AddExportPlan(ExportPlan plan)
         {
-            if (!towns.Contains(plan.Sender)) return Util.Util.StatusCode.FAIL;
-            return Util.Util.StatusCode.SUCCESS;
+            if (!Towns.Contains(plan.Sender)) return Util.Util.StatusCode.Fail;
+            return Util.Util.StatusCode.Success;
         }
 
         public abstract void InitializeTowns();
 
         public void AddBuildingTemplate(IBuildable template) {
-            if (buildingTemplates.FirstOrDefault(t => t.Name == template.Name) == null)
+            if (BuildingTemplates.FirstOrDefault(t => t.Name == template.Name) == null)
             {
-                buildingTemplates.Add((IBuildable)template.Clone());
+                BuildingTemplates.Add((IBuildable)template.Clone());
             }
         }
 
         public void DoOneTurn()
         {
-            towns.ToList().ForEach(town => town.DoOneTurn());
+            Towns.ToList().ForEach(town => town.DoOneTurn());
         }
 
         public bool IsOwn(TownEntity town)
         {
-            return towns.Contains(town);
+            return Towns.Contains(town);
         }
     }
 
@@ -67,11 +67,11 @@ namespace Model.Territory {
         
         public override void InitializeTowns()
         {
-            towns.ToList().ForEach(town =>
+            Towns.ToList().ForEach(town =>
             {
-                town.Build(buildingTemplates.First(template => template.Name == "小麦農場"));
-                town.Build(buildingTemplates.First(template => template.Name == "さとうきび畑"));
-                town.Build(buildingTemplates.First(template => template.Name == "菓子工房"));
+                town.Build(BuildingTemplates.First(template => template.Name == "小麦農場"));
+                town.Build(BuildingTemplates.First(template => template.Name == "さとうきび畑"));
+                town.Build(BuildingTemplates.First(template => template.Name == "菓子工房"));
             });
         }
     }
@@ -93,8 +93,8 @@ namespace Model.Territory {
     }
 
     public static class TerritoryFactory {
-        public static TerritoryEntity Create(string _name) {
-            return new Territory(_name);
+        public static TerritoryEntity Create(string name) {
+            return new Territory(name);
         }
     }
 

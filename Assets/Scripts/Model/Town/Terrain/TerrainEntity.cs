@@ -3,7 +3,7 @@ using Model.Util;
 
 namespace Model.Town.Terrain {
     public enum TerrainType {
-        PLAIN,
+        Plain,
     }
 
     public abstract class TerrainEntity : INamed {

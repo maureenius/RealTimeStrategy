@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Model.Goods;
 using Model.Route;
 using Model.Town;
@@ -20,17 +18,18 @@ namespace Model.Commerce
         public CommerceEntity(TownEntity town, IEnumerable<TerritoryEntity> territories)
         {
             this.town = town;
-            monopolyRate = new List<TerritoryRate>(territories.Select(ter => new TerritoryRate(ter, 0f)));
+            var territoryEntities = territories.ToList();
+            monopolyRate = new List<TerritoryRate>(territoryEntities.Select(ter => new TerritoryRate(ter, 0f)));
             if (town.IsCapital)
             {
-                var territory = territories.First(ter => ter.IsOwn(town));
+                var territory = territoryEntities.First(ter => ter.IsOwn(town));
                 monopolyRate.First(rate => rate.Territory == territory).Rate = 1f;
             }
             
             routes = RouteLayer.GetInstance().GetConnectedRoutes(town);
             routes.ForEach(route =>
             {
-                var tensions = territories.Select(ter => new Tension(ter, 0f)).ToList();
+                var tensions = territoryEntities.Select(ter => new Tension(ter, 0f)).ToList();
                 route.UpdateTensions(tensions);
                 ActingTensions.AddRange(tensions.Select(ten =>
                 {
@@ -68,7 +67,7 @@ namespace Model.Commerce
 
         private IEnumerable<Storage> GetExportableGoods()
         {
-            return town.storages;
+            return town.Storages;
         }
 
         private IEnumerable<IRoute> OutwardRoutes()

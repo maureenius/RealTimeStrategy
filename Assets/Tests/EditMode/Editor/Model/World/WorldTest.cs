@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
-using UnityEngine.TestTools;
-using Model.World;
 
 namespace Tests.EditMode.Editor.Model.World
 {

@@ -4,8 +4,8 @@ using Model.Goods;
 
 namespace Model.Race {
     public enum RaceType {
-        HUMAN,
-        ELF
+        Human,
+        Elf
     }
 
     public abstract class RaceEntity {
@@ -23,12 +23,12 @@ namespace Model.Race {
             RaceType = raceType;
             
             switch (raceType) {
-                case RaceType.HUMAN:
-                    ConsumptionTraits.Add(new ConsumptionTrait(GoodsType.FLOUR, 1.0));
+                case RaceType.Human:
+                    ConsumptionTraits.Add(new ConsumptionTrait(GoodsType.Flour, 1.0));
                     FaithWeight = 1.0;
                     break;
-                case RaceType.ELF:
-                    ConsumptionTraits.Add(new ConsumptionTrait(GoodsType.FLOUR, 2.0));
+                case RaceType.Elf:
+                    ConsumptionTraits.Add(new ConsumptionTrait(GoodsType.Flour, 2.0));
                     FaithWeight = 2.0;
                     break;
                 default:

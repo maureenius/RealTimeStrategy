@@ -3,8 +3,8 @@
 namespace Model.Util {
     public static class Util {
         public enum StatusCode {
-            SUCCESS,
-            FAIL
+            Success,
+            Fail
         }
 
         public static string GetDescription<T>(this T t) {
