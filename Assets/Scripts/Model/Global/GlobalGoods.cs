@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Model.Goods;
 
+#nullable enable
+
 namespace Model.Global {
     public sealed class GlobalGoods {
         private static readonly GlobalGoods Instance = new GlobalGoods();

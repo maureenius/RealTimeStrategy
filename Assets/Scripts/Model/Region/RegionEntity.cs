@@ -1,24 +1,20 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Model.Town;
+
+#nullable enable
 
 namespace Model.Region {
     public abstract class RegionEntity {
-        private IList<TownEntity> towns = new List<TownEntity>();
-        public string Name { get; private set; }
+        private readonly IList<TownEntity> towns = new List<TownEntity>();
+        public string Name { get; }
 
-        public RegionEntity(string name) {
+        protected RegionEntity(string name) {
             Name = name;
         }
 
         public void AttachTowns(TownEntity attachedTown)
         {
             towns.Add(attachedTown);
-        }
-        
-        public void AttachTowns(IEnumerable<TownEntity> attachedTowns)
-        {
-            towns = towns.Union(attachedTowns).ToList();
         }
     }
 

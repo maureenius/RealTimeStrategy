@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using Model.Race;
 
+#nullable enable
+
 namespace Model.Global {
     public sealed class GlobalRaces {
         private static readonly GlobalRaces Instance = new GlobalRaces();
 
-        private readonly List<RaceEntity> closedRacesList;
+        private readonly List<IRace> closedRacesList;
 
         public static GlobalRaces GetInstance() {
             return Instance;
         }
 
-        public void Register(RaceEntity race) {
+        public void Register(IRace race) {
             if (closedRacesList.FirstOrDefault(r => r.Name == race.Name) != null) {
                 throw new InvalidOperationException("同名のRaceが登録されました");
             }
@@ -21,13 +23,13 @@ namespace Model.Global {
             closedRacesList.Add(RaceFactory.Copy(race));
         }
 
-        public RaceEntity FindByName(string name) {
+        public IRace FindByName(string name) {
             return RaceFactory.Copy(closedRacesList.Find(r => r.Name == name));
         }
 
         private GlobalRaces()
         {
-            closedRacesList = new List<RaceEntity>();
+            closedRacesList = new List<IRace>();
         }
     }
 }

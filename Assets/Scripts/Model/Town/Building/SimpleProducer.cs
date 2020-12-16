@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Model.Goods;
 
+#nullable enable
+
 namespace Model.Town.Building {
     public class SimpleProducer : IBuildable, IHasProduceAbility {
         public Guid Id { get; }
@@ -19,6 +21,7 @@ namespace Model.Town.Building {
             ProduceAbilities = new List<ProduceAbility>();
             ProduceAbilities.Add(produceAbility);
             SlotNum = workerLimit;
+            SlotTemplate = new Workplace(this);
         }
 
         public bool CanWork(Pop pop) {

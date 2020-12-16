@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Model.Goods;
 using Model.Race;
 
+#nullable enable
+
 namespace Model.Town.Building
 {
     public class SimpleProcessor : IBuildable, IHasProduceAbility, IHasConsumptionTrait
@@ -24,6 +26,7 @@ namespace Model.Town.Building
             ProduceAbilities = new List<ProduceAbility>{produceAbility};
             ConsumptionTraits = new List<ConsumptionTrait>(consumptionTraits);
             SlotNum = slotNum;
+            SlotTemplate = new Workplace(this);
         }
 
         public object Clone()

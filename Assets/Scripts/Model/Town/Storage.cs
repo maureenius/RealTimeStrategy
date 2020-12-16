@@ -1,10 +1,12 @@
 ﻿using Model.Goods;
 
+#nullable enable
+
 namespace Model.Town {
     public class Storage {
-        public GoodsEntity Goods { get; private set; }
+        public GoodsEntity Goods { get; }
         public int Amount { get; private set; }
-        public int AmountLimit { get; private set; }
+        private int AmountLimit { get; }
 
         public Storage(GoodsEntity goods, int amountLimit) {
             Goods = goods;

@@ -6,6 +6,8 @@ using Model.Race;
 using Model.Util;
 using UnityEngine;
 
+#nullable enable
+
 namespace Model.Town {
     public readonly struct PopData
     {
@@ -15,7 +17,7 @@ namespace Model.Town {
         public List<(string goodsName, double amount)> Consumptions { get; }
         public List<(string goodsName, double amount)> Produces { get; }
         public Guid WorkplaceGuid { get; }
-        public string WorkplaceName { get; }
+        private string WorkplaceName { get; }
 
         public PopData(Guid id, string name, string typeName,
             IEnumerable<(string goodsName, double amount)> consumptions, 
@@ -33,15 +35,15 @@ namespace Model.Town {
     }
     
     public class Pop: IProducable, INamed {
-        public Guid Id { get; }
+        private Guid Id { get; }
         public string Name { get; }
-        public string TypeName { get; }
-        public RaceEntity Race { get; private set; }
+        private string TypeName { get; }
+        private IRace Race { get; }
         public List<ProduceAbility> ProduceAbilities { get; }
-        public List<ConsumptionTrait> Consumptions { get; }
-        public Workplace WorkSlot { get; private set; }
+        private List<ConsumptionTrait> Consumptions { get; }
+        public Workplace? Workplace { get; private set; }
 
-        public Pop(RaceEntity race)
+        public Pop(IRace race)
         {
             Id = Guid.NewGuid();
             Race = race;
@@ -63,14 +65,14 @@ namespace Model.Town {
 
         public void GetJob(Workplace slot)
         {
-            WorkSlot = slot;
-            if (WorkSlot.ProduceAbilities != null) ProduceAbilities.AddRange(WorkSlot.ProduceAbilities);
-            if (WorkSlot.ConsumptionTraits != null) Consumptions.AddRange(WorkSlot.ConsumptionTraits);
+            Workplace = slot;
+            ProduceAbilities.AddRange(Workplace.ProduceAbilities);
+            Consumptions.AddRange(Workplace.ConsumptionTraits);
         }
 
-        public string GetWorkSlotTypeName()
+        private string GetWorkSlotTypeName()
         {
-            return WorkSlot == null ? "無職" : WorkSlot.TypeName;
+            return Workplace == null ? "無職" : Workplace.TypeName;
         }
 
         public void Shortage()
@@ -83,7 +85,7 @@ namespace Model.Town {
             return new PopData(Id, Name, TypeName,
                 Consumptions.Select(trait => (trait.GoodsType.GetDescription(), trait.Weight)),
                 ProduceAbilities.Select(pa => (pa.OutputGoods.Name, (double)pa.ProduceAmount)),
-                WorkSlot?.Id ?? Guid.Empty, GetWorkSlotTypeName());
+                Workplace?.Id ?? Guid.Empty, GetWorkSlotTypeName());
         }
     }
     

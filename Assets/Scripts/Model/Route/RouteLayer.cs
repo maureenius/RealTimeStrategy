@@ -2,19 +2,21 @@
 using System.Linq;
 using Model.Town;
 
+#nullable enable
+
 namespace Model.Route {
     // シングルトンクラス
     public sealed class RouteLayer {
-        private static RouteLayer _instance = new RouteLayer();
+        private static readonly RouteLayer Instance = new RouteLayer();
 
         public static RouteLayer GetInstance()
         {
-            return _instance;
+            return Instance;
         }
 
         private RouteLayer() {}
         
-        private IList<IRoute> routes = new List<IRoute>();
+        private readonly IList<IRoute> routes = new List<IRoute>();
 
         public void DoOneTurn()
         {

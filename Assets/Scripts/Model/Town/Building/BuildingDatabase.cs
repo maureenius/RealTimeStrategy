@@ -3,6 +3,8 @@ using Model.Global;
 using Model.Goods;
 using Model.Race;
 
+#nullable enable
+
 namespace Model.Town.Building
 {
     public static class BuildingDatabase

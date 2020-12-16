@@ -1,36 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Model.Goods;
-using Model.Territory.Command;
 using Model.Town;
 using Model.Town.Building;
 
+#nullable enable
+
 namespace Model.Territory {
     public abstract class TerritoryEntity {
-        protected IList<TownEntity> Towns = new List<TownEntity>();
-        public string Name { get; private set; }
+        protected readonly IList<TownEntity> Towns = new List<TownEntity>();
+        public string Name { get; }
         protected readonly IList<IBuildable> BuildingTemplates = new List<IBuildable>();
-        protected IList<ICommand> ReservedCommands = new List<ICommand>();
-        protected IList<ExportPlan> ExportPlans = new List<ExportPlan>();
 
-        public TerritoryEntity(string name) {
+        protected TerritoryEntity(string name) {
             Name = name;
         }
 
         public void AttachTowns(TownEntity attachedTown)
         {
             Towns.Add(attachedTown);
-        }
-        
-        public void AttachTowns(IEnumerable<TownEntity> attachedTowns)
-        {
-            Towns = Towns.Union(attachedTowns).ToList();
-        }
-
-        public Util.Util.StatusCode AddExportPlan(ExportPlan plan)
-        {
-            if (!Towns.Contains(plan.Sender)) return Util.Util.StatusCode.Fail;
-            return Util.Util.StatusCode.Success;
         }
 
         public abstract void InitializeTowns();
@@ -73,22 +60,6 @@ namespace Model.Territory {
                 town.Build(BuildingTemplates.First(template => template.Name == "さとうきび畑"));
                 town.Build(BuildingTemplates.First(template => template.Name == "菓子工房"));
             });
-        }
-    }
-
-    public struct ExportPlan
-    {
-        public TownEntity Sender { get; }
-        public TownEntity Receiver { get; }
-        public GoodsEntity Goods { get; }
-        public int Amount { get; }
-        
-        public ExportPlan(TownEntity sender, TownEntity receiver, GoodsEntity goods, int amount)
-        {
-            Sender = sender;
-            Receiver = receiver;
-            Goods = goods;
-            Amount = amount;
         }
     }
 

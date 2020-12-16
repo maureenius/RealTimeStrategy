@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Model.Goods;
+using Model.Util;
+
+#nullable enable
 
 namespace Model.Race {
     public enum RaceType {
@@ -8,41 +11,39 @@ namespace Model.Race {
         Elf
     }
 
-    public abstract class RaceEntity {
-        public RaceType RaceType { get; protected set; }
-        public string Name { get; protected set; }
+    public interface IRace : INamed {
+        public RaceType RaceType { get; }
+        public double FaithWeight { get; }
 
-        public double FaithWeight { get; protected set; }
-
-        public IList<ConsumptionTrait> ConsumptionTraits = new List<ConsumptionTrait>();
+        public IList<ConsumptionTrait> ConsumptionTraits { get; }
     }
 
-    class GeneralRace: RaceEntity {
+    internal class GeneralRace: IRace {
+        public string Name { get; }
+        public RaceType RaceType { get; }
+        public double FaithWeight { get; }
+        public IList<ConsumptionTrait> ConsumptionTraits { get; }
+        
         public GeneralRace(string name, RaceType raceType) {
             Name = name;
             RaceType = raceType;
-            
-            switch (raceType) {
-                case RaceType.Human:
-                    ConsumptionTraits.Add(new ConsumptionTrait(GoodsType.Flour, 1.0));
-                    FaithWeight = 1.0;
-                    break;
-                case RaceType.Elf:
-                    ConsumptionTraits.Add(new ConsumptionTrait(GoodsType.Flour, 2.0));
-                    FaithWeight = 2.0;
-                    break;
-                default:
-                    throw new InvalidOperationException(raceType.ToString());
-            }
+            var raceData = raceType switch
+            {
+                RaceType.Human => RaceDatabase.Human(),
+                RaceType.Elf => RaceDatabase.Elf(),
+                _ => throw new InvalidOperationException(raceType.ToString())
+            };
+            FaithWeight = raceData.FaithWeight;
+            ConsumptionTraits = new List<ConsumptionTrait>(raceData.ConsumptionTraits);
         }
     }
 
     public static class RaceFactory {
-        public static RaceEntity Create(string name, RaceType raceType) {
+        public static IRace Create(string name, RaceType raceType) {
             return new GeneralRace(name, raceType);
         }
 
-        public static RaceEntity Copy(RaceEntity race) {
+        public static IRace Copy(IRace race) {
             return new GeneralRace(race.Name, race.RaceType);
         }
     }

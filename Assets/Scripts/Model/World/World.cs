@@ -11,12 +11,14 @@ using Model.Territory;
 using Model.Town;
 using Model.Town.Building;
 
+#nullable enable
+
 namespace Model.World {
     public class World {
         public readonly List<TownEntity> Towns = new List<TownEntity>();
-        public readonly List<CommerceEntity> Commerces = new List<CommerceEntity>();
-        public readonly List<TerritoryEntity> Territories = new List<TerritoryEntity>();
-        public readonly List<RegionEntity> Regions = new List<RegionEntity>();
+        private readonly List<CommerceEntity> commerces = new List<CommerceEntity>();
+        private readonly List<TerritoryEntity> territories = new List<TerritoryEntity>();
+        private readonly List<RegionEntity> regions = new List<RegionEntity>();
 
         public DateTime Date = new DateTime(1000, 1, 1);
 
@@ -32,19 +34,19 @@ namespace Model.World {
 
         public void DoOneTurn() {
             Date = Date.AddDays(1);
-            Territories.ForEach(territory => territory.DoOneTurn());
-            Commerces.ForEach(commerce => commerce.DoOneTurn());
+            territories.ForEach(territory => territory.DoOneTurn());
+            commerces.ForEach(commerce => commerce.DoOneTurn());
             RouteLayer.GetInstance().DoOneTurn();
         }
 
-        private void InitializeRaces() {
+        private static void InitializeRaces() {
             // debug
             // ひとまずHumanとElfを生成
             GlobalRaces.GetInstance().Register(RaceFactory.Create("人間", RaceType.Human));
             GlobalRaces.GetInstance().Register(RaceFactory.Create("エルフ", RaceType.Elf));
         }
 
-        private void InitializeGoods() {
+        private static void InitializeGoods() {
             // debug
             // ひとまず小麦を生成
             GlobalGoods.GetInstance().Register(GoodsFactory.Create(GoodsType.Flour, "普通の小麦"));
@@ -55,20 +57,20 @@ namespace Model.World {
         private void InitializeRegion() {
             // debug
             // ひとまず2地域を作成
-            Regions.Add(RegionFactory.Create("東ジャスミニア"));
-            Regions.Add(RegionFactory.Create("西ジャスミニア"));
+            regions.Add(RegionFactory.Create("東ジャスミニア"));
+            regions.Add(RegionFactory.Create("西ジャスミニア"));
         }
 
         private void InitializeTerritory() {
             // debug
             // ひとまず2勢力を作成
-            Territories.Add(TerritoryFactory.Create("新緑教会"));
-            Territories.Add(TerritoryFactory.Create("魔法科学振興委員会"));
+            territories.Add(TerritoryFactory.Create("新緑教会"));
+            territories.Add(TerritoryFactory.Create("魔法科学振興委員会"));
 
             // 農場のテンプレートを保有
             var pa = new ProduceAbility(GlobalGoods.GetInstance().FindByName("普通の小麦"), 3);
             var farm = new SimpleProducer("農場", pa, 5);
-            Territories.ForEach(territory => {
+            territories.ForEach(territory => {
                 territory.AddBuildingTemplate(farm);
             });
         }
@@ -82,24 +84,23 @@ namespace Model.World {
                 var town = TownFactory.Create(id, name, townType, GlobalRaces.GetInstance().FindByName(raceName), isCapital);
 
                 // Regionに属させる
-                // Territoryに属させる
-                var regionName = "";
-                var territoryName = "";
-                switch (raceName)
+                var regionName = raceName switch
                 {
-                    case "エルフ":
-                        regionName = "東ジャスミニア";
-                        territoryName = "新緑教会";
-                        break;
-                    case "人間":
-                        regionName = "西ジャスミニア";
-                        territoryName = "魔法科学振興委員会";
-                        break;
-                    default:
-                        throw new InvalidOperationException("不正なRegionが指定されました");
-                }
-                Regions.First(r => r.Name == regionName).AttachTowns(town);
-                Territories.First(t => t.Name == territoryName).AttachTowns(town);
+                    "エルフ" => "東ジャスミニア",
+                    "人間" => "西ジャスミニア",
+                    _ => throw new InvalidOperationException("不正なRegionが指定されました")
+                };
+                
+                // Territoryに属させる
+                var territoryName = raceName switch
+                {
+                    "エルフ" => "新緑教会",
+                    "人間" => "魔法科学振興委員会",
+                    _ => throw new InvalidOperationException("不正なRegionが指定されました")
+                };
+ 
+                regions.First(r => r.Name == regionName).AttachTowns(town);
+                territories.First(t => t.Name == territoryName).AttachTowns(town);
 
                 return town;
             }
@@ -111,14 +112,14 @@ namespace Model.World {
             Towns.Add(SetTown(5, "クラフトランド", TownType.Inland, "人間"));
             
             // Territory毎の初期化
-            Territories.ForEach(territory => territory.InitializeTowns());
+            territories.ForEach(territory => territory.InitializeTowns());
         }
 
         private void InitializeCommerces()
         {
             foreach (var town in Towns)
             {
-                Commerces.Add(new CommerceEntity(town, Territories));
+                commerces.Add(new CommerceEntity(town, territories));
             }
         }
 

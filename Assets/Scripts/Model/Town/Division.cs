@@ -2,11 +2,13 @@
 using Model.Town.Building;
 using Model.Town.Terrain;
 
+#nullable enable
+
 namespace Model.Town {
     public class Division {
         private readonly int id;
-        private TerrainEntity terrain;
-        public IBuildable Building { get; private set; }
+        private ITerrain terrain;
+        public IBuildable? Building { get; private set; }
 
         public Division(int id, TerrainType terrainType)
         {

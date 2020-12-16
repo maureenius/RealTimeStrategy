@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
 
+#nullable enable
+
 namespace Model.Goods {
     public enum GoodsType {
         [Description("小麦")]
@@ -19,10 +21,10 @@ namespace Model.Goods {
     }
 
     public abstract class GoodsEntity {
-        public GoodsType GoodsType { get; private set; }
-        public string Name { get; private set; }
+        public GoodsType GoodsType { get; }
+        public string Name { get; }
 
-        public GoodsEntity(GoodsType goodsType, string name) {
+        protected GoodsEntity(GoodsType goodsType, string name) {
             GoodsType = goodsType;
             Name = name;
         }

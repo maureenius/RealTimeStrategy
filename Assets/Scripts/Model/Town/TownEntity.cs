@@ -8,6 +8,8 @@ using Model.Town.Building;
 using Model.Town.TownDetail;
 using UniRx;
 
+#nullable enable
+
 namespace Model.Town {
     public enum TownType {
         [Description("港町")]
@@ -21,23 +23,23 @@ namespace Model.Town {
         public readonly string TownName;
         public readonly TownType TownType;
         public IList<Storage> Storages { get; } = new List<Storage>();
-        public IList<Pop> Pops { get; } = new List<Pop>();
-        public IList<Workplace> Workplaces { get; } = new List<Workplace>();
+        private IList<Pop> Pops { get; } = new List<Pop>();
+        private IList<Workplace> Workplaces { get; } = new List<Workplace>();
 
-        public IList<IBuildable> Buildings { get; } = new List<IBuildable>();
+        private IList<IBuildable> Buildings { get; } = new List<IBuildable>();
 
-        public bool IsCapital { get; private set; }
+        public bool IsCapital { get; }
 
-        public TownEntity(int id, string townName, TownType townType, RaceEntity raceEntity, int popNum = 5, int divisionNum = 10, bool isCapital=false){
+        public TownEntity(int id, string townName, TownType townType, IRace race, int popNum = 5, int divisionNum = 10, bool isCapital=false){
             Id = id;
             TownName = townName;
             TownType = townType;
             IsCapital = isCapital;
 
-            InitializePops(raceEntity, popNum);
+            InitializePops(race, popNum);
         }
 
-        public void InitializePops(RaceEntity race, int num) {
+        private void InitializePops(IRace race, int num) {
             Pops.Clear();
             for(var i = 0; i < num; i++)
             {
@@ -87,15 +89,18 @@ namespace Model.Town {
         {
             foreach (var cargo in cargoes)
             {
-                if (cargo == null) return;
-                
-                var outputStorage = GetStorage(cargo.Goods);
-                if (outputStorage == null) {
-                    outputStorage = new Storage(cargo.Goods, 1000);
-                    Storages.Add(outputStorage);
-                }
-                outputStorage.Store(cargo.Amount);
+                var storage = GetStorage(cargo.Goods) ?? CreateStorage(cargo.Goods, 1000);
+
+                storage.Store(cargo.Amount);
             }
+        }
+
+        private Storage CreateStorage(GoodsEntity goods, int limit)
+        {
+            var storage = new Storage(goods, limit);
+            Storages.Add(storage);
+
+            return storage;
         }
 
         private void Produce() {
@@ -132,27 +137,27 @@ namespace Model.Town {
             });
         }
 
-        private Storage GetStorage(GoodsEntity target) {
+        private Storage? GetStorage(GoodsEntity target) {
             return Storages.FirstOrDefault(storage => storage.Goods.Name == target.Name);
         }
 
-        private Storage GetStorageByGoodsType(GoodsType goodsType) {
+        private Storage? GetStorageByGoodsType(GoodsType goodsType) {
             return Storages.FirstOrDefault(storage => storage.Goods.GoodsType == goodsType);
         }
 
         private List<Pop> GetUnemployed()
         {
-            return Pops.Where(pop => pop.WorkSlot == null).ToList();
+            return Pops.Where(pop => pop.Workplace == null).ToList();
         }
 
         private List<Workplace> GetVacantWorkplaces()
         {
-            return Workplaces.Where(ws => !Pops.Select(pop => pop.WorkSlot).Contains(ws)).ToList();
+            return Workplaces.Where(ws => !Pops.Select(pop => pop.Workplace).Contains(ws)).ToList();
         }
     }
 
     public static class TownFactory {
-        public static TownEntity Create(int id, string townName, TownType townType, RaceEntity race, bool isCapital=false)
+        public static TownEntity Create(int id, string townName, TownType townType, IRace race, bool isCapital=false)
         {
             return townType switch
             {

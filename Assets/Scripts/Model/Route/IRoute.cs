@@ -3,6 +3,8 @@ using Model.Goods;
 using Model.Territory;
 using Model.Town;
 
+#nullable enable
+
 namespace Model.Route {
     public interface IRoute {
         int Capacity { get; }
@@ -10,7 +12,7 @@ namespace Model.Route {
         TownEntity To { get; }
         void DoOneTurn();
         void PushCargo(Cargo cargo);
-        Cargo TakeCargo();
+        List<Cargo> TakeCargo();
         void UpdateTensions(IEnumerable<Tension> argTensions);
         double FlowPower();
     }

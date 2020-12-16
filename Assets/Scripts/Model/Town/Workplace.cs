@@ -5,6 +5,8 @@ using Model.Race;
 using Model.Town.Building;
 using Model.Util;
 
+#nullable enable
+
 namespace Model.Town
 {
     public readonly struct WorkplaceData
@@ -36,8 +38,8 @@ namespace Model.Town
             Id = Guid.NewGuid();
             Name = Source.Name;
             TypeName = Source.TypeName;
-            if (Source is IHasProduceAbility pa) ProduceAbilities = pa.ProduceAbilities;
-            if (Source is IHasConsumptionTrait ct) ConsumptionTraits = ct.ConsumptionTraits;
+            ProduceAbilities = Source is IHasProduceAbility pa ? new List<ProduceAbility>(pa.ProduceAbilities) : new List<ProduceAbility>();
+            ConsumptionTraits = Source is IHasConsumptionTrait ct ? new List<ConsumptionTrait>(ct.ConsumptionTraits) : new List<ConsumptionTrait>();
         }
 
         public WorkplaceData ToData()
