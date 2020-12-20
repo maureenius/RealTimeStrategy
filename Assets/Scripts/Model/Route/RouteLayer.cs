@@ -16,26 +16,30 @@ namespace Model.Route {
 
         private RouteLayer() {}
         
-        private readonly IList<IRoute> routes = new List<IRoute>();
+        public IList<IRoute> Routes { get; } = new List<IRoute>();
 
         public void DoOneTurn()
         {
-            routes.ToList().ForEach(route => route.DoOneTurn());
+            Routes.ToList().ForEach(route => route.DoOneTurn());
         }
         
-        public void Connect(TownEntity start, TownEntity end, int capacity, int length) {
+        public void Connect(TownEntity start, TownEntity end, int capacity, int length)
+        {
+            if (Routes.Any(route => route.From.Id == start.Id && route.To.Id == end.Id ||
+                                    route.From.Id == end.Id && route.To.Id == start.Id)) return;
+            
             var addRoute = new Route(capacity, length, start, end);
-            routes.Add(addRoute);
+            Routes.Add(addRoute);
         }
 
         public void Disconnect(IRoute route)
         {
-            routes.Remove(route);
+            Routes.Remove(route);
         }
 
         public List<IRoute> GetConnectedRoutes(TownEntity town)
         {
-            return routes
+            return Routes
                 .Where(route => route.From == town || route.To == town)
                 .ToList();
         }

@@ -1,11 +1,13 @@
 {
     "name": "Presenter",
+    "rootNamespace": "",
     "references": [
         "Town",
         "View",
         "Util",
         "UniRx",
-        "Database"
+        "Database",
+        "Route"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

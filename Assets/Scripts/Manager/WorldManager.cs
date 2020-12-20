@@ -1,4 +1,5 @@
 ﻿using System;
+using Model.Route;
 using Model.World;
 using Presenter;
 using UnityEngine;
@@ -19,7 +20,7 @@ namespace Manager
 
         public bool isPaused = true;
         
-        private readonly World world = new World();
+        private readonly World _world = new World();
 
         public void PlayGame()
         {
@@ -42,6 +43,7 @@ namespace Manager
         private void Start()
         {
             InitializeTowns();
+            InitializeRoutes();
 
             Observable.Interval(TimeSpan.FromMilliseconds(milliSecForOneTurn))
                 .Where(_ => !isPaused)
@@ -53,13 +55,18 @@ namespace Manager
         {
             if (dateText == null) throw new NullReferenceException();
             
-            world.DoOneTurn();
-            dateText.text = world.Date.ToString("yyyy/MM/dd");
+            _world.DoOneTurn();
+            dateText.text = _world.Date.ToString("yyyy/MM/dd");
         }
 
         private void InitializeTowns()
         {
-            GetComponent<TownsPresenter>().Initialize(world.Towns);
+            GetComponent<TownsPresenter>().Initialize(_world.Towns);
+        }
+
+        private void InitializeRoutes()
+        {
+            GetComponent<RoutesPresenter>().Initialize(RouteLayer.GetInstance().Routes);
         }
     }
 }

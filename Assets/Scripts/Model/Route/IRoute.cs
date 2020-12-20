@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Model.Goods;
 using Model.Territory;
 using Model.Town;
+using UniRx;
 
 #nullable enable
 
 namespace Model.Route {
     public interface IRoute {
+        Guid Id { get; }
         int Capacity { get; }
         TownEntity From { get; }
         TownEntity To { get; }
@@ -15,6 +18,7 @@ namespace Model.Route {
         List<Cargo> TakeCargo();
         void UpdateTensions(IEnumerable<Tension> argTensions);
         double FlowPower();
+        IObservable<Unit> OnRecalculation { get; }
     }
     
     public class Tension

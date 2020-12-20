@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Model.Goods;
 using Model.Town;
+using UniRx;
 
 #nullable enable
 
 namespace Model.Route {
     public class Route : IRoute {
+        public Guid Id { get; }
         public int Capacity { get; }
         public bool IsForward { get; }
 
@@ -18,7 +21,11 @@ namespace Model.Route {
         private readonly int length;
         private List<Tension> tensions = new List<Tension>();
 
+        public IObservable<Unit> OnRecalculation => _onRecalculation;
+        private readonly Subject<Unit> _onRecalculation = new Subject<Unit>();
+
         public Route(int capacity, int length, TownEntity from, TownEntity to) {
+            Id = Guid.NewGuid();
             Capacity = capacity;
             IsForward = true;
             this.length = length;
@@ -49,6 +56,8 @@ namespace Model.Route {
         public void UpdateTensions(IEnumerable<Tension> argTensions)
         {
             tensions = tensions.Union(argTensions).ToList();
+            
+            _onRecalculation.OnNext(Unit.Default);
         }
     }
 }
