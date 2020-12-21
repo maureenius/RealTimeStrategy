@@ -13,7 +13,7 @@ namespace View
     {
         [SerializeField] private GameObject? background;
         [SerializeField] private GameObject? pop;
-        private PopSlotViewData data;
+        private PopSlotViewData _data;
         
         private readonly Subject<PopSlotViewData> _onSelectedSubject = new Subject<PopSlotViewData>();
         public IObservable<PopSlotViewData> OnSelected => _onSelectedSubject;
@@ -22,7 +22,7 @@ namespace View
         {
             if(background == null || pop == null) throw new NullReferenceException();
             
-            data = arg;
+            _data = arg;
 
             if (arg.SlotGuid == Guid.Empty)
             {
@@ -31,7 +31,7 @@ namespace View
             }
             else
             {
-                background.GetComponent<Image>().sprite = data.SlotBackgroundImage;
+                background.GetComponent<Image>().sprite = _data.SlotBackgroundImage;
             }
 
             if (arg.WorkerGuid == Guid.Empty)
@@ -41,13 +41,13 @@ namespace View
             }
             else
             {
-                pop.GetComponent<Image>().sprite = data.WorkerImage;
+                pop.GetComponent<Image>().sprite = _data.WorkerImage;
             }
         }
 
         public void OnClicked(BaseEventData e)
         {
-            _onSelectedSubject.OnNext(data);
+            _onSelectedSubject.OnNext(_data);
         }
     }
 

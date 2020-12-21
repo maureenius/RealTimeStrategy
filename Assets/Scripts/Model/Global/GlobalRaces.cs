@@ -9,32 +9,32 @@ namespace Model.Global {
     public sealed class GlobalRaces {
         private static readonly GlobalRaces Instance = new GlobalRaces();
 
-        private readonly List<IRace> closedRacesList;
+        private readonly List<IRace> _closedRacesList;
 
         public static GlobalRaces GetInstance() {
             return Instance;
         }
 
         public void Register(IRace race) {
-            if (closedRacesList.FirstOrDefault(r => r.Name == race.Name) != null) {
+            if (_closedRacesList.FirstOrDefault(r => r.Name == race.Name) != null) {
                 throw new InvalidOperationException("同名のRaceが登録されました");
             }
 
-            closedRacesList.Add(RaceFactory.Copy(race));
+            _closedRacesList.Add(RaceFactory.Copy(race));
         }
 
         public IRace FindByName(string name) {
-            return RaceFactory.Copy(closedRacesList.Find(r => r.Name == name));
+            return RaceFactory.Copy(_closedRacesList.Find(r => r.Name == name));
         }
 
         public void Clear()
         {
-            closedRacesList.Clear();
+            _closedRacesList.Clear();
         }
 
         private GlobalRaces()
         {
-            closedRacesList = new List<IRace>();
+            _closedRacesList = new List<IRace>();
         }
     }
 }

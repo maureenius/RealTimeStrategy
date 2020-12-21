@@ -15,7 +15,7 @@ namespace Model.Route {
         TownEntity To { get; }
         void DoOneTurn();
         void PushCargo(Cargo cargo);
-        List<Cargo> TakeCargo();
+        IEnumerable<Cargo> TakeCargo();
         void UpdateTensions(IEnumerable<Tension> argTensions);
         double FlowPower();
         IObservable<Unit> OnRecalculation { get; }

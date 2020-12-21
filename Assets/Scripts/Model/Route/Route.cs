@@ -17,9 +17,9 @@ namespace Model.Route {
 
         public TownEntity To { get; }
 
-        private readonly Queue<(Cargo cargo, int timer)> cargos = new Queue<(Cargo cargo, int timer)>();
-        private readonly int length;
-        private List<Tension> tensions = new List<Tension>();
+        private readonly Queue<(Cargo cargo, int timer)> _cargos = new Queue<(Cargo cargo, int timer)>();
+        private readonly int _length;
+        private List<Tension> _tensions = new List<Tension>();
 
         public IObservable<Unit> OnRecalculation => _onRecalculation;
         private readonly Subject<Unit> _onRecalculation = new Subject<Unit>();
@@ -28,34 +28,34 @@ namespace Model.Route {
             Id = Guid.NewGuid();
             Capacity = capacity;
             IsForward = true;
-            this.length = length;
+            this._length = length;
             From = from;
             To = to;
         }
 
         public void DoOneTurn() {
-            cargos.ToList().ForEach(c => c.timer--);
+            _cargos.ToList().ForEach(c => c.timer--);
         }
 
         public void PushCargo(Cargo cargo) {
             if (cargo.Amount > Capacity) return;
 
-            cargos.Enqueue((cargo, timer: length));
+            _cargos.Enqueue((cargo, timer: _length));
         }
 
-        public List<Cargo> TakeCargo()
+        public IEnumerable<Cargo> TakeCargo()
         {
-            return cargos.Where(c => c.timer <= 0).Select(c => c.cargo).ToList();
+            return _cargos.Where(c => c.timer <= 0).Select(c => c.cargo).ToList();
         }
 
         public double FlowPower()
         {
-            return tensions.Sum(t => t.Power);
+            return _tensions.Sum(t => t.Power);
         }
 
         public void UpdateTensions(IEnumerable<Tension> argTensions)
         {
-            tensions = tensions.Union(argTensions).ToList();
+            _tensions = _tensions.Union(argTensions).ToList();
             
             _onRecalculation.OnNext(Unit.Default);
         }

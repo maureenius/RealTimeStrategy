@@ -10,7 +10,7 @@ namespace Tests.EditMode.Editor.Model.Commerce
 {
     public class CommerceEntityTest
     {
-        private CommerceEntity commerce;
+        private CommerceEntity _commerce;
         
         [SetUp]
         public void Constructor()
@@ -23,9 +23,9 @@ namespace Tests.EditMode.Editor.Model.Commerce
                 race);
             var territories = new List<TerritoryEntity>(){TerritoryFactory.Create("testTerritory")};
             
-            commerce = new CommerceEntity(town, territories);
+            _commerce = new CommerceEntity(town, territories);
             
-            Assert.AreEqual(commerce, null);
+            Assert.AreEqual(_commerce, null);
         }
         
         [Test]

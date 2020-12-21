@@ -5,7 +5,7 @@ using Model.Town;
 
 namespace Model.Region {
     public abstract class RegionEntity {
-        private readonly IList<TownEntity> towns = new List<TownEntity>();
+        private readonly IList<TownEntity> _towns = new List<TownEntity>();
         public string Name { get; }
 
         protected RegionEntity(string name) {
@@ -14,7 +14,7 @@ namespace Model.Region {
 
         public void AttachTowns(TownEntity attachedTown)
         {
-            towns.Add(attachedTown);
+            _towns.Add(attachedTown);
         }
     }
 

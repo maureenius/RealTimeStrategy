@@ -6,14 +6,14 @@ using Model.Town.Terrain;
 
 namespace Model.Town {
     public class Division {
-        private readonly int id;
-        private ITerrain terrain;
+        private readonly int _id;
+        private ITerrain _terrain;
         public IBuildable? Building { get; private set; }
 
         public Division(int id, TerrainType terrainType)
         {
-            this.id = id;
-            terrain = terrainType switch
+            this._id = id;
+            _terrain = terrainType switch
             {
                 TerrainType.Plain => Plain.GetInstance(),
                 _ => throw new InvalidOperationException()

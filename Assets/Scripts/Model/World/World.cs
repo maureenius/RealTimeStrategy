@@ -16,9 +16,9 @@ using Model.Town.Building;
 namespace Model.World {
     public class World {
         public readonly List<TownEntity> Towns = new List<TownEntity>();
-        private readonly List<CommerceEntity> commerces = new List<CommerceEntity>();
-        private readonly List<TerritoryEntity> territories = new List<TerritoryEntity>();
-        private readonly List<RegionEntity> regions = new List<RegionEntity>();
+        private readonly List<CommerceEntity> _commerces = new List<CommerceEntity>();
+        private readonly List<TerritoryEntity> _territories = new List<TerritoryEntity>();
+        private readonly List<RegionEntity> _regions = new List<RegionEntity>();
 
         public DateTime Date = new DateTime(1000, 1, 1);
 
@@ -34,8 +34,8 @@ namespace Model.World {
 
         public void DoOneTurn() {
             Date = Date.AddDays(1);
-            territories.ForEach(territory => territory.DoOneTurn());
-            commerces.ForEach(commerce => commerce.DoOneTurn());
+            _territories.ForEach(territory => territory.DoOneTurn());
+            _commerces.ForEach(commerce => commerce.DoOneTurn());
             RouteLayer.GetInstance().DoOneTurn();
         }
 
@@ -61,20 +61,20 @@ namespace Model.World {
         private void InitializeRegion() {
             // debug
             // ひとまず2地域を作成
-            regions.Add(RegionFactory.Create("東ジャスミニア"));
-            regions.Add(RegionFactory.Create("西ジャスミニア"));
+            _regions.Add(RegionFactory.Create("東ジャスミニア"));
+            _regions.Add(RegionFactory.Create("西ジャスミニア"));
         }
 
         private void InitializeTerritory() {
             // debug
             // ひとまず2勢力を作成
-            territories.Add(TerritoryFactory.Create("新緑教会"));
-            territories.Add(TerritoryFactory.Create("魔法科学振興委員会"));
+            _territories.Add(TerritoryFactory.Create("新緑教会"));
+            _territories.Add(TerritoryFactory.Create("魔法科学振興委員会"));
 
             // 農場のテンプレートを保有
             var pa = new ProduceAbility(GlobalGoods.GetInstance().FindByName("普通の小麦"), 3);
             var farm = new SimpleProducer("農場", pa, 5);
-            territories.ForEach(territory => {
+            _territories.ForEach(territory => {
                 territory.AddBuildingTemplate(farm);
             });
         }
@@ -103,8 +103,8 @@ namespace Model.World {
                     _ => throw new InvalidOperationException("不正なRegionが指定されました")
                 };
  
-                regions.First(r => r.Name == regionName).AttachTowns(town);
-                territories.First(t => t.Name == territoryName).AttachTowns(town);
+                _regions.First(r => r.Name == regionName).AttachTowns(town);
+                _territories.First(t => t.Name == territoryName).AttachTowns(town);
 
                 return town;
             }
@@ -116,14 +116,14 @@ namespace Model.World {
             Towns.Add(SetTown(5, "クラフトランド", TownType.Inland, "人間"));
             
             // Territory毎の初期化
-            territories.ForEach(territory => territory.InitializeTowns());
+            _territories.ForEach(territory => territory.InitializeTowns());
         }
 
         private void InitializeCommerces()
         {
             foreach (var town in Towns)
             {
-                commerces.Add(new CommerceEntity(town, territories));
+                _commerces.Add(new CommerceEntity(town, _territories));
             }
         }
 
