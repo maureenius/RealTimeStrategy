@@ -2,6 +2,7 @@
 using Model.Global;
 using Model.Goods;
 using Model.Race;
+using Model.Town.Terrain;
 
 #nullable enable
 
@@ -12,13 +13,13 @@ namespace Model.Town.Building
         public static SimpleProducer FlourFarm()
         {
             var pa = new ProduceAbility(GlobalGoods.GetInstance().FindByName("普通の小麦"), 5);
-            return new SimpleProducer("小麦農場", pa, 2);
+            return new SimpleProducer("小麦農場", pa, 2, new List<TerrainType>() {TerrainType.Plain});
         }
         
         public static SimpleProducer SugarCaneField()
         {
             var pa = new ProduceAbility(GlobalGoods.GetInstance().FindByName("普通の砂糖"), 3);
-            return new SimpleProducer("さとうきび畑", pa, 2);
+            return new SimpleProducer("さとうきび畑", pa, 2, new List<TerrainType>() {TerrainType.Plain});
         }
         
         public static SimpleProcessor Confectionery()
@@ -29,7 +30,7 @@ namespace Model.Town.Building
                 new ConsumptionTrait(GoodsType.Flour, 1),
                 new ConsumptionTrait(GoodsType.Sugar, 1)
             };
-            return new SimpleProcessor("菓子工房", pa, ct,2);
+            return new SimpleProcessor("菓子工房", pa, ct,2, new List<TerrainType>() {TerrainType.Plain});
         }
     }
 }

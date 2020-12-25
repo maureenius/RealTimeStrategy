@@ -11,6 +11,8 @@ namespace Database
 
         private Sprite[]? RaceFaceImages { get; set; }
         
+        private Sprite[]? BuildingImages { get; set; }
+        
         public Sprite FindSlotBackground(string typeName)
         {
             if (SlotBackgroundImages == null) throw new NullReferenceException();
@@ -54,11 +56,27 @@ namespace Database
             
             return Array.Find(RaceFaceImages, sprite => sprite.name.Equals("None"));
         }
+
+        public Sprite FindBuildingImage(string typeName)
+        {
+            if (BuildingImages == null) throw new NullReferenceException();
+
+            string filename = typeName switch
+            {
+                "小麦農場" => "farm",
+                "さとうきび畑" => "farm",
+                "菓子工房" => "farm",
+                _ => throw new InvalidOperationException(typeName)
+            };
+
+            return Array.Find(BuildingImages, sprite => sprite.name.Equals(filename));
+        }
         
         private void LoadSprites()
         {
             SlotBackgroundImages = Resources.LoadAll<Sprite> ("Images/SlotBackground/");
             RaceFaceImages = Resources.LoadAll<Sprite> ("Images/RaceFace/");
+            BuildingImages = Resources.LoadAll<Sprite>("Images/Building/");
         }
         
         private void Start()

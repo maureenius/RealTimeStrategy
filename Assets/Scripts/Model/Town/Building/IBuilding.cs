@@ -2,15 +2,20 @@
 using System.Collections.Generic;
 using Model.Goods;
 using Model.Race;
+using Model.Town.Terrain;
 using Model.Util;
 
+#nullable enable
+
 namespace Model.Town.Building {
-    public interface IBuildable : INamed, ICloneable
+    public interface IBuildable : INamed
     {
-        // IEnumerable<TerrainEntity> buildableTerrain;
-        int SlotNum { get; }
+        Guid Id { get; }
+        IEnumerable<TerrainType> BuildableTerrainTypes { get; }
         string TypeName { get; }
-        Workplace SlotTemplate { get; }
+        ICollection<Workplace> Workplaces { get; }
+
+        public IBuildable Clone();
     }
 
     public interface IHasProduceAbility

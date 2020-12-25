@@ -13,6 +13,7 @@ namespace View
         [SerializeField] private GameObject? popSlotRowPrefab;
         [SerializeField] private PopContainerView? popContainer;
         [SerializeField] private GameObject? slotContainer;
+        [SerializeField] private BuildingSlotContainerView? buildingSlotContainerView;
         
         private readonly Subject<Unit> _onOpenedSubject = new Subject<Unit>();
         public IObservable<Unit> OnOpened => _onOpenedSubject;
@@ -40,6 +41,13 @@ namespace View
             {
                 AddPopSlot(rowViewData);
             }
+        }
+
+        public void UpdateBuildingContainer(IEnumerable<BuildingSlotViewData> datas)
+        {
+            if (buildingSlotContainerView == null) throw new NullReferenceException();
+            
+            buildingSlotContainerView.Initialize(datas);
         }
 
         private void UpdatePopContainer(PopSlotViewData data)

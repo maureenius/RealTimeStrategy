@@ -5,6 +5,7 @@ using System.Linq;
 using Model.Goods;
 using Model.Race;
 using Model.Town.Building;
+using Model.Town.Terrain;
 using Model.Town.TownDetail;
 using UniRx;
 
@@ -27,14 +28,16 @@ namespace Model.Town {
         private IList<Workplace> Workplaces { get; } = new List<Workplace>();
 
         private IList<IBuildable> Buildings { get; } = new List<IBuildable>();
+        private IEnumerable<Division> Divisions { get; }
 
         public bool IsCapital { get; }
 
-        public TownEntity(int id, string townName, TownType townType, IRace race, int popNum = 5, int divisionNum = 10, bool isCapital=false){
+        protected TownEntity(int id, string townName, TownType townType, IRace race, IEnumerable<Division> divisions, int popNum = 5, bool isCapital=false){
             Id = id;
             TownName = townName;
             TownType = townType;
             IsCapital = isCapital;
+            Divisions = new List<Division>(divisions);
 
             InitializePops(race, popNum);
         }
@@ -54,8 +57,6 @@ namespace Model.Town {
             OptimizeWorkers();
             Produce();
             Consume();
-            // Import();
-            // Export();
             
             _turnPassedSubject.OnNext(Unit.Default);
         }
@@ -73,16 +74,20 @@ namespace Model.Town {
         {
             return Workplaces.Select(ws => ws.ToData()).ToList();
         }
+
+        public IEnumerable<BuildingData> GetBuildings()
+        {
+            return Buildings.Select(b => new BuildingData(b.Id, b.Name));
+        }
         
         public void Build(IBuildable template)
         {
-            if (!(template.Clone() is IBuildable building)) return;
-            
+            var building = template.Clone();
             Buildings.Add(building);
-            for (var i = 0; i < building.SlotNum; i++)
-            {
-                Workplaces.Add(new Workplace(building));
-            }
+            // for (var i = 0; i < building.SlotNum; i++)
+            // {
+            //     Workplaces.Add(new Workplace(building));
+            // }
         }
 
         public void CarryIn(IEnumerable<Cargo> cargoes)

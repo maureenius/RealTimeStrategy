@@ -72,10 +72,8 @@ namespace Model.World {
             _territories.Add(TerritoryFactory.Create("魔法科学振興委員会"));
 
             // 農場のテンプレートを保有
-            var pa = new ProduceAbility(GlobalGoods.GetInstance().FindByName("普通の小麦"), 3);
-            var farm = new SimpleProducer("農場", pa, 5);
             _territories.ForEach(territory => {
-                territory.AddBuildingTemplate(farm);
+                territory.AddBuildingTemplate(BuildingDatabase.FlourFarm());
             });
         }
 

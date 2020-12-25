@@ -6,6 +6,7 @@ using UniRx;
 using UnityEngine;
 using View;
 using Database;
+using Model.Town.Building;
 
 #nullable enable
 
@@ -45,6 +46,7 @@ namespace Presenter
         private void UpdateDetail(TownEntity entity)
         {
             UpdateDivisionContainer(entity);
+            UpdateBuildingContainer(entity);
         }
 
         private void UpdateDivisionContainer(TownEntity entity)
@@ -55,6 +57,14 @@ namespace Presenter
             var workplaceData = entity.GetWorkplaces();
 
             townDetailView.UpdateDivisionContainer(CreateRowData(popData, workplaceData));
+        }
+
+        private void UpdateBuildingContainer(TownEntity entity)
+        {
+            if(townDetailView == null) throw new NullReferenceException();
+
+            var buildingDatas = entity.GetBuildings();
+            townDetailView.UpdateBuildingContainer(ConvertBuildingData(buildingDatas));
         }
 
         private IEnumerable<PopSlotRowViewData> CreateRowData(IEnumerable<PopData> pops, IEnumerable<WorkplaceData> workplaces)
@@ -95,6 +105,15 @@ namespace Presenter
             results.Add(new PopSlotRowViewData("無職", unemployedSlots));
             
             return results;
+        }
+
+        private IEnumerable<BuildingSlotViewData> ConvertBuildingData(IEnumerable<BuildingData> buildings)
+        {
+            if (imageDatabase == null) throw new NullReferenceException();
+
+            return buildings
+                .Select(b => new BuildingSlotViewData(b.Id, b.Name, 
+                    imageDatabase.FindBuildingImage(b.Name)));
         }
     }
 }

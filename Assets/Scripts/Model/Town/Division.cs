@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Model.Town.Building;
 using Model.Town.Terrain;
 
@@ -6,13 +7,13 @@ using Model.Town.Terrain;
 
 namespace Model.Town {
     public class Division {
-        private readonly int _id;
+        private readonly Guid _id;
         private ITerrain _terrain;
-        public IBuildable? Building { get; private set; }
+        private IBuildable? Building { get; set; }
 
-        public Division(int id, TerrainType terrainType)
+        public Division(TerrainType terrainType)
         {
-            this._id = id;
+            _id = Guid.NewGuid();
             _terrain = terrainType switch
             {
                 TerrainType.Plain => Plain.GetInstance(),
@@ -25,9 +26,13 @@ namespace Model.Town {
             Building = target;
         }
 
-        public Util.Util.StatusCode Demolish() {
+        public void Demolish() {
             Building = null;
-            return Util.Util.StatusCode.Success;
+        }
+
+        public IEnumerable<Workplace> ProvidedWorkplaces()
+        {
+            return Building == null ? new List<Workplace>() : Building.Workplaces;
         }
     }
 }
