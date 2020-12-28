@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
+using Database;
 using Model.Race;
-using Model.Town.Terrain;
 
 #nullable enable
 
@@ -14,7 +14,7 @@ namespace Model.Town.TownDetail {
             var divisions = new List<Division>();
             for (var i = 0; i < 10; i++)
             {
-                divisions.Add(new Division(TerrainType.Plain));
+                divisions.Add(new Division(TerrainName.Plain.ToString()));
             }
 
             return divisions;

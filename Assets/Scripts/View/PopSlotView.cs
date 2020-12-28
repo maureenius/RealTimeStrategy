@@ -55,7 +55,6 @@ namespace View
     {
         public Guid SlotGuid { get; }
         public string? SlotName { get; }
-        public string? SlotTypeName { get; }
         public Sprite? SlotBackgroundImage { get; }
         public Guid WorkerGuid { get; }
         public string? WorkerName { get; }
@@ -66,11 +65,10 @@ namespace View
         
         public List<(string goodsName, double amount)> Produces { get; }
 
-        public PopSlotViewData(Guid slotGuid, string slotName, string slotTypeName, Sprite backgroundImage)
+        public PopSlotViewData(Guid slotGuid, string slotName, Sprite backgroundImage)
         {
             SlotGuid = slotGuid;
             SlotName = slotName;
-            SlotTypeName = slotTypeName;
             SlotBackgroundImage = backgroundImage;
             WorkerGuid = Guid.Empty;
             WorkerName = null;
@@ -85,7 +83,6 @@ namespace View
         {
             SlotGuid = Guid.Empty;
             SlotName = "無職";
-            SlotTypeName = "無職";
             SlotBackgroundImage = null;
             WorkerGuid = workerGuid;
             WorkerName = workerName;
@@ -95,13 +92,12 @@ namespace View
             Produces = new List<(string goodsName, double amount)>(produces);
         }
         
-        public PopSlotViewData(Guid slotGuid, string slotName, string slotTypeName, Sprite slotBackgroundImage,
+        public PopSlotViewData(Guid slotGuid, string slotName, Sprite slotBackgroundImage,
             Guid workerGuid, string workerName, string workerRaceName, Sprite workerImage,
             IEnumerable<(string goodsName, double amount)> consumptions, IEnumerable<(string goodsName, double amount)> produces)
         {
             SlotGuid = slotGuid;
             SlotName = slotName;
-            SlotTypeName = slotTypeName;
             SlotBackgroundImage = slotBackgroundImage;
             WorkerGuid = workerGuid;
             WorkerName = workerName;

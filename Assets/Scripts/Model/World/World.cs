@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Model.Commerce;
-using Model.Global;
 using Model.Goods;
 using Model.Race;
 using Model.Region;
@@ -14,126 +13,56 @@ using Model.Town.Building;
 #nullable enable
 
 namespace Model.World {
-    public class World {
-        public readonly List<TownEntity> Towns = new List<TownEntity>();
-        private readonly List<CommerceEntity> _commerces = new List<CommerceEntity>();
-        private readonly List<TerritoryEntity> _territories = new List<TerritoryEntity>();
-        private readonly List<RegionEntity> _regions = new List<RegionEntity>();
+    public class World
+    {
+        public IEnumerable<TownEntity> Towns { get; private set; } = new List<TownEntity>();
+
+        protected IEnumerable<CommerceEntity> Commerces = new List<CommerceEntity>();
+        public IEnumerable<TerritoryEntity> Territories { get; private set; } = new List<TerritoryEntity>();
+        protected IEnumerable<RegionEntity> Regions = new List<RegionEntity>();
 
         public DateTime Date = new DateTime(1000, 1, 1);
 
-        public World() {
-            InitializeRaces();
-            InitializeGoods();
-            InitializeRegion();
-            InitializeTerritory();
-            InitializeTown();
-            InitializeRoutes();
-            InitializeCommerces();
-        }
-
         public void DoOneTurn() {
             Date = Date.AddDays(1);
-            _territories.ForEach(territory => territory.DoOneTurn());
-            _commerces.ForEach(commerce => commerce.DoOneTurn());
+
+            foreach (var town in Towns)
+            {
+                town.DoOneTurn();
+            }
+
+            foreach (var territory in Territories)
+            {
+                territory.DoOneTurn();
+            }
+
+            foreach (var commerce in Commerces)
+            {
+                commerce.DoOneTurn();
+            }
+            
             RouteLayer.GetInstance().DoOneTurn();
         }
 
-        private static void InitializeRaces() {
-            GlobalRaces.GetInstance().Clear();
-            
-            // debug
-            // ひとまずHumanとElfを生成
-            GlobalRaces.GetInstance().Register(RaceFactory.Create("人間", RaceType.Human));
-            GlobalRaces.GetInstance().Register(RaceFactory.Create("エルフ", RaceType.Elf));
-        }
-
-        private static void InitializeGoods() {
-            GlobalGoods.GetInstance().Clear();
-            
-            // debug
-            // ひとまず小麦を生成
-            GlobalGoods.GetInstance().Register(GoodsFactory.Create(GoodsType.Flour, "普通の小麦"));
-            GlobalGoods.GetInstance().Register(GoodsFactory.Create(GoodsType.Sugar, "普通の砂糖"));
-            GlobalGoods.GetInstance().Register(GoodsFactory.Create(GoodsType.Cookie, "普通のクッキー"));
-        }
-
-        private void InitializeRegion() {
-            // debug
-            // ひとまず2地域を作成
-            _regions.Add(RegionFactory.Create("東ジャスミニア"));
-            _regions.Add(RegionFactory.Create("西ジャスミニア"));
-        }
-
-        private void InitializeTerritory() {
-            // debug
-            // ひとまず2勢力を作成
-            _territories.Add(TerritoryFactory.Create("新緑教会"));
-            _territories.Add(TerritoryFactory.Create("魔法科学振興委員会"));
-
-            // 農場のテンプレートを保有
-            _territories.ForEach(territory => {
-                territory.AddBuildingTemplate(BuildingDatabase.FlourFarm());
-            });
-        }
-
-        private void InitializeTown() {
-            // debug
-            // ひとまず5都市を作成
-
-            // 初期Pop3, 区画10, 農場2
-            TownEntity SetTown(int id, string name, TownType townType, string raceName, bool isCapital=false) {
-                var town = TownFactory.Create(id, name, townType, GlobalRaces.GetInstance().FindByName(raceName), isCapital);
-
-                // Regionに属させる
-                var regionName = raceName switch
-                {
-                    "エルフ" => "東ジャスミニア",
-                    "人間" => "西ジャスミニア",
-                    _ => throw new InvalidOperationException("不正なRegionが指定されました")
-                };
-                
-                // Territoryに属させる
-                var territoryName = raceName switch
-                {
-                    "エルフ" => "新緑教会",
-                    "人間" => "魔法科学振興委員会",
-                    _ => throw new InvalidOperationException("不正なRegionが指定されました")
-                };
- 
-                _regions.First(r => r.Name == regionName).AttachTowns(town);
-                _territories.First(t => t.Name == territoryName).AttachTowns(town);
-
-                return town;
-            }
-
-            Towns.Add(SetTown(1, "原初の森", TownType.Inland, "エルフ", isCapital: true));
-            Towns.Add(SetTown(2, "青碧の湖", TownType.Port, "エルフ"));
-            Towns.Add(SetTown(3, "首都マクシムス", TownType.Inland, "人間", isCapital: true));
-            Towns.Add(SetTown(4, "ポートランド", TownType.Port, "人間"));
-            Towns.Add(SetTown(5, "クラフトランド", TownType.Inland, "人間"));
-            
-            // Territory毎の初期化
-            _territories.ForEach(territory => territory.InitializeTowns());
-        }
-
-        private void InitializeCommerces()
+        public void InitializeTowns(IEnumerable<TownEntity> towns)
         {
-            foreach (var town in Towns)
-            {
-                _commerces.Add(new CommerceEntity(town, _territories));
-            }
+            if (Towns.Any()) throw new InvalidOperationException("Townsは既に初期化されています");
+
+            Towns = towns;
+        }
+        
+        public void InitializeTerritories(IEnumerable<TerritoryEntity> territories)
+        {
+            if (Territories.Any()) throw new InvalidOperationException("Territoriesは既に初期化されています");
+
+            Territories = territories;
         }
 
-        private void InitializeRoutes()
+        public void InitializeCommerce(IEnumerable<CommerceEntity> commerces)
         {
-            // debug
-            // 1-2-3-4
-            //     |-5 に繋ぐ
-            RouteLayer.GetInstance().Connect(Towns.First(t => t.Id == 1), Towns.First(t => t.Id == 2), 100, 3);
-            RouteLayer.GetInstance().Connect(Towns.First(t => t.Id == 2), Towns.First(t => t.Id == 3), 100, 3);
-            RouteLayer.GetInstance().Connect(Towns.First(t => t.Id == 3), Towns.First(t => t.Id == 4), 100, 3);
-            RouteLayer.GetInstance().Connect(Towns.First(t => t.Id == 3), Towns.First(t => t.Id == 5), 100, 3);
+            if (Commerces.Any()) throw new InvalidOperationException("Commercesは既に初期化されています");
+
+            Commerces = commerces;
         }
     }
 }

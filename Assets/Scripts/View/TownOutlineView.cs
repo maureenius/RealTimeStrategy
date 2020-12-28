@@ -48,14 +48,14 @@ namespace View
     {
         public string TownName { get; }
         public string TownType { get; }
-        public List<(string goodsTypeName, int amount)> Storages { get; }
+        public List<(string goodsTypeName, float amount)> Storages { get; }
 
         public TownOutlineData(string townName, string townType,
-            IEnumerable<(string goodsTypeName, int amount)> storages)
+            IEnumerable<(string goodsTypeName, float amount)> storages)
         {
             TownName = townName;
             TownType = townType;
-            Storages = new List<(string goodsTypeName, int amount)>(storages);
+            Storages = new List<(string goodsTypeName, float amount)>(storages);
         }
     }
 }

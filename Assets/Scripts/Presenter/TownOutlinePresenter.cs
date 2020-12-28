@@ -13,7 +13,7 @@ namespace Presenter
     {
         [SerializeField] private TownsPresenter? townsPresenter;
         
-        private TownOutlineView? _view;
+        [SerializeField] private TownOutlineView? _view;
 
         private void UpdateData(TownEntity entity)
         {
@@ -22,12 +22,10 @@ namespace Presenter
             _view.ShowOverPanel();
             _view.UpdateOutline(GetTownOutlineData(entity));
         }
-        
-        private void Start()
+
+        public void Initialize()
         {
             if (townsPresenter == null) throw new NullReferenceException();
-            
-            _view = GetComponent<TownOutlineView>();
 
             townsPresenter.SelectedTownId
                 .Where(townId => townId != 0)

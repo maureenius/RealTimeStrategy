@@ -1,24 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Database;
 using Model.Town.Building;
-using Model.Town.Terrain;
 
 #nullable enable
 
 namespace Model.Town {
     public class Division {
         private readonly Guid _id;
-        private ITerrain _terrain;
-        private IBuildable? Building { get; set; }
+        private TerrainData _terrain;
+        public IBuildable? Building { get; private set; }
 
-        public Division(TerrainType terrainType)
+        public Division(string terrainName)
         {
             _id = Guid.NewGuid();
-            _terrain = terrainType switch
-            {
-                TerrainType.Plain => Plain.GetInstance(),
-                _ => throw new InvalidOperationException()
-            };
+            _terrain = TerrainDatabase.Find(terrainName);
+        }
+
+        public bool CanBuild(IBuildable target)
+        {
+            return target.BuildableTerrainTypes.Contains(_terrain.TerrainName);
         }
 
         public void Build(IBuildable target) {

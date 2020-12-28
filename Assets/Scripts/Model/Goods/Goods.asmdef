@@ -1,3 +1,17 @@
-﻿{
-	"name": "Goods"
+{
+    "name": "Goods",
+    "rootNamespace": "",
+    "references": [
+        "GUID:0a90099f0fc06394fa8d9ff76a95ebd0",
+        "GUID:6559a05898285e94380b20250eb51fb6"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

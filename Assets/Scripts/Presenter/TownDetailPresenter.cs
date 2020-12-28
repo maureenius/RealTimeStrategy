@@ -5,8 +5,8 @@ using Model.Town;
 using UniRx;
 using UnityEngine;
 using View;
-using Database;
 using Model.Town.Building;
+using Store;
 
 #nullable enable
 
@@ -16,9 +16,9 @@ namespace Presenter
     {
         [SerializeField] private TownsPresenter? townsPresenter;
         [SerializeField] private TownDetailView? townDetailView;
-        [SerializeField] private ImageDatabase? imageDatabase;
+        [SerializeField] private ImageStore? imageDatabase;
 
-        private void Start()
+        public void Initialize()
         {
             if(townsPresenter == null || townDetailView == null) throw new NullReferenceException();
             
@@ -54,7 +54,7 @@ namespace Presenter
             if(townDetailView == null) throw new NullReferenceException();
             
             var popData = entity.GetPopData();
-            var workplaceData = entity.GetWorkplaces();
+            var workplaceData = entity.GetWorkplaceDatas();
 
             townDetailView.UpdateDivisionContainer(CreateRowData(popData, workplaceData));
         }
@@ -80,7 +80,6 @@ namespace Presenter
                     var viewData = worker.Id != Guid.Empty
                         ? new PopSlotViewData(wpData.SlotGuid,
                             wpData.SlotName,
-                            wpData.SlotTypeName,
                             imageDatabase.FindSlotBackground(wpData.SlotName),
                             worker.Id,
                             worker.Name,
@@ -89,8 +88,7 @@ namespace Presenter
                             worker.Consumptions,
                             worker.Produces
                         )
-                        : new PopSlotViewData(wpData.SlotGuid, wpData.SlotName, wpData.SlotTypeName,
-                            imageDatabase.FindSlotBackground(wpData.SlotName));
+                        : new PopSlotViewData(wpData.SlotGuid, wpData.SlotName, imageDatabase.FindSlotBackground(wpData.SlotName));
 
                     return viewData;
                 })) 
@@ -107,13 +105,13 @@ namespace Presenter
             return results;
         }
 
-        private IEnumerable<BuildingSlotViewData> ConvertBuildingData(IEnumerable<BuildingData> buildings)
+        private IEnumerable<BuildingSlotViewData> ConvertBuildingData(IEnumerable<IBuildable> buildings)
         {
             if (imageDatabase == null) throw new NullReferenceException();
 
             return buildings
-                .Select(b => new BuildingSlotViewData(b.Id, b.Name, 
-                    imageDatabase.FindBuildingImage(b.Name)));
+                .Select(b => new BuildingSlotViewData(b.Id, b.SystemName, 
+                    imageDatabase.FindBuildingImage(b.SystemName)));
         }
     }
 }

@@ -690,7 +690,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2476,7 +2476,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 3}
     m_FontSize: 25
     m_FontStyle: 0
     m_BestFit: 0
@@ -6404,7 +6404,6 @@ GameObject:
   - component: {fileID: 1203019192}
   - component: {fileID: 1203019191}
   - component: {fileID: 1203019193}
-  - component: {fileID: 1203019190}
   m_Layer: 5
   m_Name: TownOutline
   m_TagString: Untagged
@@ -6474,19 +6473,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1203019186}
   m_CullTransparentMesh: 0
---- !u!114 &1203019190
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1203019186}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f71f49ca9dbe1e4b80ed98daa3fa6e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  townsPresenter: {fileID: 1439080119}
 --- !u!114 &1203019191
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7134,6 +7120,8 @@ GameObject:
   - component: {fileID: 1439080120}
   - component: {fileID: 1439080119}
   - component: {fileID: 1439080122}
+  - component: {fileID: 1439080123}
+  - component: {fileID: 1439080124}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -7209,7 +7197,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1439080116}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ac9403130d642c9bf8377a68e2bde6d, type: 3}
+  m_Script: {fileID: 11500000, guid: 7f340d9df832fa94384c4b0d5b5e7101, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1439080122
@@ -7228,6 +7216,32 @@ MonoBehaviour:
   routePrefab: {fileID: 6592695804638874717, guid: c43223a8bb771004c8f21c2f56eadb84,
     type: 3}
   townRoot: {fileID: 155945606}
+--- !u!114 &1439080123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1439080116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 326f9c717e624b9c893a0ad2b579c4df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1439080124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1439080116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f71f49ca9dbe1e4b80ed98daa3fa6e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  townsPresenter: {fileID: 1439080119}
+  _view: {fileID: 1203019193}
 --- !u!1 &1468360269
 GameObject:
   m_ObjectHideFlags: 0

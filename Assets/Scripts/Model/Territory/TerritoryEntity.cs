@@ -23,15 +23,15 @@ namespace Model.Territory {
         public abstract void InitializeTowns();
 
         public void AddBuildingTemplate(IBuildable template) {
-            if (BuildingTemplates.FirstOrDefault(t => t.Name == template.Name) == null)
+            if (BuildingTemplates.FirstOrDefault(t => t.SystemName == template.SystemName) == null)
             {
-                BuildingTemplates.Add((IBuildable)template.Clone());
+                BuildingTemplates.Add(template.Clone());
             }
         }
 
         public void DoOneTurn()
         {
-            Towns.ToList().ForEach(town => town.DoOneTurn());
+            
         }
 
         public bool IsOwn(TownEntity town)
@@ -47,18 +47,18 @@ namespace Model.Territory {
 
         private void InitializeBuildingTemplate()
         {
-            AddBuildingTemplate(BuildingDatabase.FlourFarm());
-            AddBuildingTemplate(BuildingDatabase.SugarCaneField());
-            AddBuildingTemplate(BuildingDatabase.Confectionery());
+            AddBuildingTemplate(BuildingFactory.FlourFarm());
+            AddBuildingTemplate(BuildingFactory.SugarCaneField());
+            AddBuildingTemplate(BuildingFactory.Confectionery());
         }
         
         public override void InitializeTowns()
         {
             Towns.ToList().ForEach(town =>
             {
-                town.Build(BuildingTemplates.First(template => template.Name == "小麦農場"));
-                town.Build(BuildingTemplates.First(template => template.Name == "さとうきび畑"));
-                town.Build(BuildingTemplates.First(template => template.Name == "菓子工房"));
+                town.Build(BuildingTemplates.First(template => template.SystemName == "小麦農場"));
+                town.Build(BuildingTemplates.First(template => template.SystemName == "さとうきび畑"));
+                town.Build(BuildingTemplates.First(template => template.SystemName == "菓子工房"));
             });
         }
     }

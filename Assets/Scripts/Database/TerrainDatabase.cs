@@ -1,18 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+
+#nullable enable
 
 namespace Database
 {
-    public class TerrainDatabase : ScriptableObject
+    public static class TerrainDatabase
     {
-        [SerializeField]
-        public List<TerrainData> TerrainDatas = new List<TerrainData>();
+        private static readonly Dictionary<string, TerrainData> TerrainDataList = 
+            Resources.LoadAll<TerrainData>("Database/TerrainData/")
+                .ToDictionary(data => data.Name);
+
+        public static TerrainData Find(string name)
+        {
+            return TerrainDataList[name];
+        }
+
+        public static TerrainData Find(TerrainName name)
+        {
+            return TerrainDataList[name.ToString()];
+        }
     }
 
-    [Serializable]
-    public class TerrainData : ScriptableObject
+    public enum TerrainName
     {
-        public string Name;
+        Plain,
+        Mountain
     }
 }

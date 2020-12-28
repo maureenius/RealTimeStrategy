@@ -1,33 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
+using Database;
 using Model.Goods;
 using Model.Race;
 using Model.Town.Building;
-using Model.Town.Terrain;
 using Model.Town.TownDetail;
+using Model.Util;
 using UniRx;
 
 #nullable enable
 
 namespace Model.Town {
-    public enum TownType {
-        [Description("港町")]
-        Port,
-        [Description("内陸")]
-        Inland,
-    }
-
     public abstract class TownEntity {
         public readonly int Id;
         public readonly string TownName;
         public readonly TownType TownType;
         public IList<Storage> Storages { get; } = new List<Storage>();
         private IList<Pop> Pops { get; } = new List<Pop>();
-        private IList<Workplace> Workplaces { get; } = new List<Workplace>();
-
-        private IList<IBuildable> Buildings { get; } = new List<IBuildable>();
         private IEnumerable<Division> Divisions { get; }
 
         public bool IsCapital { get; }
@@ -61,8 +51,8 @@ namespace Model.Town {
             _turnPassedSubject.OnNext(Unit.Default);
         }
 
-        public IEnumerable<(string goodsTypeName, int amount)> GetStoredProducts() {
-            return Storages.Select(s => (goodsTypeName: s.Goods.GoodsType.GetNameJpn(), amount: s.Amount)).ToList();
+        public IEnumerable<(string goodsTypeName, float amount)> GetStoredProducts() {
+            return Storages.Select(s => (goodsTypeName: s.Goods.DisplayName, amount: s.Amount)).ToList();
         }
 
         public List<PopData> GetPopData()
@@ -70,24 +60,30 @@ namespace Model.Town {
             return Pops.Select(pop => pop.ToData()).ToList();
         }
 
-        public List<WorkplaceData> GetWorkplaces()
+        private IEnumerable<Workplace> GetWorkplaces()
         {
-            return Workplaces.Select(ws => ws.ToData()).ToList();
+            return Divisions
+                .SelectMany(division => division.ProvidedWorkplaces())
+                .Select(workplace => workplace);
         }
 
-        public IEnumerable<BuildingData> GetBuildings()
+        public IEnumerable<WorkplaceData> GetWorkplaceDatas()
         {
-            return Buildings.Select(b => new BuildingData(b.Id, b.Name));
+            return GetWorkplaces().Select(workplace => workplace.ToData());
+        }
+
+        public IEnumerable<IBuildable> GetBuildings()
+        {
+            return Divisions
+                .Select(division => division.Building)
+                .WhereNotNull();
         }
         
         public void Build(IBuildable template)
         {
             var building = template.Clone();
-            Buildings.Add(building);
-            // for (var i = 0; i < building.SlotNum; i++)
-            // {
-            //     Workplaces.Add(new Workplace(building));
-            // }
+            var site = Divisions.First(division => division.CanBuild(building));
+            site?.Build(building);
         }
 
         public void CarryIn(IEnumerable<Cargo> cargoes)
@@ -117,7 +113,7 @@ namespace Model.Town {
             {
                 pop.RequestProducts().ToList().ForEach(trait =>
                 {
-                    var storage = GetStorageByGoodsType(trait.GoodsType);
+                    var storage = GetStorage(trait.Goods);
                     if (storage == null || storage.Amount < (int)trait.Weight)
                     {
                         pop.Shortage();
@@ -143,11 +139,7 @@ namespace Model.Town {
         }
 
         private Storage? GetStorage(GoodsEntity target) {
-            return Storages.FirstOrDefault(storage => storage.Goods.Name == target.Name);
-        }
-
-        private Storage? GetStorageByGoodsType(GoodsType goodsType) {
-            return Storages.FirstOrDefault(storage => storage.Goods.GoodsType == goodsType);
+            return Storages.FirstOrDefault(storage => storage.Goods == target);
         }
 
         private List<Pop> GetUnemployed()
@@ -157,7 +149,7 @@ namespace Model.Town {
 
         private List<Workplace> GetVacantWorkplaces()
         {
-            return Workplaces.Where(ws => !Pops.Select(pop => pop.Workplace).Contains(ws)).ToList();
+            return GetWorkplaces().Where(ws => !Pops.Select(pop => pop.Workplace).Contains(ws)).ToList();
         }
     }
 

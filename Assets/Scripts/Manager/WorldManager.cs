@@ -1,5 +1,4 @@
 ﻿using System;
-using JetBrains.Annotations;
 using Model.Route;
 using Model.World;
 using Presenter;
@@ -21,8 +20,15 @@ namespace Manager
 
         public bool isPaused = true;
         
-        private readonly World _world = new World();
+        private World? _world;
 
+        public void SetInitialWorld(World world)
+        {
+            if (_world != null) throw new InvalidOperationException("Worldは既に初期化されています");
+
+            _world = world;
+        }
+        
         public void PlayGame()
         {
             if (pauseImage == null || playImage == null) throw new NullReferenceException();
@@ -43,9 +49,6 @@ namespace Manager
 
         private void Start()
         {
-            InitializeTowns();
-            InitializeRoutes();
-
             Observable.Interval(TimeSpan.FromMilliseconds(milliSecForOneTurn))
                 .Where(_ => !isPaused)
                 .Subscribe(_ => NextTurn())
@@ -54,20 +57,10 @@ namespace Manager
 
         private void NextTurn()
         {
-            if (dateText == null) throw new NullReferenceException();
+            if (dateText == null || _world == null) throw new NullReferenceException();
             
             _world.DoOneTurn();
             dateText.text = _world.Date.ToString("yyyy/MM/dd");
-        }
-
-        private void InitializeTowns()
-        {
-            GetComponent<TownsPresenter>().Initialize(_world.Towns);
-        }
-
-        private void InitializeRoutes()
-        {
-            GetComponent<RoutesPresenter>().Initialize(RouteLayer.GetInstance().Routes);
         }
     }
 }

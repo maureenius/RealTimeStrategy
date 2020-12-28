@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Model.Goods;
 using Model.Race;
 using Model.Town.Building;
@@ -13,38 +14,43 @@ namespace Model.Town
     {
         public Guid SlotGuid { get; }
         public string SlotName { get; }
-        public string SlotTypeName { get; }
 
-        public WorkplaceData(Guid slotGuid, string slotName, string slotTypeName)
+        public WorkplaceData(Guid slotGuid, string slotName)
         {
             SlotGuid = slotGuid;
             SlotName = slotName;
-            SlotTypeName = slotTypeName;
         }
     }
     
-    public class Workplace : INamed, IHasProduceAbility
+    public class Workplace : INamed, IHasProduceAbility, IHasConsumptionTrait
     {
+        private readonly Database.WorkplaceData _baseData;
         public Guid Id { get; }
-        public string Name { get; }
-        public string TypeName { get; }
-        public IList<ProduceAbility> ProduceAbilities { get; }
-        public IList<ConsumptionTrait> ConsumptionTraits { get; }
-        private IBuildable Source { get; }
+        public string SystemName { get; }
+        public string DisplayName { get; }
+        public IEnumerable<ProduceAbility> ProduceAbilities { get; }
+        public IEnumerable<ConsumptionTrait> ConsumptionTraits { get; }
 
-        public Workplace(IBuildable source)
+        public Workplace(Database.WorkplaceData data)
         {
-            Source = source;
+            _baseData = data;
+            
             Id = Guid.NewGuid();
-            Name = Source.Name;
-            TypeName = Source.TypeName;
-            ProduceAbilities = Source is IHasProduceAbility pa ? new List<ProduceAbility>(pa.ProduceAbilities) : new List<ProduceAbility>();
-            ConsumptionTraits = Source is IHasConsumptionTrait ct ? new List<ConsumptionTrait>(ct.ConsumptionTraits) : new List<ConsumptionTrait>();
+            SystemName = _baseData.Name;
+            DisplayName = _baseData.DisplayName;
+
+            ProduceAbilities = _baseData.Products
+                .Select(goods => new ProduceAbility(GlobalGoods.GetInstance().FindByName(goods.Goods.Name),
+                    goods.amount));
+
+            ConsumptionTraits = _baseData.Consumptions
+                .Select(goods => new ConsumptionTrait(GlobalGoods.GetInstance().FindByName(goods.Goods.Name),
+                    goods.amount));
         }
 
         public WorkplaceData ToData()
         {
-            return new WorkplaceData(Id, Name, TypeName);
+            return new WorkplaceData(Id, SystemName);
         }
     }
 }

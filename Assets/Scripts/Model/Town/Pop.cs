@@ -36,29 +36,35 @@ namespace Model.Town {
     
     public class Pop: IProducable, INamed {
         private Guid Id { get; }
-        public string Name { get; }
+        public string SystemName { get; }
+        public string DisplayName { get; }
         private string TypeName { get; }
         private IRace Race { get; }
-        public List<ProduceAbility> ProduceAbilities { get; }
-        private List<ConsumptionTrait> Consumptions { get; }
+        
+        private List<ProduceAbility> _produceAbilities { get; }
+        public IEnumerable<ProduceAbility> ProduceAbilities => _produceAbilities;
+        
+        private List<ConsumptionTrait> _consumptionTraits { get; }
+        public IEnumerable<ConsumptionTrait> Consumptions => _consumptionTraits;
         public Workplace? Workplace { get; private set; }
 
         public Pop(IRace race)
         {
             Id = Guid.NewGuid();
             Race = race;
-            ProduceAbilities = new List<ProduceAbility>();
-            Consumptions = new List<ConsumptionTrait>(race.ConsumptionTraits);
+            _produceAbilities = new List<ProduceAbility>();
+            _consumptionTraits = new List<ConsumptionTrait>(race.ConsumptionTraits);
 
-            Name = Race.Name;
-            TypeName = Race.Name;
+            SystemName = Race.SystemName;
+            TypeName = Race.SystemName;
+            DisplayName = Race.DisplayName;
         }
 
-        public IList<ConsumptionTrait> RequestProducts() {
+        public IEnumerable<ConsumptionTrait> RequestProducts() {
             return Race.ConsumptionTraits;
         }
 
-        public List<Cargo> Produce()
+        public IEnumerable<Cargo> Produce()
         {
             return ProduceAbilities.Select(pa => new Cargo(pa.OutputGoods, pa.ProduceAmount)).ToList();
         }
@@ -66,13 +72,13 @@ namespace Model.Town {
         public void GetJob(Workplace slot)
         {
             Workplace = slot;
-            ProduceAbilities.AddRange(Workplace.ProduceAbilities);
-            Consumptions.AddRange(Workplace.ConsumptionTraits);
+            _produceAbilities.AddRange(Workplace.ProduceAbilities);
+            _consumptionTraits.AddRange(Workplace.ConsumptionTraits);
         }
 
         private string GetWorkSlotTypeName()
         {
-            return Workplace == null ? "無職" : Workplace.TypeName;
+            return Workplace == null ? "無職" : Workplace.SystemName;
         }
 
         public void Shortage()
@@ -82,15 +88,15 @@ namespace Model.Town {
 
         public PopData ToData()
         {
-            return new PopData(Id, Name, TypeName,
-                Consumptions.Select(trait => (trait.GoodsType.GetDescription(), trait.Weight)),
-                ProduceAbilities.Select(pa => (pa.OutputGoods.Name, (double)pa.ProduceAmount)),
+            return new PopData(Id, SystemName, TypeName,
+                Consumptions.Select(trait => (trait.Goods.DisplayName, trait.Weight)),
+                ProduceAbilities.Select(pa => (pa.OutputGoods.DisplayName, (double)pa.ProduceAmount)),
                 Workplace?.Id ?? Guid.Empty, GetWorkSlotTypeName());
         }
     }
     
     public interface IProducable {
-        List<ProduceAbility> ProduceAbilities { get; }
-        List<Cargo> Produce();
+        IEnumerable<ProduceAbility> ProduceAbilities { get; }
+        IEnumerable<Cargo> Produce();
     }
 }

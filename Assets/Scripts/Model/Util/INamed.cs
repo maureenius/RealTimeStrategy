@@ -1,5 +1,6 @@
 ﻿namespace Model.Util {
     public interface INamed {
-        string Name { get; }
+        string SystemName { get; }
+        string DisplayName { get; }
     }
 }

@@ -2,8 +2,9 @@
     "name": "Race",
     "rootNamespace": "",
     "references": [
-        "GUID:a85aa5ce370f9bb4f94fd7e0fd2f3f9c",
-        "GUID:8adf6238827c1be4aaf8c370be3ce2ac"
+        "GUID:6559a05898285e94380b20250eb51fb6",
+        "GUID:70416b8ce38dadd47b8a1df7135325f1",
+        "GUID:0a90099f0fc06394fa8d9ff76a95ebd0"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

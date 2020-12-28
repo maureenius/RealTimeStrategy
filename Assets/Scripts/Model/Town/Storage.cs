@@ -5,26 +5,26 @@
 namespace Model.Town {
     public class Storage {
         public GoodsEntity Goods { get; }
-        public int Amount { get; private set; }
-        private int AmountLimit { get; }
+        public float Amount { get; private set; }
+        private float AmountLimit { get; }
 
-        public Storage(GoodsEntity goods, int amountLimit) {
+        public Storage(GoodsEntity goods, float amountLimit) {
             Goods = goods;
             AmountLimit = amountLimit;
         }
 
-        public void Consume(int amount) {
+        public void Consume(float amount) {
             if (!CanConsume(amount)) return;
 
             Amount -= amount;
         }
 
-        public void Store(int amount) {
+        public void Store(float amount) {
             Amount += amount;
             if (Amount > AmountLimit) Amount = AmountLimit;
         }
 
-        private bool CanConsume(int amount) {
+        private bool CanConsume(float amount) {
             return Amount >= amount;
         }
     }

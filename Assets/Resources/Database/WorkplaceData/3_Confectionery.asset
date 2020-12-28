@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d8b28f35efd40fbb295cd987af81820, type: 3}
+  m_Name: 3_Confectionery
+  m_EditorClassIdentifier: 
+  name: Confectionery
+  id: 3
+  products:
+  - goods: {fileID: 11400000, guid: 05c6983089b08c24e8d27f57343fd414, type: 2}
+    amount: 3
+  consumptions:
+  - goods: {fileID: 11400000, guid: f393e73b089ef6d4b960c373992df6d4, type: 2}
+    amount: 1
+  - goods: {fileID: 11400000, guid: 1158da12435d7da4fac8ddefa1b6bab4, type: 2}
+    amount: 1

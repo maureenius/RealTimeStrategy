@@ -23,22 +23,6 @@ namespace Presenter
         public IObservable<int> OnOutlineChanged => _outlineChangeSubject;
         public IObservable<int> OnDetailChanged => _outlineChangeSubject;
 
-        public void Initialize(IEnumerable<TownEntity> entities)
-        {
-            if (townRoot == null) throw new NullReferenceException();
-            
-            _entities = new List<TownEntity>(entities);
-            _entities.ForEach(InitializeTown);
-
-            _views = townRoot.GetComponentsInChildren<TownView>().ToList();
-            _views.ForEach(view =>
-            {
-                view.OnSelected
-                    .Subscribe(_ => OnSelected(view))
-                    .AddTo(this);
-            });
-        }
-
         public TownEntity FindEntityById(int id)
         {
             return _entities.First(entity => entity.Id == id);
@@ -58,8 +42,24 @@ namespace Presenter
             }
         }
 
-        private void InitializeTown(TownEntity town)
+        public void InitializeView()
         {
+            if (townRoot == null) throw new NullReferenceException();
+             
+            foreach (var view in townRoot.GetComponentsInChildren<TownView>())
+            {
+                _views.Add(view);
+                
+                view.OnSelected
+                    .Subscribe(_ => OnSelected(view))
+                    .AddTo(this);
+            }
+        }
+
+        public void InitializeEntity(TownEntity town)
+        {
+            _entities.Add(town);
+            
             town.OnTurnPassed
                 .Where(_ => town.Id == _selectedTownId.Value)
                 .Subscribe(_ => _outlineChangeSubject.OnNext(town.Id))

@@ -1,46 +1,31 @@
 ﻿using System.ComponentModel;
+using Database;
+using Model.Util;
 
 #nullable enable
 
 namespace Model.Goods {
-    public enum GoodsType {
-        [Description("小麦")]
-        Flour,
-        [Description("砂糖")]
-        Sugar,
-        [Description("菓子")]
-        Cookie
-    }
+    public abstract class GoodsEntity : INamed
+    {
+        private readonly GoodsData _baseData;
+        public string SystemName { get; }
+        public string DisplayName { get; }
 
-    public static class GoodsTypeMethod {
-        public static string GetNameJpn(this GoodsType goodsType) {
-            var gm = goodsType.GetType().GetMember(goodsType.ToString());
-            var attributes = gm[0].GetCustomAttributes(typeof(DescriptionAttribute), false);
-            return ((DescriptionAttribute)attributes[0]).Description;
-        }
-    }
-
-    public abstract class GoodsEntity {
-        public GoodsType GoodsType { get; }
-        public string Name { get; }
-
-        protected GoodsEntity(GoodsType goodsType, string name) {
-            GoodsType = goodsType;
-            Name = name;
+        protected GoodsEntity(GoodsData data)
+        {
+            _baseData = data;
+            SystemName = _baseData.Name;
+            DisplayName = _baseData.DisplayName;
         }
     }
 
     public class GeneralGoods : GoodsEntity {
-        public GeneralGoods(GoodsType goodsType, string name) : base(goodsType, name) { }
+        public GeneralGoods(GoodsData data) : base(data) { }
     }
 
     public static class GoodsFactory {
-        public static GoodsEntity Create(GoodsType goodsType, string name) {
-            return new GeneralGoods(goodsType, name);
-        }
-
-        public static GoodsEntity Copy(GoodsEntity original) {
-            return new GeneralGoods(original.GoodsType, original.Name);
+        public static GoodsEntity Create(GoodsData data) {
+            return new GeneralGoods(data);
         }
     }
 }

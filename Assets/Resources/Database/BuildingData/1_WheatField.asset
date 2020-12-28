@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c40a42367c484295885dd8914848f7d1, type: 3}
+  m_Name: 1_WheatField
+  m_EditorClassIdentifier: 
+  name: WheatField
+  buildingName: 0
+  displayName: "\u5C0F\u9EA6\u7551"
+  id: 1
+  buildableTerrains: 00000000
+  workplace:
+    workplace: {fileID: 11400000, guid: 668667774fa2e8e4db8ff62054c66878, type: 2}
+    count: 2
