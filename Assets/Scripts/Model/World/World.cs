@@ -2,30 +2,27 @@
 using System.Collections.Generic;
 using System.Linq;
 using Model.Commerce;
-using Model.Goods;
-using Model.Race;
 using Model.Region;
 using Model.Route;
 using Model.Territory;
 using Model.Town;
-using Model.Town.Building;
 
 #nullable enable
 
 namespace Model.World {
     public class World
     {
-        public IEnumerable<TownEntity> Towns { get; private set; } = new List<TownEntity>();
-
-        protected IEnumerable<CommerceEntity> Commerces = new List<CommerceEntity>();
-        public IEnumerable<TerritoryEntity> Territories { get; private set; } = new List<TerritoryEntity>();
-        protected IEnumerable<RegionEntity> Regions = new List<RegionEntity>();
+        // IEnumerableが入るとforeachがコピー渡しになり、DoOneTurnが処理されなくなる
+        public IList<TownEntity> Towns { get; private set; } = new List<TownEntity>();
+        public IList<CommerceEntity> Commerces { get; private set; } = new List<CommerceEntity>();
+        public IList<TerritoryEntity> Territories { get; private set; } = new List<TerritoryEntity>();
+        protected IList<RegionEntity> Regions = new List<RegionEntity>();
 
         public DateTime Date = new DateTime(1000, 1, 1);
 
         public void DoOneTurn() {
             Date = Date.AddDays(1);
-
+            
             foreach (var town in Towns)
             {
                 town.DoOneTurn();
@@ -48,21 +45,21 @@ namespace Model.World {
         {
             if (Towns.Any()) throw new InvalidOperationException("Townsは既に初期化されています");
 
-            Towns = towns;
+            Towns = towns.ToList();
         }
         
         public void InitializeTerritories(IEnumerable<TerritoryEntity> territories)
         {
             if (Territories.Any()) throw new InvalidOperationException("Territoriesは既に初期化されています");
 
-            Territories = territories;
+            Territories = territories.ToList();
         }
 
         public void InitializeCommerce(IEnumerable<CommerceEntity> commerces)
         {
             if (Commerces.Any()) throw new InvalidOperationException("Commercesは既に初期化されています");
 
-            Commerces = commerces;
+            Commerces = commerces.ToList();
         }
     }
 }

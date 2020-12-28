@@ -24,7 +24,6 @@ namespace Model.Town
     
     public class Workplace : INamed, IHasProduceAbility, IHasConsumptionTrait
     {
-        private readonly Database.WorkplaceData _baseData;
         public Guid Id { get; }
         public string SystemName { get; }
         public string DisplayName { get; }
@@ -33,17 +32,17 @@ namespace Model.Town
 
         public Workplace(Database.WorkplaceData data)
         {
-            _baseData = data;
+            Database.WorkplaceData baseData = data;
             
             Id = Guid.NewGuid();
-            SystemName = _baseData.Name;
-            DisplayName = _baseData.DisplayName;
+            SystemName = baseData.Name;
+            DisplayName = baseData.DisplayName;
 
-            ProduceAbilities = _baseData.Products
+            ProduceAbilities = baseData.Products
                 .Select(goods => new ProduceAbility(GlobalGoods.GetInstance().FindByName(goods.Goods.Name),
                     goods.amount));
 
-            ConsumptionTraits = _baseData.Consumptions
+            ConsumptionTraits = baseData.Consumptions
                 .Select(goods => new ConsumptionTrait(GlobalGoods.GetInstance().FindByName(goods.Goods.Name),
                     goods.amount));
         }

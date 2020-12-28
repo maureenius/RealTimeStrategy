@@ -16,17 +16,8 @@ namespace Store
         public Sprite FindSlotBackground(string typeName)
         {
             if (SlotBackgroundImages == null) throw new NullReferenceException();
-            
-            string filename = typeName switch
-            {
-                "無職" => "Unemployed",
-                "小麦農場" => "Farm",
-                "さとうきび畑" => "Farm",
-                "菓子工房" => "Farm",
-                _ => throw new InvalidOperationException(typeName)
-            };
 
-            return Array.Find(SlotBackgroundImages, sprite => sprite.name.Equals(filename));
+            return Array.Find(SlotBackgroundImages, sprite => sprite.name.Equals(typeName));
         }
 
         public Sprite FindNoneBackground()
@@ -53,16 +44,7 @@ namespace Store
         public Sprite FindBuildingImage(string typeName)
         {
             if (BuildingImages == null) throw new NullReferenceException();
-
-            string filename = typeName switch
-            {
-                "小麦農場" => "farm",
-                "さとうきび畑" => "farm",
-                "菓子工房" => "farm",
-                _ => throw new InvalidOperationException(typeName)
-            };
-
-            return Array.Find(BuildingImages, sprite => sprite.name.Equals(filename));
+            return Array.Find(BuildingImages, sprite => sprite.name.Equals(typeName));
         }
         
         private void LoadSprites()

@@ -16,8 +16,8 @@ namespace Presenter
         
         public IReadOnlyReactiveProperty<int> SelectedTownId => _selectedTownId;
         private readonly IReactiveProperty<int> _selectedTownId = new IntReactiveProperty();
-        private List<TownEntity> _entities = new List<TownEntity>();
-        private List<TownView> _views = new List<TownView>();
+        private readonly List<TownEntity> _entities = new List<TownEntity>();
+        private readonly List<TownView> _views = new List<TownView>();
         
         private readonly Subject<int> _outlineChangeSubject = new Subject<int>();
         public IObservable<int> OnOutlineChanged => _outlineChangeSubject;

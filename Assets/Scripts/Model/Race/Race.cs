@@ -12,18 +12,17 @@ namespace Model.Race {
     }
 
     internal class GeneralRace: IRace {
-        private RaceData _baseData;
         public string SystemName { get; }
         public string DisplayName { get; }
         public IEnumerable<ConsumptionTrait> ConsumptionTraits { get; }
 
         public GeneralRace(RaceData data)
         {
-            _baseData = data;
+            RaceData baseData = data;
             
-            SystemName = _baseData.Name;
-            DisplayName = _baseData.DisplayName;
-            ConsumptionTraits = _baseData.Consumptions
+            SystemName = baseData.Name;
+            DisplayName = baseData.DisplayName;
+            ConsumptionTraits = baseData.Consumptions
                 .Select(consumption => new ConsumptionTrait(GlobalGoods.GetInstance()
                     .FindByName(consumption.Goods.Name), consumption.amount));
         }

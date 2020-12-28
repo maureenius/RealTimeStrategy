@@ -2476,7 +2476,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 3}
+    m_Font: {fileID: 12800000, guid: dba6cfe866261314e817d81d68dcbdc5, type: 3}
     m_FontSize: 25
     m_FontStyle: 0
     m_BestFit: 0
@@ -7241,7 +7241,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   townsPresenter: {fileID: 1439080119}
-  _view: {fileID: 1203019193}
+  view: {fileID: 1203019193}
 --- !u!1 &1468360269
 GameObject:
   m_ObjectHideFlags: 0

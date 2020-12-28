@@ -41,9 +41,11 @@ namespace Model.Town {
         private string TypeName { get; }
         private IRace Race { get; }
         
+        // ReSharper disable once InconsistentNaming
         private List<ProduceAbility> _produceAbilities { get; }
         public IEnumerable<ProduceAbility> ProduceAbilities => _produceAbilities;
         
+        // ReSharper disable once InconsistentNaming
         private List<ConsumptionTrait> _consumptionTraits { get; }
         public IEnumerable<ConsumptionTrait> Consumptions => _consumptionTraits;
         public Workplace? Workplace { get; private set; }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Database;
 using Manager;
@@ -9,9 +8,9 @@ using Model.Race;
 using Model.Route;
 using Model.Territory;
 using Model.Town;
+using Model.Town.Building;
 using Model.World;
 using UnityEngine;
-using View;
 
 #nullable enable
 
@@ -35,6 +34,8 @@ namespace Presenter.Initializer
             InitializeTowns(world);
             InitializeRoutes(world);
             InitializeCommerce(world);
+            
+            SetTerritoriesCapital(world);
 
             return world;
         }
@@ -61,11 +62,18 @@ namespace Presenter.Initializer
             
             // Model側を初期化
             var presenter = GetComponent<TownsPresenter>();
+            // 農場5
             world.InitializeTowns(initialTownDatas
                 .Select(townData =>
                 {
                     var townEntity =
                         TownFactory.Create(townData.Id, townData.TownName, townData.TownType, townData.Race);
+
+                    for (var i = 0; i < 5; i++)
+                    {
+                        townEntity.Build(BuildingFactory.FlourFarm());
+                    }
+                    
                     presenter.InitializeEntity(townEntity);
 
                     return townEntity;
@@ -83,6 +91,19 @@ namespace Presenter.Initializer
                 TerritoryFactory.Create("新緑教会"),
                 TerritoryFactory.Create("魔法科学振興委員会")
             });
+        }
+
+        private void SetTerritoriesCapital(World world)
+        {
+            var elfTerritory = world.Territories.ElementAt(0);
+            var elfCapital = world.Towns.First(t => t.Id == 1);
+            elfTerritory.AttachTowns(elfCapital);
+            world.Commerces.First(com => com.Town == elfCapital).Monopolize(elfTerritory);
+
+            var humanTerritory = world.Territories.ElementAt(1);
+            var humanCapital = world.Towns.First(t => t.Id == 3);
+            humanTerritory.AttachTowns(humanCapital);
+            world.Commerces.First(com => com.Town == humanCapital).Monopolize(humanTerritory);
         }
 
         private void InitializeRoutes(World world)

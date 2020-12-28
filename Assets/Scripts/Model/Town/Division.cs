@@ -20,7 +20,7 @@ namespace Model.Town {
 
         public bool CanBuild(IBuildable target)
         {
-            return target.BuildableTerrainTypes.Contains(_terrain.TerrainName);
+            return (target.BuildableTerrainTypes.Contains(_terrain.TerrainName)) && (Building == null);
         }
 
         public void Build(IBuildable target) {

@@ -11,15 +11,15 @@ namespace Model.Commerce
 {
     public class CommerceEntity
     {
-        private readonly TownEntity _town;
+        public readonly TownEntity Town;
         private readonly List<IRoute> _routes;
-        private readonly List<TerritoryRate> _monopolyRate;
+        private List<TerritoryRate> _monopolyRate;
         private const double CommerceScale = 1f;
         private readonly List<(IRoute route, Tension tension)> _actingTensions = new List<(IRoute route, Tension tension)>();
 
         public CommerceEntity(TownEntity town, IEnumerable<TerritoryEntity> territories)
         {
-            this._town = town;
+            this.Town = town;
             var territoryEntities = territories.ToList();
             _monopolyRate = new List<TerritoryRate>(territoryEntities.Select(ter => new TerritoryRate(ter, 0f)));
             if (town.IsCapital)
@@ -48,6 +48,14 @@ namespace Model.Commerce
             UpdateTension();
         }
 
+        public void Monopolize(TerritoryEntity territory)
+        {
+            foreach (var territoryRate in _monopolyRate)
+            {
+                territoryRate.Rate = territoryRate.Territory == territory ? 1 : 0;
+            }
+        }
+
         private void Export()
         {
             var storages = GetExportableGoods();
@@ -69,20 +77,20 @@ namespace Model.Commerce
 
         private IEnumerable<Storage> GetExportableGoods()
         {
-            return _town.Storages;
+            return Town.Storages;
         }
 
         private IEnumerable<IRoute> OutwardRoutes()
         {
-            return _routes.Where(r => (r.From == _town && r.FlowPower() > 0) || 
-                                     (r.To == _town && r.FlowPower() < 0));
+            return _routes.Where(r => (r.From == Town && r.FlowPower() > 0) || 
+                                     (r.To == Town && r.FlowPower() < 0));
         }
 
         private void Import()
         {
             foreach (var route in _routes)
             {
-                _town.CarryIn(route.TakeCargo());
+                Town.CarryIn(route.TakeCargo());
             }
         }
 

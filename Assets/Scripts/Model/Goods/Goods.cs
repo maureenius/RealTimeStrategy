@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using Database;
+﻿using Database;
 using Model.Util;
 
 #nullable enable
@@ -7,15 +6,14 @@ using Model.Util;
 namespace Model.Goods {
     public abstract class GoodsEntity : INamed
     {
-        private readonly GoodsData _baseData;
         public string SystemName { get; }
         public string DisplayName { get; }
 
         protected GoodsEntity(GoodsData data)
         {
-            _baseData = data;
-            SystemName = _baseData.Name;
-            DisplayName = _baseData.DisplayName;
+            GoodsData baseData = data;
+            SystemName = baseData.Name;
+            DisplayName = baseData.DisplayName;
         }
     }
 

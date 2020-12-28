@@ -1,7 +1,5 @@
 ﻿using System;
-using Model.Route;
 using Model.World;
-using Presenter;
 using UnityEngine;
 using TMPro;
 using UniRx;

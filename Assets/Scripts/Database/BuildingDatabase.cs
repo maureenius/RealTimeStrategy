@@ -21,6 +21,11 @@ namespace Database
         {
             return BuildingDataList[name.ToString()];
         }
+
+        public static IEnumerable<BuildingData> All()
+        {
+            return BuildingDataList.Values;
+        }
     }
 
     public enum BuildingName

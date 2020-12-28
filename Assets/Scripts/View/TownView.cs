@@ -1,5 +1,4 @@
 ﻿using System;
-using Database;
 using UniRx;
 using UnityEngine;
 using QuickOutline.Scripts;

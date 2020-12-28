@@ -13,14 +13,14 @@ namespace Presenter
     {
         [SerializeField] private TownsPresenter? townsPresenter;
         
-        [SerializeField] private TownOutlineView? _view;
+        [SerializeField] private TownOutlineView? view;
 
         private void UpdateData(TownEntity entity)
         {
-            if (_view == null) throw new NullReferenceException();
+            if (view == null) throw new NullReferenceException();
             
-            _view.ShowOverPanel();
-            _view.UpdateOutline(GetTownOutlineData(entity));
+            view.ShowOverPanel();
+            view.UpdateOutline(GetTownOutlineData(entity));
         }
 
         public void Initialize()

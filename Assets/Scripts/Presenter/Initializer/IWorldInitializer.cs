@@ -1,6 +1,6 @@
 ﻿using Model.World;
 
-namespace Presenter
+namespace Presenter.Initializer
 {
     public interface IWorldInitializer
     {
