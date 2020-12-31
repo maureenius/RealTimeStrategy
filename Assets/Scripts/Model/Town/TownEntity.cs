@@ -18,7 +18,7 @@ namespace Model.Town {
         public readonly TownType TownType;
         public IList<Storage> Storages { get; } = new List<Storage>();
         public IList<Pop> Pops { get; } = new List<Pop>();
-        private IEnumerable<IDivision> Divisions { get; }
+        public IEnumerable<IDivision> Divisions { get; private set; }
 
         public bool IsCapital { get; }
 

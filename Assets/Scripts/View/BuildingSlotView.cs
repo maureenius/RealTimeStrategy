@@ -10,7 +10,8 @@ namespace View
 {
     public class BuildingSlotView : MonoBehaviour
     {
-        [SerializeField] private Image? image;
+        [SerializeField] private Image? buildingImage;
+        [SerializeField] private Image? terrainImage;
         
         private readonly Subject<BuildingSlotViewData> _onSelected = new Subject<BuildingSlotViewData>();
         public IObservable<BuildingSlotViewData> OnSelected => _onSelected;
@@ -19,25 +20,42 @@ namespace View
         public void Initialize(BuildingSlotViewData data)
         {
             _data = data;
-            if (image != null)
+            if (terrainImage != null)
             {
-                image.sprite = _data.Image;
+                terrainImage.sprite = _data.TerrainImage;
+            }
+
+            if (buildingImage != null)
+            {
+                buildingImage.sprite = _data.BuildingImage;
             }
         }
     }
     
-    public readonly struct BuildingSlotViewData
+    public class BuildingSlotViewData
     {
         public Guid Id { get; }
-        public string Name { get; }
-        public Sprite? Image { get; }
+        public string TerrainName { get; }
+        public Sprite TerrainImage { get; }
+        public string BuildingName { get; } = "";
+        public Sprite? BuildingImage { get; }
         
         
-        public BuildingSlotViewData(Guid id, string name, Sprite image)
+        public BuildingSlotViewData(Guid id, string terrainName, Sprite terrainImage)
         {
             Id = id;
-            Name = name;
-            Image = image;
+            TerrainName = terrainName;
+            TerrainImage = terrainImage;
+        }
+
+        public BuildingSlotViewData(Guid id, string terrainName, Sprite terrainImage,
+            string buildingName, Sprite buildingImage)
+        {
+            Id = id;
+            TerrainName = terrainName;
+            TerrainImage = terrainImage;
+            BuildingName = buildingName;
+            BuildingImage = buildingImage;
         }
     }
 }

@@ -13,6 +13,8 @@ namespace Store
         
         private Sprite[]? BuildingImages { get; set; }
         
+        private Sprite[]? TerrainImages { get; set; }
+        
         public Sprite FindSlotBackground(string typeName)
         {
             if (SlotBackgroundImages == null) throw new NullReferenceException();
@@ -46,12 +48,19 @@ namespace Store
             if (BuildingImages == null) throw new NullReferenceException();
             return Array.Find(BuildingImages, sprite => sprite.name.Equals(typeName));
         }
+
+        public Sprite FindTerrainImage(string typeName)
+        {
+            if (TerrainImages == null) throw new NullReferenceException();
+            return Array.Find(TerrainImages, sprite => sprite.name.Equals(typeName));
+        }
         
         private void LoadSprites()
         {
             SlotBackgroundImages = Resources.LoadAll<Sprite> ("Images/SlotBackground/");
             RaceFaceImages = Resources.LoadAll<Sprite> ("Images/RaceFace/");
             BuildingImages = Resources.LoadAll<Sprite>("Images/Building/");
+            TerrainImages = Resources.LoadAll<Sprite>("Images/Terrain/");
         }
         
         private void Start()

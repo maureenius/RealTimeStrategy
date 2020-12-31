@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: f11535f459e7b5546854fde2b7f1d2ab, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -156,7 +156,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d003b897ae504886b22b3f5a5f2c239e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  image: {fileID: 1859825124271827851}
+  buildingImage: {fileID: 1859825124271827851}
+  terrainImage: {fileID: 7392175521070705509}
 --- !u!1 &5137341912179947706
 GameObject:
   m_ObjectHideFlags: 0

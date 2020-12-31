@@ -65,8 +65,8 @@ namespace Presenter
         {
             if(townDetailView == null) throw new NullReferenceException();
 
-            var buildingDatas = entity.GetBuildings();
-            townDetailView.UpdateBuildingContainer(ConvertBuildingData(buildingDatas));
+            var divisions = entity.Divisions;
+            townDetailView.UpdateBuildingContainer(ConvertBuildingData(divisions));
         }
 
         private IEnumerable<PopSlotRowViewData> CreateRowData(IEnumerable<Pop> pops, IEnumerable<IWorkplace> workplaces)
@@ -110,13 +110,15 @@ namespace Presenter
             return results.Append(new PopSlotRowViewData("無職", unemployedSlots));
         }
 
-        private IEnumerable<BuildingSlotViewData> ConvertBuildingData(IEnumerable<IBuildable> buildings)
+        private IEnumerable<BuildingSlotViewData> ConvertBuildingData(IEnumerable<IDivision> divisions)
         {
             if (imageDatabase == null) throw new NullReferenceException();
 
-            return buildings
-                .Select(b => new BuildingSlotViewData(b.Id, b.SystemName, 
-                    imageDatabase.FindBuildingImage(b.SystemName)));
+            return divisions
+                .Select(division => division.Building == null ? 
+                    new BuildingSlotViewData(division.Id, division.TerrainName, imageDatabase.FindTerrainImage(division.TerrainName)) : 
+                    new BuildingSlotViewData(division.Id, division.TerrainName, imageDatabase.FindTerrainImage(division.TerrainName),
+                        division.Building.DisplayName, imageDatabase.FindBuildingImage(division.Building.SystemName)));
         }
     }
 }

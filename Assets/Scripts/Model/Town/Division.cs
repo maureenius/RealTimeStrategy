@@ -8,13 +8,14 @@ using Model.Town.Building;
 
 namespace Model.Town {
     public class Division : IDivision {
-        private readonly Guid _id;
+        public Guid Id { get; }
+        public string TerrainName => _terrain.Name;
         private ITerrainData _terrain;
         public IBuildable? Building { get; private set; }
 
         public Division(ITerrainData terrain)
         {
-            _id = Guid.NewGuid();
+            Id = Guid.NewGuid();
             _terrain = terrain;
         }
 
