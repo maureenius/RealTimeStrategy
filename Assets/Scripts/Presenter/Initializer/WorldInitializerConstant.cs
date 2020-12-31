@@ -11,6 +11,7 @@ using Model.Town;
 using Model.Town.Building;
 using Model.World;
 using UnityEngine;
+using View;
 
 #nullable enable
 
@@ -23,6 +24,8 @@ namespace Presenter.Initializer
             GetComponent<WorldManager>().SetInitialWorld(InitializeWorld());
             GetComponent<TownOutlinePresenter>().Initialize();
             GetComponent<TownDetailPresenter>().Initialize();
+            
+            GetComponent<ViewInitializer>().Initialize();
         }
 
         public World InitializeWorld()
