@@ -17,17 +17,17 @@ namespace Model.Town {
         public readonly string TownName;
         public readonly TownType TownType;
         public IList<Storage> Storages { get; } = new List<Storage>();
-        private IList<Pop> Pops { get; } = new List<Pop>();
-        private IEnumerable<Division> Divisions { get; }
+        public IList<Pop> Pops { get; } = new List<Pop>();
+        private IEnumerable<IDivision> Divisions { get; }
 
         public bool IsCapital { get; }
 
-        protected TownEntity(int id, string townName, TownType townType, IRace race, IEnumerable<Division> divisions, int popNum = 5, bool isCapital=false){
+        protected TownEntity(int id, string townName, TownType townType, IRace race, IEnumerable<IDivision> divisions, int popNum = 5, bool isCapital=false){
             Id = id;
             TownName = townName;
             TownType = townType;
             IsCapital = isCapital;
-            Divisions = new List<Division>(divisions);
+            Divisions = new List<IDivision>(divisions);
 
             InitializePops(race, popNum);
         }
@@ -55,21 +55,10 @@ namespace Model.Town {
             return Storages.Select(s => (goodsTypeName: s.Goods.DisplayName, amount: s.Amount)).ToList();
         }
 
-        public List<PopData> GetPopData()
-        {
-            return Pops.Select(pop => pop.ToData()).ToList();
-        }
-
-        private IEnumerable<Workplace> GetWorkplaces()
+        public IEnumerable<IWorkplace> GetWorkplaces()
         {
             return Divisions
-                .SelectMany(division => division.ProvidedWorkplaces())
-                .Select(workplace => workplace);
-        }
-
-        public IEnumerable<WorkplaceData> GetWorkplaceDatas()
-        {
-            return GetWorkplaces().Select(workplace => workplace.ToData());
+                .SelectMany(division => division.ProvidedWorkplaces());
         }
 
         public IEnumerable<IBuildable> GetBuildings()
@@ -147,7 +136,7 @@ namespace Model.Town {
             return Pops.Where(pop => pop.Workplace == null).ToList();
         }
 
-        private List<Workplace> GetVacantWorkplaces()
+        private List<IWorkplace> GetVacantWorkplaces()
         {
             return GetWorkplaces().Where(ws => !Pops.Select(pop => pop.Workplace).Contains(ws)).ToList();
         }

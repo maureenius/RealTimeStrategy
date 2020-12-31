@@ -7,15 +7,15 @@ using Model.Town.Building;
 #nullable enable
 
 namespace Model.Town {
-    public class Division {
+    public class Division : IDivision {
         private readonly Guid _id;
-        private TerrainData _terrain;
+        private ITerrainData _terrain;
         public IBuildable? Building { get; private set; }
 
-        public Division(string terrainName)
+        public Division(ITerrainData terrain)
         {
             _id = Guid.NewGuid();
-            _terrain = TerrainDatabase.Find(terrainName);
+            _terrain = terrain;
         }
 
         public bool CanBuild(IBuildable target)
@@ -24,7 +24,7 @@ namespace Model.Town {
         }
 
         public void Build(IBuildable target) {
-            if (Building != null) throw new InvalidOperationException("建物が存在する区画にbuildしました");
+            if (!CanBuild(target)) throw new InvalidOperationException("建設不可能な地形にbuildしました");
             Building = target;
         }
 
@@ -32,7 +32,7 @@ namespace Model.Town {
             Building = null;
         }
 
-        public IEnumerable<Workplace> ProvidedWorkplaces()
+        public IEnumerable<IWorkplace> ProvidedWorkplaces()
         {
             return Building == null ? new List<Workplace>() : Building.Workplaces;
         }

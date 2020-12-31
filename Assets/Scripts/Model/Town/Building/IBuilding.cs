@@ -12,7 +12,7 @@ namespace Model.Town.Building {
     {
         Guid Id { get; }
         IEnumerable<TerrainName> BuildableTerrainTypes { get; }
-        IEnumerable<Workplace> Workplaces { get; }
+        IEnumerable<IWorkplace> Workplaces { get; }
 
         public IBuildable Clone();
     }

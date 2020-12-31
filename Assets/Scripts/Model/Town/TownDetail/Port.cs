@@ -14,7 +14,7 @@ namespace Model.Town.TownDetail {
             var divisions = new List<Division>();
             for (var i = 0; i < 10; i++)
             {
-                divisions.Add(new Division(TerrainName.Plain.ToString()));
+                divisions.Add(new Division(TerrainDatabase.Find(TerrainName.Plain.ToString())));
             }
 
             return divisions;

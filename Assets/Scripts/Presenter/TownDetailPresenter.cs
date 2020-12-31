@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Database;
+using Model.Goods;
 using Model.Town;
 using UniRx;
 using UnityEngine;
@@ -53,8 +55,8 @@ namespace Presenter
         {
             if(townDetailView == null) throw new NullReferenceException();
             
-            var popData = entity.GetPopData();
-            var workplaceData = entity.GetWorkplaceDatas();
+            var popData = entity.Pops;
+            var workplaceData = entity.GetWorkplaces();
 
             townDetailView.UpdateDivisionContainer(CreateRowData(popData, workplaceData));
         }
@@ -67,42 +69,45 @@ namespace Presenter
             townDetailView.UpdateBuildingContainer(ConvertBuildingData(buildingDatas));
         }
 
-        private IEnumerable<PopSlotRowViewData> CreateRowData(IEnumerable<PopData> pops, IEnumerable<WorkplaceData> workplaces)
+        private IEnumerable<PopSlotRowViewData> CreateRowData(IEnumerable<Pop> pops, IEnumerable<IWorkplace> workplaces)
         {
             if(imageDatabase == null) throw new NullReferenceException();
-            
-            var results = (
-                from grouped in workplaces.GroupBy(ws => ws.SlotName) 
-                let data = new List<PopSlotViewData>(grouped.Select(wpData =>
+
+            var slots = workplaces.Select(ws =>
+            {
+                var slot = new PopSlotViewData();
+                slot.SetSlot(ws.Id, ws.DisplayName, imageDatabase.FindSlotBackground(ws.SystemName));
+
+                var worker = pops.FirstOrDefault(pop => pop.Workplace == ws);
+                if (worker != null)
                 {
-                    var worker = pops.FirstOrDefault(pop => pop.WorkplaceGuid == wpData.SlotGuid);
+                    slot.SetWorker(worker.Id, worker.DisplayName, worker.DisplayName,
+                        imageDatabase.FindRaceFaceImage(worker.SystemName),
+                        worker.ProduceAbilities.Select(pa =>
+                            (goods: pa.OutputGoods.DisplayName, amount: pa.ProduceAmount)),
+                        worker.Consumptions.Select(con => (goods: con.Goods.DisplayName, amount: (float) con.Weight)));
+                }
+                
+                return slot;
+            });
 
-                    var viewData = worker.Id != Guid.Empty
-                        ? new PopSlotViewData(wpData.SlotGuid,
-                            wpData.SlotName,
-                            imageDatabase.FindSlotBackground(wpData.SlotName),
-                            worker.Id,
-                            worker.Name,
-                            worker.TypeName,
-                            imageDatabase.FindRaceFaceImage(worker.Name),
-                            worker.Consumptions,
-                            worker.Produces
-                        )
-                        : new PopSlotViewData(wpData.SlotGuid, wpData.SlotName, imageDatabase.FindSlotBackground(wpData.SlotName));
-
-                    return viewData;
-                })) 
-                select new PopSlotRowViewData(grouped.Key, data)).ToList();
+            var results = slots.GroupBy(slot => slot.SlotName)
+                .Select(grouped => new PopSlotRowViewData(grouped.Key, grouped.ToList()));
 
             var unemployedSlots = pops
-                .Where(pop => pop.WorkplaceGuid.Equals(Guid.Empty))
-                .Select(pop => new PopSlotViewData(pop.Id, pop.Name, pop.TypeName, imageDatabase.FindRaceFaceImage(pop.Name),
-                    pop.Consumptions, pop.Produces))
-                .ToList();
-            
-            results.Add(new PopSlotRowViewData("無職", unemployedSlots));
-            
-            return results;
+                .Where(pop => pop.Workplace == null)
+                .Select(pop =>
+                {
+                    var slot = new PopSlotViewData();
+                    slot.SetWorker(pop.Id, pop.DisplayName, pop.DisplayName,
+                        imageDatabase.FindRaceFaceImage(pop.SystemName),
+                        pop.ProduceAbilities.Select(pa =>
+                            (goods: pa.OutputGoods.DisplayName, amount: pa.ProduceAmount)),
+                        pop.Consumptions.Select(con => (goods: con.Goods.DisplayName, amount: (float) con.Weight)));
+                    return slot;
+                }).ToList();
+
+            return results.Append(new PopSlotRowViewData("無職", unemployedSlots));
         }
 
         private IEnumerable<BuildingSlotViewData> ConvertBuildingData(IEnumerable<IBuildable> buildings)

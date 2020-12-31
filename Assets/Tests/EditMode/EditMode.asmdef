@@ -1,16 +1,16 @@
 {
     "name": "EditMode",
+    "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "View",
         "Town",
-        "Global",
         "Race",
-        "commerce",
         "Territory",
         "World",
-        "Route"
+        "Route",
+        "Database",
+        "Util"
     ],
     "includePlatforms": [
         "Editor"
@@ -19,7 +19,10 @@
     "allowUnsafeCode": false,
     "overrideReferences": true,
     "precompiledReferences": [
-        "nunit.framework.dll"
+        "nunit.framework.dll",
+        "Castle.Core.dll",
+        "NSubstitute.dll",
+        "System.Threading.Tasks.Extensions.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [

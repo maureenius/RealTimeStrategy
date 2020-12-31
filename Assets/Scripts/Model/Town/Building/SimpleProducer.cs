@@ -14,7 +14,7 @@ namespace Model.Town.Building {
         public string DisplayName { get; }
 
         public IEnumerable<TerrainName> BuildableTerrainTypes { get; }
-        public IEnumerable<Workplace> Workplaces { get; }
+        public IEnumerable<IWorkplace> Workplaces { get; }
 
         public SimpleProducer(BuildingData data) {
             BuildingData baseData = data;
@@ -23,9 +23,10 @@ namespace Model.Town.Building {
             SystemName = string.Copy(baseData.Name);
             DisplayName = string.Copy(baseData.DisplayName);
             BuildableTerrainTypes = new List<TerrainName>(baseData.BuildableTerrains);
-            Workplaces = Enumerable
-                .Range(0, baseData.Workplace.count)
-                .Select(_ => new Workplace(baseData.Workplace.Workplace));
+            Workplaces = Enumerable.Range(0, baseData.Workplace.count)
+                .Select(index => new Workplace(baseData.Workplace.Workplace))
+                .Cast<IWorkplace>()
+                .ToList();
         }
 
         public IBuildable Clone() {

@@ -10,19 +10,12 @@ using Model.Util;
 
 namespace Model.Town
 {
-    public readonly struct WorkplaceData
+    public interface IWorkplace : INamed, IHasProduceAbility, IHasConsumptionTrait
     {
-        public Guid SlotGuid { get; }
-        public string SlotName { get; }
-
-        public WorkplaceData(Guid slotGuid, string slotName)
-        {
-            SlotGuid = slotGuid;
-            SlotName = slotName;
-        }
+        public Guid Id { get; }
     }
     
-    public class Workplace : INamed, IHasProduceAbility, IHasConsumptionTrait
+    public class Workplace : IWorkplace
     {
         public Guid Id { get; }
         public string SystemName { get; }
@@ -45,11 +38,6 @@ namespace Model.Town
             ConsumptionTraits = baseData.Consumptions
                 .Select(goods => new ConsumptionTrait(GlobalGoods.GetInstance().FindByName(goods.Goods.Name),
                     goods.amount));
-        }
-
-        public WorkplaceData ToData()
-        {
-            return new WorkplaceData(Id, SystemName);
         }
     }
 }

@@ -57,7 +57,7 @@ MonoBehaviour:
   m_MinHeight: -1
   m_PreferredWidth: -1
   m_PreferredHeight: -1
-  m_FlexibleWidth: -1
+  m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
 --- !u!114 &2347103476166769465
@@ -102,8 +102,6 @@ MonoBehaviour:
   popSlotPrefab: {fileID: 1386506703774618835, guid: 231e5a8b6ed2f12498729528899e625e,
     type: 3}
   slotContainer: {fileID: 6284170998574546600}
-  popSlotRow: {fileID: 7808727678892076990}
-  popPrefab: {fileID: 0}
 --- !u!1 &2347103476974157107
 GameObject:
   m_ObjectHideFlags: 0
@@ -225,8 +223,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4279505459
-  m_fontColor: {r: 0.2, g: 0.07058824, b: 0.078431375, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -315,7 +313,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6284170998574546600}
   - component: {fileID: 3569944495103287959}
-  - component: {fileID: 8881276983640397043}
+  - component: {fileID: 8708568268525745535}
   m_Layer: 5
   m_Name: SlotContainer
   m_TagString: Untagged
@@ -359,10 +357,10 @@ MonoBehaviour:
   m_MinHeight: -1
   m_PreferredWidth: -1
   m_PreferredHeight: -1
-  m_FlexibleWidth: -1
+  m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!114 &8881276983640397043
+--- !u!114 &8708568268525745535
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -371,7 +369,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7808727678892076990}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
@@ -380,11 +378,9 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 0
-  m_Spacing: 10
-  m_ChildForceExpandWidth: 0
-  m_ChildForceExpandHeight: 0
-  m_ChildControlWidth: 1
-  m_ChildControlHeight: 1
-  m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
+  m_StartCorner: 0
+  m_StartAxis: 0
+  m_CellSize: {x: 100, y: 100}
+  m_Spacing: {x: 5, y: 5}
+  m_Constraint: 0
+  m_ConstraintCount: 2

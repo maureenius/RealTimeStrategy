@@ -29,6 +29,7 @@
       <Path>Library/PackageCache/com.unity.textmeshpro@3.0.1</Path>
       <Path>Library/PackageCache/com.unity.timeline@1.2.6</Path>
       <Path>Library/PackageCache/com.unity.xr.legacyinputhelpers@2.1.6</Path>
+      <Path>Library/PackageCache/net.tnrd.nsubstitute@4.2.2</Path>
       <Path>Packages</Path>
       <Path>ProjectSettings</Path>
     </explicitIncludes>

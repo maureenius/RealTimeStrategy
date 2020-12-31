@@ -51,60 +51,38 @@ namespace View
         }
     }
 
-    public readonly struct PopSlotViewData
+    public class PopSlotViewData
     {
-        public Guid SlotGuid { get; }
-        public string? SlotName { get; }
-        public Sprite? SlotBackgroundImage { get; }
-        public Guid WorkerGuid { get; }
-        public string? WorkerName { get; }
-        public string? WorkerRaceName { get; }
-        public Sprite? WorkerImage { get; }
-        
-        public List<(string goodsName, double amount)> Consumptions { get; }
-        
-        public List<(string goodsName, double amount)> Produces { get; }
+        public Guid SlotGuid { get; private set; }
+        public string SlotName { get; private set; } = "無職";
+        public Sprite? SlotBackgroundImage { get; private set; }
+        public Guid WorkerGuid { get; private set; }
+        public string? WorkerName { get; private set; }
+        public string? WorkerRaceName { get; private set; }
+        public Sprite? WorkerImage { get; private set; }
 
-        public PopSlotViewData(Guid slotGuid, string slotName, Sprite backgroundImage)
+        public IEnumerable<(string goodsName, float amount)> Consumptions { get; private set; } =
+            new List<(string goodsName, float amount)>();
+
+        public IEnumerable<(string goodsName, float amount)> Produces { get; private set; } =
+            new List<(string goodsName, float amount)>();
+
+        public void SetSlot(Guid id, string name, Sprite image)
         {
-            SlotGuid = slotGuid;
-            SlotName = slotName;
-            SlotBackgroundImage = backgroundImage;
-            WorkerGuid = Guid.Empty;
-            WorkerName = null;
-            WorkerRaceName = null;
-            WorkerImage = null;
-            Consumptions = new List<(string goodsName, double amount)>();
-            Produces = new List<(string goodsName, double amount)>();
+            SlotGuid = id;
+            SlotName = name;
+            SlotBackgroundImage = image;
         }
         
-        public PopSlotViewData(Guid workerGuid, string workerName, string workerRaceName, Sprite workerImage,
-            IEnumerable<(string goodsName, double amount)> consumptions, IEnumerable<(string goodsName, double amount)> produces)
+        public void SetWorker(Guid id, string name, string raceName, Sprite image, 
+            IEnumerable<(string goods, float amount)> produces, IEnumerable<(string goods, float amount)> consumptions)
         {
-            SlotGuid = Guid.Empty;
-            SlotName = "無職";
-            SlotBackgroundImage = null;
-            WorkerGuid = workerGuid;
-            WorkerName = workerName;
-            WorkerRaceName = workerRaceName;
-            WorkerImage = workerImage;
-            Consumptions = new List<(string goodsName, double amount)>(consumptions);
-            Produces = new List<(string goodsName, double amount)>(produces);
-        }
-        
-        public PopSlotViewData(Guid slotGuid, string slotName, Sprite slotBackgroundImage,
-            Guid workerGuid, string workerName, string workerRaceName, Sprite workerImage,
-            IEnumerable<(string goodsName, double amount)> consumptions, IEnumerable<(string goodsName, double amount)> produces)
-        {
-            SlotGuid = slotGuid;
-            SlotName = slotName;
-            SlotBackgroundImage = slotBackgroundImage;
-            WorkerGuid = workerGuid;
-            WorkerName = workerName;
-            WorkerRaceName = workerRaceName;
-            WorkerImage = workerImage;
-            Consumptions = new List<(string goodsName, double amount)>(consumptions);
-            Produces = new List<(string goodsName, double amount)>(produces);
+            WorkerGuid = id;
+            WorkerName = name;
+            WorkerRaceName = raceName;
+            WorkerImage = image;
+            Produces = produces;
+            Consumptions = consumptions;
         }
     }
 }

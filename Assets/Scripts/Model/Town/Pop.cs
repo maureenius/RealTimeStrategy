@@ -9,33 +9,8 @@ using UnityEngine;
 #nullable enable
 
 namespace Model.Town {
-    public readonly struct PopData
-    {
-        public Guid Id { get; }
-        public string Name { get; }
-        public string TypeName { get; }
-        public List<(string goodsName, double amount)> Consumptions { get; }
-        public List<(string goodsName, double amount)> Produces { get; }
-        public Guid WorkplaceGuid { get; }
-        private string WorkplaceName { get; }
-
-        public PopData(Guid id, string name, string typeName,
-            IEnumerable<(string goodsName, double amount)> consumptions, 
-            IEnumerable<(string goodsName, double amount)> produces,
-            Guid workplaceGuid, string workplaceName)
-        {
-            Id = id;
-            Name = name;
-            TypeName = typeName;
-            Consumptions = consumptions.ToList();
-            Produces = produces.ToList();
-            WorkplaceGuid = workplaceGuid;
-            WorkplaceName = workplaceName;
-        }
-    }
-    
     public class Pop: IProducable, INamed {
-        private Guid Id { get; }
+        public Guid Id { get; }
         public string SystemName { get; }
         public string DisplayName { get; }
         private string TypeName { get; }
@@ -48,7 +23,7 @@ namespace Model.Town {
         // ReSharper disable once InconsistentNaming
         private List<ConsumptionTrait> _consumptionTraits { get; }
         public IEnumerable<ConsumptionTrait> Consumptions => _consumptionTraits;
-        public Workplace? Workplace { get; private set; }
+        public IWorkplace? Workplace { get; private set; }
 
         public Pop(IRace race)
         {
@@ -71,7 +46,7 @@ namespace Model.Town {
             return ProduceAbilities.Select(pa => new Cargo(pa.OutputGoods, pa.ProduceAmount)).ToList();
         }
 
-        public void GetJob(Workplace slot)
+        public void GetJob(IWorkplace slot)
         {
             Workplace = slot;
             _produceAbilities.AddRange(Workplace.ProduceAbilities);
@@ -86,14 +61,6 @@ namespace Model.Town {
         public void Shortage()
         {
             Debug.Log("資源が足りません");
-        }
-
-        public PopData ToData()
-        {
-            return new PopData(Id, SystemName, TypeName,
-                Consumptions.Select(trait => (trait.Goods.DisplayName, trait.Weight)),
-                ProduceAbilities.Select(pa => (pa.OutputGoods.DisplayName, (double)pa.ProduceAmount)),
-                Workplace?.Id ?? Guid.Empty, GetWorkSlotTypeName());
         }
     }
     
