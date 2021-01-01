@@ -12,6 +12,7 @@ namespace Model.Territory {
         protected readonly IList<TownEntity> Towns = new List<TownEntity>();
         protected readonly IList<IBuildable> BuildingTemplates = new List<IBuildable>();
         public string Name { get; }
+        public bool IsPlayer { get; }
         public float Money { get; }
         public float FaithPoint { get; private set; }
 
@@ -21,9 +22,13 @@ namespace Model.Territory {
         private readonly Subject<Unit> _monthPassedSubject = new Subject<Unit>();
         public IObservable<Unit> OnMonthPassed => _monthPassedSubject;
 
-        protected TerritoryEntity(string name, float money) {
+        private readonly Subject<float> _faithPointSubject = new Subject<float>();
+        public IObservable<float> OnChangeFaithPoint => _faithPointSubject;
+
+        protected TerritoryEntity(string name, float money, bool isPlayer=false) {
             Name = name;
             Money = money;
+            IsPlayer = isPlayer;
         }
 
         public void AttachTowns(TownEntity attachedTown)
@@ -54,6 +59,7 @@ namespace Model.Territory {
         private void CollectFaith()
         {
             FaithPoint += Towns.Sum(town => town.CollectFaith());
+            _faithPointSubject.OnNext(FaithPoint);
         }
 
         public bool IsOwn(TownEntity town)
@@ -63,7 +69,7 @@ namespace Model.Territory {
     }
 
     class Territory : TerritoryEntity {
-        public Territory(string name, float money) : base(name, money) {
+        public Territory(string name, float money, bool isPlayer=false) : base(name, money, isPlayer) {
             InitializeBuildingTemplate();
         }
 
@@ -88,6 +94,11 @@ namespace Model.Territory {
     public static class TerritoryFactory {
         public static TerritoryEntity Create(string name, float money) {
             return new Territory(name, money);
+        }
+
+        public static TerritoryEntity CreatePlayer(string name, float money)
+        {
+            return new Territory(name, money, isPlayer: true);
         }
     }
 

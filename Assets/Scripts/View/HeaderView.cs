@@ -10,6 +10,7 @@ namespace View
     public class HeaderView : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI? dateText;
+        [SerializeField] private TextMeshProUGUI? faithPointText;
         [SerializeField] private GameObject? pauseButton;
         [SerializeField] private GameObject? playButton;
 
@@ -39,6 +40,13 @@ namespace View
             _changePausedSubject.OnNext(true);
             pauseButton.SetActive(false);
             playButton.SetActive(true);
+        }
+
+        public void UpdateFaithPoint(float point)
+        {
+            if (faithPointText == null) throw new NullReferenceException();
+
+            faithPointText.text = point.ToString("F1");
         }
     }
 }

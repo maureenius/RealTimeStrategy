@@ -20,7 +20,10 @@ namespace Presenter.Initializer
     {
         private void Start()
         {
-            GetComponent<TimePresenter>().Initialize(InitializeWorld());
+            var world = InitializeWorld();
+            
+            GetComponent<TimePresenter>().Initialize(world);
+            GetComponent<MyTerritoryPresenter>().Initialize(world.GetPlayerTerritory());
             GetComponent<TownOutlinePresenter>().Initialize();
             GetComponent<TownDetailPresenter>().Initialize();
             
@@ -93,7 +96,7 @@ namespace Presenter.Initializer
             world.InitializeTerritories(new List<TerritoryEntity>()
             {
                 TerritoryFactory.Create("新緑教会", initialMoney),
-                TerritoryFactory.Create("魔法科学振興委員会", initialMoney)
+                TerritoryFactory.CreatePlayer("魔法科学振興委員会", initialMoney)
             });
         }
 

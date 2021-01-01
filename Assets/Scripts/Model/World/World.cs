@@ -65,5 +65,10 @@ namespace Model.World {
 
             Commerces = commerces.ToList();
         }
+
+        public TerritoryEntity GetPlayerTerritory()
+        {
+            return Territories.First(entity => entity.IsPlayer);
+        }
     }
 }
