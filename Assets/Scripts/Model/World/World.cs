@@ -31,6 +31,10 @@ namespace Model.World {
             foreach (var territory in Territories)
             {
                 territory.DoOneTurn();
+                if (Date.Day == 1)
+                {
+                    territory.DoAtMonthBeginning();
+                }
             }
 
             foreach (var commerce in Commerces)

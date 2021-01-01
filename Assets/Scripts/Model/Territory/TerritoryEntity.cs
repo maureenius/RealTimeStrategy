@@ -1,18 +1,29 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Model.Town;
 using Model.Town.Building;
+using UniRx;
 
 #nullable enable
 
 namespace Model.Territory {
     public abstract class TerritoryEntity {
         protected readonly IList<TownEntity> Towns = new List<TownEntity>();
-        public string Name { get; }
         protected readonly IList<IBuildable> BuildingTemplates = new List<IBuildable>();
+        public string Name { get; }
+        public float Money { get; }
+        public float FaithPoint { get; private set; }
 
-        protected TerritoryEntity(string name) {
+        private readonly Subject<Unit> _turnPassedSubject = new Subject<Unit>();
+        public IObservable<Unit> OnTurnPassed => _turnPassedSubject;
+
+        private readonly Subject<Unit> _monthPassedSubject = new Subject<Unit>();
+        public IObservable<Unit> OnMonthPassed => _monthPassedSubject;
+
+        protected TerritoryEntity(string name, float money) {
             Name = name;
+            Money = money;
         }
 
         public void AttachTowns(TownEntity attachedTown)
@@ -31,7 +42,18 @@ namespace Model.Territory {
 
         public void DoOneTurn()
         {
-            
+            _turnPassedSubject.OnNext(Unit.Default);
+        }
+
+        public void DoAtMonthBeginning()
+        {
+            CollectFaith();
+            _monthPassedSubject.OnNext(Unit.Default);
+        }
+        
+        private void CollectFaith()
+        {
+            FaithPoint += Towns.Sum(town => town.CollectFaith());
         }
 
         public bool IsOwn(TownEntity town)
@@ -41,7 +63,7 @@ namespace Model.Territory {
     }
 
     class Territory : TerritoryEntity {
-        public Territory(string name) : base(name) {
+        public Territory(string name, float money) : base(name, money) {
             InitializeBuildingTemplate();
         }
 
@@ -64,8 +86,8 @@ namespace Model.Territory {
     }
 
     public static class TerritoryFactory {
-        public static TerritoryEntity Create(string name) {
-            return new Territory(name);
+        public static TerritoryEntity Create(string name, float money) {
+            return new Territory(name, money);
         }
     }
 

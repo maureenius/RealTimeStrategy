@@ -127,6 +127,11 @@ namespace Model.Town {
             });
         }
 
+        public float CollectFaith()
+        {
+            return Pops.Sum(pop => pop.Faith());
+        }
+
         private Storage? GetStorage(GoodsEntity target) {
             return Storages.FirstOrDefault(storage => storage.Goods == target);
         }

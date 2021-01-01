@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Database;
-using Manager;
 using Model.Commerce;
 using Model.Goods;
 using Model.Race;
@@ -21,7 +20,7 @@ namespace Presenter.Initializer
     {
         private void Start()
         {
-            GetComponent<WorldManager>().SetInitialWorld(InitializeWorld());
+            GetComponent<TimePresenter>().Initialize(InitializeWorld());
             GetComponent<TownOutlinePresenter>().Initialize();
             GetComponent<TownDetailPresenter>().Initialize();
             
@@ -89,10 +88,12 @@ namespace Presenter.Initializer
         
         private void InitializeTerritories(World world)
         {
+            const float initialMoney = 1000f;
+
             world.InitializeTerritories(new List<TerritoryEntity>()
             {
-                TerritoryFactory.Create("新緑教会"),
-                TerritoryFactory.Create("魔法科学振興委員会")
+                TerritoryFactory.Create("新緑教会", initialMoney),
+                TerritoryFactory.Create("魔法科学振興委員会", initialMoney)
             });
         }
 

@@ -46,6 +46,12 @@ namespace Model.Town {
             return ProduceAbilities.Select(pa => new Cargo(pa.OutputGoods, pa.ProduceAmount)).ToList();
         }
 
+        public float Faith()
+        {
+            // TODO: 実装
+            return 1f;
+        }
+
         public void GetJob(IWorkplace slot)
         {
             Workplace = slot;
