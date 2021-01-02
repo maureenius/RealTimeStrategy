@@ -11,6 +11,7 @@ namespace View
     {
         [SerializeField] private TextMeshProUGUI? dateText;
         [SerializeField] private TextMeshProUGUI? faithPointText;
+        [SerializeField] private TextMeshProUGUI? moneyText;
         [SerializeField] private GameObject? pauseButton;
         [SerializeField] private GameObject? playButton;
 
@@ -47,6 +48,13 @@ namespace View
             if (faithPointText == null) throw new NullReferenceException();
 
             faithPointText.text = point.ToString("F1");
+        }
+
+        public void UpdateMoney(float money)
+        {
+            if (moneyText == null) throw new NullReferenceException();
+
+            moneyText.text = money.ToString("F1");
         }
     }
 }

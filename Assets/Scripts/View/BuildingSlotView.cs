@@ -15,7 +15,7 @@ namespace View
         
         private readonly Subject<BuildingSlotViewData> _onSelected = new Subject<BuildingSlotViewData>();
         public IObservable<BuildingSlotViewData> OnSelected => _onSelected;
-        private BuildingSlotViewData _data;
+        private BuildingSlotViewData? _data;
         
         public void Initialize(BuildingSlotViewData data)
         {

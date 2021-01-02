@@ -13,7 +13,7 @@ namespace View
     {
         [SerializeField] private GameObject? background;
         [SerializeField] private GameObject? pop;
-        private PopSlotViewData _data;
+        private PopSlotViewData? _data;
         
         private readonly Subject<PopSlotViewData> _onSelectedSubject = new Subject<PopSlotViewData>();
         public IObservable<PopSlotViewData> OnSelected => _onSelectedSubject;
@@ -47,6 +47,8 @@ namespace View
 
         public void OnClicked(BaseEventData e)
         {
+            if (_data == null) throw new NullReferenceException();
+            
             _onSelectedSubject.OnNext(_data);
         }
     }

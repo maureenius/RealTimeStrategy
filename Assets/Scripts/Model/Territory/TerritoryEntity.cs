@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Model.Town;
 using Model.Town.Building;
+using Model.Util;
 using UniRx;
 
 #nullable enable
@@ -13,8 +14,8 @@ namespace Model.Territory {
         protected readonly IList<IBuildable> BuildingTemplates = new List<IBuildable>();
         public string Name { get; }
         public bool IsPlayer { get; }
-        public float Money { get; }
-        public float FaithPoint { get; private set; }
+        public Tank Money { get; }
+        public Tank FaithPoint { get; }
 
         private readonly Subject<Unit> _turnPassedSubject = new Subject<Unit>();
         public IObservable<Unit> OnTurnPassed => _turnPassedSubject;
@@ -25,9 +26,13 @@ namespace Model.Territory {
         private readonly Subject<float> _faithPointSubject = new Subject<float>();
         public IObservable<float> OnChangeFaithPoint => _faithPointSubject;
 
+        private readonly Subject<float> _moneySubject = new Subject<float>();
+        public IObservable<float> OnChangeMoney => _moneySubject;
+
         protected TerritoryEntity(string name, float money, bool isPlayer=false) {
             Name = name;
-            Money = money;
+            Money = new Tank(100000, money, _moneySubject);
+            FaithPoint = new Tank(10000, 0, _faithPointSubject);
             IsPlayer = isPlayer;
         }
 
@@ -55,11 +60,18 @@ namespace Model.Territory {
             CollectFaith();
             _monthPassedSubject.OnNext(Unit.Default);
         }
+
+        public void FaithToMoney(float faith, float money)
+        {
+            if (!FaithPoint.CanConsume(faith)) return;
+            
+            FaithPoint.Consume(faith);
+            Money.Store(money);
+        }
         
         private void CollectFaith()
         {
-            FaithPoint += Towns.Sum(town => town.CollectFaith());
-            _faithPointSubject.OnNext(FaithPoint);
+            FaithPoint.Store(Towns.Sum(town => town.CollectFaith()));
         }
 
         public bool IsOwn(TownEntity town)
