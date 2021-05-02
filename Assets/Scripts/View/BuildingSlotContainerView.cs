@@ -11,9 +11,10 @@ namespace View
     {
         [SerializeField] private Transform? buildingSlotRoot;
         [SerializeField] private GameObject? buildingSlotPrefab;
-        
-        private readonly Subject<BuildingSlotViewData> _onBuildingSelected = new Subject<BuildingSlotViewData>();
-        public IObservable<BuildingSlotViewData> OnBuildingSelected => _onBuildingSelected;
+        [SerializeField] private BuildingTemplateView? buildingTemplateView;
+
+        private readonly Subject<Guid> _onBuilding = new Subject<Guid>();
+        public IObservable<Guid> OnBuilding => _onBuilding;
 
         public void Initialize(IEnumerable<BuildingSlotViewData> viewDatas)
         {
@@ -23,17 +24,22 @@ namespace View
             {
                 AddSlot(viewData);
             }
+            
+            if (buildingTemplateView == null) throw new NullReferenceException();
+            buildingTemplateView.OnBuildingSelected
+                .Subscribe(id => _onBuilding.OnNext(id))
+                .AddTo(this);
         }
 
         private void AddSlot(BuildingSlotViewData data)
         {
             var slot = Instantiate(buildingSlotPrefab, buildingSlotRoot)?.GetComponent<BuildingSlotView>();
             if (slot == null) throw new NullReferenceException();
-            
+
+            if (buildingTemplateView == null) throw new NullReferenceException();
             slot.Initialize(data);
             slot.OnSelected
-                .Where(slotData => slotData.Id != Guid.Empty)
-                .Subscribe(slotData => _onBuildingSelected.OnNext(slotData))
+                .Subscribe(slotData => buildingTemplateView.Open())
                 .AddTo(this);
         }
 

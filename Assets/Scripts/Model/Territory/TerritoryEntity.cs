@@ -11,7 +11,7 @@ using UniRx;
 namespace Model.Territory {
     public abstract class TerritoryEntity {
         protected readonly IList<TownEntity> Towns = new List<TownEntity>();
-        protected readonly IList<IBuildable> BuildingTemplates = new List<IBuildable>();
+        public readonly IReactiveCollection<IBuildable> BuildingTemplates = new ReactiveCollection<IBuildable>();
         public string Name { get; }
         public bool IsPlayer { get; }
         public Tank Money { get; }
@@ -53,6 +53,14 @@ namespace Model.Territory {
         public void DoOneTurn()
         {
             _turnPassedSubject.OnNext(Unit.Default);
+        }
+
+        public void OrderBuilding(int townId, Guid buildingId)
+        {
+            var targetTown = Towns.First(town => town.Id == townId);
+            var targetTemplate = BuildingTemplates.First(tmp => tmp.Id == buildingId);
+
+            targetTown.Build(targetTemplate);
         }
 
         public void DoAtMonthBeginning()

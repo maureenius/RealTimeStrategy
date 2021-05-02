@@ -17,23 +17,35 @@ namespace Presenter
     public class TownDetailPresenter : MonoBehaviour
     {
         [SerializeField] private TownsPresenter? townsPresenter;
+        [SerializeField] private MyTerritoryPresenter? myTerritoryPresenter;
         [SerializeField] private TownDetailView? townDetailView;
         [SerializeField] private ImageStore? imageDatabase;
 
         public void Initialize()
         {
-            if(townsPresenter == null || townDetailView == null) throw new NullReferenceException();
-            
-            townDetailView.OnOpened
-                .Where(_ => townsPresenter.SelectedTownId.Value > 0)
-                .Subscribe(_ => OnOpened())
-                .AddTo(this);
-
+            if(townsPresenter == null) throw new NullReferenceException();
             townsPresenter.OnDetailChanged
                 .Where(_ => isActiveAndEnabled)
                 .Where(townId => townId != 0)
                 .Select(townId => townsPresenter.FindEntityById(townId))
                 .Subscribe(UpdateDetail)
+                .AddTo(this);
+            
+            if(townDetailView == null) throw new NullReferenceException();
+            townDetailView.Initialize();
+            townDetailView.OnOpened
+                .Where(_ => townsPresenter.SelectedTownId.Value > 0)
+                .Subscribe(_ => OnOpened())
+                .AddTo(this);
+
+            if (myTerritoryPresenter == null) throw new NullReferenceException();
+            townDetailView.OnBuilding
+                .Subscribe(buildingId =>
+                {
+                    myTerritoryPresenter
+                        .OrderBuilding(townsPresenter.SelectedTownId.Value, buildingId);
+                    
+                })
                 .AddTo(this);
         }
 

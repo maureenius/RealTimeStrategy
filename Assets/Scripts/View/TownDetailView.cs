@@ -17,6 +17,17 @@ namespace View
         
         private readonly Subject<Unit> _onOpenedSubject = new Subject<Unit>();
         public IObservable<Unit> OnOpened => _onOpenedSubject;
+
+        private readonly Subject<Guid> _onBuilding = new Subject<Guid>();
+        public IObservable<Guid> OnBuilding => _onBuilding;
+
+        public void Initialize()
+        {
+            if (buildingSlotContainerView == null) throw new NullReferenceException();
+            buildingSlotContainerView.OnBuilding
+                .Subscribe(id => _onBuilding.OnNext(id))
+                .AddTo(this);
+        }
         
         public void OnOpenButtonClicked()
         {

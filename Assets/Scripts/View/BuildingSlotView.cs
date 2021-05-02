@@ -12,9 +12,10 @@ namespace View
     {
         [SerializeField] private Image? buildingImage;
         [SerializeField] private Image? terrainImage;
+        [SerializeField] private BuildingTemplateView? buildingTemplateView;
         
-        private readonly Subject<BuildingSlotViewData> _onSelected = new Subject<BuildingSlotViewData>();
-        public IObservable<BuildingSlotViewData> OnSelected => _onSelected;
+        private readonly Subject<BuildingSlotViewData?> _onSelected = new Subject<BuildingSlotViewData?>();
+        public IObservable<BuildingSlotViewData?> OnSelected => _onSelected;
         private BuildingSlotViewData? _data;
         
         public void Initialize(BuildingSlotViewData data)
@@ -29,6 +30,11 @@ namespace View
             {
                 buildingImage.sprite = _data.BuildingImage;
             }
+        }
+
+        public void OnClicked()
+        {
+            _onSelected.OnNext(_data);
         }
     }
     
