@@ -7,6 +7,7 @@ using Store;
 using UniRx;
 using UnityEngine;
 using View;
+using View.TownDetail;
 
 #nullable enable
 
@@ -18,6 +19,7 @@ namespace Presenter
         [SerializeField] private MyTerritoryDetailView? myTerritoryDetailView;
         [SerializeField] private BuildingTemplateView? buildingTemplateView;
         [SerializeField] private ImageStore? imageStore;
+        [SerializeField] private TownDetailView? townDetailView;
         private TerritoryEntity? _myTerritoryEntity;
 
         public void Initialize(TerritoryEntity territory)
@@ -68,10 +70,13 @@ namespace Presenter
                     imageStore.FindBuildingImage(buildable.SystemName)));
         }
 
-        public void OrderBuilding(int townId, Guid buildingId)
+        public void OrderBuilding(int townId, Guid divisionId, Guid buildingId)
         {
             if (_myTerritoryEntity == null) throw new NullReferenceException();
-            _myTerritoryEntity.OrderBuilding(townId, buildingId);
+            _myTerritoryEntity.OrderBuilding(townId, divisionId, buildingId);
+
+            if (townDetailView == null) throw new NullReferenceException();
+            townDetailView.OnContentChanged();
         }
 
         private void CommandFaithToMoney(float faith, float money)

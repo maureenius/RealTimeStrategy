@@ -5,7 +5,7 @@ using UnityEngine;
 
 #nullable enable
 
-namespace View
+namespace View.TownDetail
 {
     public class TownDetailView : MonoBehaviour
     {
@@ -18,8 +18,8 @@ namespace View
         private readonly Subject<Unit> _onOpenedSubject = new Subject<Unit>();
         public IObservable<Unit> OnOpened => _onOpenedSubject;
 
-        private readonly Subject<Guid> _onBuilding = new Subject<Guid>();
-        public IObservable<Guid> OnBuilding => _onBuilding;
+        private readonly Subject<(Guid divisionId, Guid buildingId)> _onBuilding = new Subject<(Guid divisionId, Guid buildingId)>();
+        public IObservable<(Guid divisionId, Guid buildingId)> OnBuilding => _onBuilding;
 
         public void Initialize()
         {
@@ -27,6 +27,11 @@ namespace View
             buildingSlotContainerView.OnBuilding
                 .Subscribe(id => _onBuilding.OnNext(id))
                 .AddTo(this);
+        }
+
+        public void OnContentChanged()
+        {
+            _onOpenedSubject.OnNext(Unit.Default);
         }
         
         public void OnOpenButtonClicked()

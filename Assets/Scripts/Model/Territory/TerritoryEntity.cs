@@ -55,12 +55,12 @@ namespace Model.Territory {
             _turnPassedSubject.OnNext(Unit.Default);
         }
 
-        public void OrderBuilding(int townId, Guid buildingId)
+        public void OrderBuilding(int townId, Guid divisionId, Guid buildingId)
         {
             var targetTown = Towns.First(town => town.Id == townId);
             var targetTemplate = BuildingTemplates.First(tmp => tmp.Id == buildingId);
 
-            targetTown.Build(targetTemplate);
+            targetTown.Build(divisionId, targetTemplate);
         }
 
         public void DoAtMonthBeginning()
@@ -104,9 +104,14 @@ namespace Model.Territory {
         {
             Towns.ToList().ForEach(town =>
             {
-                town.Build(BuildingTemplates.First(template => template.SystemName == "小麦農場"));
-                town.Build(BuildingTemplates.First(template => template.SystemName == "さとうきび畑"));
-                town.Build(BuildingTemplates.First(template => template.SystemName == "菓子工房"));
+                var firstDivision = town.Divisions.ElementAt(0);
+                town.Build(firstDivision.Id, BuildingTemplates.First(template => template.SystemName == "小麦農場"));
+
+                var secondDivision = town.Divisions.ElementAt(1);
+                town.Build(secondDivision.Id, BuildingTemplates.First(template => template.SystemName == "さとうきび畑"));
+
+                var thirdDivision = town.Divisions.ElementAt(2);
+                town.Build(thirdDivision.Id, BuildingTemplates.First(template => template.SystemName == "菓子工房"));
             });
         }
     }

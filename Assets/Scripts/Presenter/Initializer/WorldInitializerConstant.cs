@@ -76,7 +76,7 @@ namespace Presenter.Initializer
 
                     for (var i = 0; i < 5; i++)
                     {
-                        townEntity.Build(BuildingFactory.FlourFarm());
+                        townEntity.Build(townEntity.Divisions.ElementAt(i).Id, BuildingFactory.FlourFarm());
                     }
                     
                     presenter.InitializeEntity(townEntity);

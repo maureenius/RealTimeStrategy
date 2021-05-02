@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 #nullable enable
 
-namespace View
+namespace View.TownDetail
 {
     public class BuildingSlotView : MonoBehaviour
     {

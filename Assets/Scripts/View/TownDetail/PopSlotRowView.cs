@@ -6,7 +6,7 @@ using UnityEngine;
 
 #nullable enable
 
-namespace View
+namespace View.TownDetail
 {
     public class PopSlotRowView : MonoBehaviour
     {

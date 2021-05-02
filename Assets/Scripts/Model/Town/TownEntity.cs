@@ -68,11 +68,11 @@ namespace Model.Town {
                 .WhereNotNull();
         }
         
-        public void Build(IBuildable template)
+        public void Build(Guid divisionId, IBuildable template)
         {
             var building = template.Clone();
-            var site = Divisions.First(division => division.CanBuild(building));
-            site?.Build(building);
+            var site = Divisions.First(division => division.Id == divisionId);
+            if (site.CanBuild(building)) site.Build(building);
         }
 
         public void CarryIn(IEnumerable<Cargo> cargoes)

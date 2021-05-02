@@ -5,7 +5,7 @@ using UnityEngine;
 
 # nullable enable
 
-namespace View
+namespace View.TownDetail
 {
     public class BuildingTemplateView : MonoBehaviour
     {
@@ -15,12 +15,16 @@ namespace View
         public IEnumerable<BuildingTemplateViewData> BuildingTemplateViewDatas { get; set; } =
             new List<BuildingTemplateViewData>();
 
-        private readonly Subject<Guid> _onBuildingSelected = new Subject<Guid>();
-        public IObservable<Guid> OnBuildingSelected => _onBuildingSelected;
+        private Guid selectedDivisionId = Guid.Empty;
 
-        public void Open()
+        private readonly Subject<(Guid divisionId, Guid buildingId)> _onBuildingSelected = 
+            new Subject<(Guid divisionId, Guid buildingId)>();
+        public IObservable<(Guid divisionId, Guid buildingId)> OnBuildingSelected => _onBuildingSelected;
+
+        public void Open(Guid divisionId)
         {
             Refresh();
+            selectedDivisionId = divisionId;
             gameObject.SetActive(true);
         }
 
@@ -45,7 +49,7 @@ namespace View
             
             foreach (Transform child in slotRoot)
             {
-                Destroy(child);
+                Destroy(child.gameObject);
             }
         }
 
@@ -55,7 +59,11 @@ namespace View
             var tileView = slot.GetComponent<BuildingTemplateTileView>();
             tileView.Initialize(data);
             tileView.OnSelected
-                .Subscribe(id => _onBuildingSelected.OnNext(id))
+                .Subscribe(buildingId =>
+                {
+                    var item = (divisionId: selectedDivisionId, buildingId);
+                    _onBuildingSelected.OnNext(item);
+                })
                 .AddTo(this);
         }
     }

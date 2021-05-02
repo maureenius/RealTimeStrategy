@@ -6,7 +6,7 @@ using Model.Goods;
 using Model.Town;
 using UniRx;
 using UnityEngine;
-using View;
+using View.TownDetail;
 using Model.Town.Building;
 using Store;
 
@@ -40,11 +40,11 @@ namespace Presenter
 
             if (myTerritoryPresenter == null) throw new NullReferenceException();
             townDetailView.OnBuilding
-                .Subscribe(buildingId =>
+                .Subscribe(item =>
                 {
+                    var (divisionId, buildingId) = item;
                     myTerritoryPresenter
-                        .OrderBuilding(townsPresenter.SelectedTownId.Value, buildingId);
-                    
+                        .OrderBuilding(townsPresenter.SelectedTownId.Value, divisionId, buildingId);
                 })
                 .AddTo(this);
         }

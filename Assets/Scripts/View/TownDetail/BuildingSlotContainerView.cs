@@ -5,7 +5,7 @@ using UnityEngine;
 
 #nullable enable
 
-namespace View
+namespace View.TownDetail
 {
     public class BuildingSlotContainerView : MonoBehaviour
     {
@@ -13,8 +13,9 @@ namespace View
         [SerializeField] private GameObject? buildingSlotPrefab;
         [SerializeField] private BuildingTemplateView? buildingTemplateView;
 
-        private readonly Subject<Guid> _onBuilding = new Subject<Guid>();
-        public IObservable<Guid> OnBuilding => _onBuilding;
+        private readonly Subject<(Guid divisionId, Guid buildingId)> _onBuilding = 
+            new Subject<(Guid divisionId, Guid buildingId)>();
+        public IObservable<(Guid divisionId, Guid buildingId)> OnBuilding => _onBuilding;
 
         public void Initialize(IEnumerable<BuildingSlotViewData> viewDatas)
         {
@@ -27,7 +28,7 @@ namespace View
             
             if (buildingTemplateView == null) throw new NullReferenceException();
             buildingTemplateView.OnBuildingSelected
-                .Subscribe(id => _onBuilding.OnNext(id))
+                .Subscribe(item => _onBuilding.OnNext(item))
                 .AddTo(this);
         }
 
@@ -39,7 +40,7 @@ namespace View
             if (buildingTemplateView == null) throw new NullReferenceException();
             slot.Initialize(data);
             slot.OnSelected
-                .Subscribe(slotData => buildingTemplateView.Open())
+                .Subscribe(slotData => buildingTemplateView.Open(slotData!.Id))
                 .AddTo(this);
         }
 
