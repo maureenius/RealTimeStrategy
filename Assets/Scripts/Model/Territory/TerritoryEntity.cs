@@ -55,12 +55,12 @@ namespace Model.Territory {
             _turnPassedSubject.OnNext(Unit.Default);
         }
 
-        public void OrderBuilding(int townId, Guid divisionId, Guid buildingId)
+        public Util.Util.StatusCode OrderBuilding(int townId, Guid divisionId, Guid buildingId)
         {
             var targetTown = Towns.First(town => town.Id == townId);
             var targetTemplate = BuildingTemplates.First(tmp => tmp.Id == buildingId);
 
-            targetTown.Build(divisionId, targetTemplate);
+            return targetTown.Build(divisionId, targetTemplate);
         }
 
         public void DoAtMonthBeginning()

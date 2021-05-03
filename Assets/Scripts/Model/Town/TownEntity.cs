@@ -68,11 +68,19 @@ namespace Model.Town {
                 .WhereNotNull();
         }
         
-        public void Build(Guid divisionId, IBuildable template)
+        public Util.Util.StatusCode Build(Guid divisionId, IBuildable template)
         {
             var building = template.Clone();
             var site = Divisions.First(division => division.Id == divisionId);
-            if (site.CanBuild(building)) site.Build(building);
+            if (site.CanBuild(building))
+            {
+                site.Build(building);
+                return Util.Util.StatusCode.Success;
+            }
+            else
+            {
+                return Util.Util.StatusCode.Fail;
+            }
         }
 
         public void CarryIn(IEnumerable<Cargo> cargoes)

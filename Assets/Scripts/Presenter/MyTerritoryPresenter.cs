@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Model.Territory;
 using Model.Town.Building;
+using Model.Util;
 using Store;
 using UniRx;
 using UnityEngine;
@@ -73,7 +74,8 @@ namespace Presenter
         public void OrderBuilding(int townId, Guid divisionId, Guid buildingId)
         {
             if (_myTerritoryEntity == null) throw new NullReferenceException();
-            _myTerritoryEntity.OrderBuilding(townId, divisionId, buildingId);
+            var result = _myTerritoryEntity.OrderBuilding(townId, divisionId, buildingId);
+            if (result == Util.StatusCode.Fail) Debug.Log($"建造できませんでした。 townId:{townId}, divisionId:{divisionId}, buildingId:{buildingId}");
 
             if (townDetailView == null) throw new NullReferenceException();
             townDetailView.OnContentChanged();
