@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using Model.Goods;
 using Model.Town;
 using UniRx;
@@ -24,6 +25,9 @@ namespace Model.Route {
         public IObservable<Unit> OnRecalculation => _onRecalculation;
         private readonly Subject<Unit> _onRecalculation = new Subject<Unit>();
 
+        public IObservable<IEnumerable<string>> OnCargoChanged => _onCargoChanged;
+        private readonly Subject<IEnumerable<string>> _onCargoChanged = new Subject<IEnumerable<string>>();
+
         public Route(int capacity, int length, TownEntity from, TownEntity to) {
             Id = Guid.NewGuid();
             Capacity = capacity;
@@ -35,6 +39,7 @@ namespace Model.Route {
 
         public void DoOneTurn() {
             _cargos.ToList().ForEach(c => c.timer--);
+            FireCargoChangedEvent();
         }
 
         public void PushCargo(Cargo cargo) {
@@ -58,6 +63,12 @@ namespace Model.Route {
             _tensions = _tensions.Union(argTensions).ToList();
             
             _onRecalculation.OnNext(Unit.Default);
+        }
+
+        private void FireCargoChangedEvent()
+        {
+            var cargoNames = _cargos.Select(item => item.cargo.Goods.DisplayName).Distinct();
+            _onCargoChanged.OnNext(cargoNames);
         }
     }
 }

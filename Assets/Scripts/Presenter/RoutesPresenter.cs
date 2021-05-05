@@ -49,6 +49,9 @@ namespace Presenter
                 .Where(_ => route.Id == _selectedRouteId.Value)
                 .Subscribe(_ => view.UpdateFlowPower(route.FlowPower()))
                 .AddTo(this);
+            route.OnCargoChanged
+                .Subscribe(items => view.UpdateCargoText(items))
+                .AddTo(this);
             
             return view;
         }

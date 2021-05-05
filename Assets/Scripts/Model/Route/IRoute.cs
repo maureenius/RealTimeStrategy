@@ -19,6 +19,7 @@ namespace Model.Route {
         void UpdateTensions(IEnumerable<Tension> argTensions);
         double FlowPower();
         IObservable<Unit> OnRecalculation { get; }
+        IObservable<IEnumerable<string>> OnCargoChanged { get; }
     }
     
     public class Tension
