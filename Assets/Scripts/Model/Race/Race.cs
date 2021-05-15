@@ -37,17 +37,4 @@ namespace Model.Race {
             return new GeneralRace(RaceDatabase.Find(type));
         }
     }
-
-    public class ConsumptionTrait {
-        public GoodsEntity Goods { get; }
-        public double Weight { get; }
-
-        public ConsumptionTrait(
-            GoodsEntity goods, 
-            double weight
-            ) {
-            Goods = goods;
-            Weight = weight;
-        }
-    }
 }

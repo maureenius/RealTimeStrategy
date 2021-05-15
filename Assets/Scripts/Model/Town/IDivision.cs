@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Model.Pops;
 using Model.Town.Building;
 
 #nullable enable
@@ -14,6 +15,6 @@ namespace Model.Town
         public bool CanBuild(IBuildable target);
         public void Build(IBuildable target);
         public void Demolish();
-        public IEnumerable<IWorkplace> ProvidedWorkplaces();
+        public IEnumerable<Workplace> ProvidedWorkplaces();
     }
 }

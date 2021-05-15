@@ -4,7 +4,10 @@ using System.ComponentModel;
 #nullable enable
 
 namespace Model.Util {
-    public static class Util {
+    public static class Util
+    {
+        public static float MIN = 0.001f;
+        
         public enum StatusCode {
             Success,
             Fail

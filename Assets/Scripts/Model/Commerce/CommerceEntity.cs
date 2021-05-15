@@ -58,7 +58,7 @@ namespace Model.Commerce
 
         private void Export()
         {
-            var storages = GetExportableGoods();
+            var storages = GetExportableGoods().ToList();
             var targetRoutes = OutwardRoutes().ToList();
             var totalPower = targetRoutes.Sum(route => route.FlowPower());
 
@@ -66,18 +66,20 @@ namespace Model.Commerce
             {
                 foreach (var route in targetRoutes)
                 {
-                    var amount = (int)(storage.Amount * (route.FlowPower() / totalPower));
+                    var amount = (int)(storage.Amount.Volume * (route.FlowPower() / totalPower));
                     var cargo = new Cargo(storage.Goods, amount);
-                    storage.Consume(amount);
+                    storage.Amount.Consume(amount);
 
                     route.PushCargo(cargo);
                 }
             }
+            
+            Town.CarryIn(storages);
         }
 
-        private IEnumerable<Storage> GetExportableGoods()
+        private IEnumerable<Cargo> GetExportableGoods()
         {
-            return Town.Storages;
+            return Town.Storages.PickUpAll();
         }
 
         private IEnumerable<IRoute> OutwardRoutes()

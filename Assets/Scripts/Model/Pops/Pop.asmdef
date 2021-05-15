@@ -1,13 +1,11 @@
 {
-    "name": "Town",
+    "name": "Pop",
     "rootNamespace": "",
     "references": [
         "GUID:70416b8ce38dadd47b8a1df7135325f1",
         "GUID:076515a1229e7b6449822e2492a6606f",
         "GUID:6559a05898285e94380b20250eb51fb6",
-        "GUID:560b04d1a97f54a4e82edc0cbbb69285",
-        "GUID:0a90099f0fc06394fa8d9ff76a95ebd0",
-        "GUID:689985766c55a37408b7b8a05d6bcc5a"
+        "GUID:0a90099f0fc06394fa8d9ff76a95ebd0"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

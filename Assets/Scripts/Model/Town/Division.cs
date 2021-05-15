@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Database;
+using Model.Pops;
 using Model.Town.Building;
 
 #nullable enable
@@ -33,7 +34,7 @@ namespace Model.Town {
             Building = null;
         }
 
-        public IEnumerable<IWorkplace> ProvidedWorkplaces()
+        public IEnumerable<Workplace> ProvidedWorkplaces()
         {
             return Building == null ? new List<Workplace>() : Building.Workplaces;
         }

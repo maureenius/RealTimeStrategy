@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Database;
 using Model.Goods;
+using Model.Pops;
 using Model.Town;
 using UniRx;
 using UnityEngine;
@@ -81,7 +82,7 @@ namespace Presenter
             townDetailView.UpdateBuildingContainer(ConvertBuildingData(divisions));
         }
 
-        private IEnumerable<PopSlotRowViewData> CreateRowData(IEnumerable<Pop> pops, IEnumerable<IWorkplace> workplaces)
+        private IEnumerable<PopSlotRowViewData> CreateRowData(IEnumerable<Pop> pops, IEnumerable<Workplace> workplaces)
         {
             if(imageDatabase == null) throw new NullReferenceException();
 
@@ -97,7 +98,8 @@ namespace Presenter
                         imageDatabase.FindRaceFaceImage(worker.SystemName),
                         worker.ProduceAbilities.Select(pa =>
                             (goods: pa.OutputGoods.DisplayName, amount: pa.ProduceAmount)),
-                        worker.Consumptions.Select(con => (goods: con.Goods.DisplayName, amount: (float) con.Weight)));
+                        worker.ConsumptionTraits()
+                            .Select(con => (goods: con.GoodsName, amount: con.Weight)));
                 }
                 
                 return slot;
@@ -115,7 +117,8 @@ namespace Presenter
                         imageDatabase.FindRaceFaceImage(pop.SystemName),
                         pop.ProduceAbilities.Select(pa =>
                             (goods: pa.OutputGoods.DisplayName, amount: pa.ProduceAmount)),
-                        pop.Consumptions.Select(con => (goods: con.Goods.DisplayName, amount: (float) con.Weight)));
+                        pop.ConsumptionTraits()
+                            .Select(con => (goods: con.GoodsName, amount: con.Weight)));
                     return slot;
                 }).ToList();
 

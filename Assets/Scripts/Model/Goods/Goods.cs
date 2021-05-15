@@ -8,12 +8,15 @@ namespace Model.Goods {
     {
         public string SystemName { get; }
         public string DisplayName { get; }
+        public string TypeName { get; }
 
         protected GoodsEntity(GoodsData data)
         {
             GoodsData baseData = data;
             SystemName = baseData.Name;
             DisplayName = baseData.DisplayName;
+            // TODO: 暫定実装
+            TypeName = SystemName;
         }
     }
 

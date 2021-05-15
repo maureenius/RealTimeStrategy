@@ -28,26 +28,26 @@ namespace Tests.EditMode.Editor.Model.Town
             }
         }
         
-        [Test]
-        public void ProvidedWorkplacesTest()
-        {
-            var terrainData = new TerrainDataMock("test", TerrainName.Plain, "test", 1);
-            var division = new Division(terrainData);
-
-            var buildingMock = Substitute.For<IBuildable>();
-            var workplacesMock = new List<IWorkplace>()
-            {
-                Substitute.For<IWorkplace>()
-            };
-            buildingMock.Workplaces.Returns(workplacesMock);
-            buildingMock.BuildableTerrainTypes.Returns(new List<TerrainName>() {TerrainName.Plain});
-            
-            division.Build(buildingMock);
-
-            var actual = division.ProvidedWorkplaces();
-            var expected = workplacesMock;
-            
-            Assert.AreEqual(expected, actual);
-        }
+        // [Test]
+        // public void ProvidedWorkplacesTest()
+        // {
+        //     var terrainData = new TerrainDataMock("test", TerrainName.Plain, "test", 1);
+        //     var division = new Division(terrainData);
+        //
+        //     var buildingMock = Substitute.For<IBuildable>();
+        //     var workplacesMock = new List<IWorkplace>()
+        //     {
+        //         Substitute.For<IWorkplace>()
+        //     };
+        //     buildingMock.Workplaces.Returns(workplacesMock);
+        //     buildingMock.BuildableTerrainTypes.Returns(new List<TerrainName>() {TerrainName.Plain});
+        //     
+        //     division.Build(buildingMock);
+        //
+        //     var actual = division.ProvidedWorkplaces();
+        //     var expected = workplacesMock;
+        //     
+        //     Assert.AreEqual(expected, actual);
+        // }
     }
 }

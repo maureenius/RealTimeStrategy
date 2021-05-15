@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Annotations;
 using Model.Goods;
 using Model.Town;
 using UniRx;
@@ -43,7 +42,7 @@ namespace Model.Route {
         }
 
         public void PushCargo(Cargo cargo) {
-            if (cargo.Amount > Capacity) return;
+            if (cargo.Amount.Volume > Capacity) return;
 
             _cargos.Enqueue((cargo, timer: _length));
         }

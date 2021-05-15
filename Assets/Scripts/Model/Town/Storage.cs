@@ -1,31 +1,40 @@
-﻿using Model.Goods;
+﻿using System;
+using Model.Goods;
+using Model.Util;
 
 #nullable enable
 
 namespace Model.Town {
     public class Storage {
         public GoodsEntity Goods { get; }
-        public float Amount { get; private set; }
-        private float AmountLimit { get; }
+        public Tank GoodsTank { get; private set; }
 
         public Storage(GoodsEntity goods, float amountLimit) {
             Goods = goods;
-            AmountLimit = amountLimit;
+            GoodsTank = new Tank(amountLimit);
         }
 
-        public void Consume(float amount) {
-            if (!CanConsume(amount)) return;
+        public void Consume(float amount)
+        {
+            if (!GoodsTank.CanConsume(amount)) throw new InvalidOperationException();
 
-            Amount -= amount;
+            GoodsTank.Consume(amount);
         }
 
         public void Store(float amount) {
-            Amount += amount;
-            if (Amount > AmountLimit) Amount = AmountLimit;
+            GoodsTank.Store(amount);
         }
 
-        private bool CanConsume(float amount) {
-            return Amount >= amount;
+        public Cargo PickUpAll()
+        {
+            return PickUp(GoodsTank.Volume);
+        }
+
+        private Cargo PickUp(float amount)
+        {
+            Consume(amount);
+
+            return new Cargo(Goods, amount);
         }
     }
 }

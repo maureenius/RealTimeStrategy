@@ -7,6 +7,7 @@ using Model.Race;
 using Model.Town.Building;
 using Model.Town.TownDetail;
 using Model.Util;
+using Model.Pops;
 using UniRx;
 
 #nullable enable
@@ -16,7 +17,7 @@ namespace Model.Town {
         public readonly int Id;
         public readonly string TownName;
         public readonly TownType TownType;
-        public IList<Storage> Storages { get; } = new List<Storage>();
+        public TownStorage Storages { get; } = new TownStorage();
         public IList<Pop> Pops { get; } = new List<Pop>();
         public IEnumerable<IDivision> Divisions { get; private set; }
 
@@ -51,11 +52,7 @@ namespace Model.Town {
             _turnPassedSubject.OnNext(Unit.Default);
         }
 
-        public IEnumerable<(string goodsTypeName, float amount)> GetStoredProducts() {
-            return Storages.Select(s => (goodsTypeName: s.Goods.DisplayName, amount: s.Amount)).ToList();
-        }
-
-        public IEnumerable<IWorkplace> GetWorkplaces()
+        public IEnumerable<Workplace> GetWorkplaces()
         {
             return Divisions
                 .SelectMany(division => division.ProvidedWorkplaces());
@@ -85,40 +82,33 @@ namespace Model.Town {
 
         public void CarryIn(IEnumerable<Cargo> cargoes)
         {
-            foreach (var cargo in cargoes)
-            {
-                var storage = GetStorage(cargo.Goods) ?? CreateStorage(cargo.Goods, 1000);
-
-                storage.Store(cargo.Amount);
-            }
-        }
-
-        private Storage CreateStorage(GoodsEntity goods, int limit)
-        {
-            var storage = new Storage(goods, limit);
-            Storages.Add(storage);
-
-            return storage;
+            Storages.Store(cargoes);
         }
 
         private void Produce() {
             CarryIn(Pops.Select(pop => pop.Produce()).SelectMany(product => product));
         }
 
-        private void Consume() {
-            Pops.ToList().ForEach(pop =>
+        private void Consume()
+        {
+            var cargoes = Storages.PickUpAll().ToList();
+            
+            foreach (var pop in Pops)
             {
-                pop.RequestProducts().ToList().ForEach(trait =>
-                {
-                    var storage = GetStorage(trait.Goods);
-                    if (storage == null || storage.Amount < (int)trait.Weight)
-                    {
-                        pop.Shortage();
-                        return;
-                    }
-                    storage.Consume((int)trait.Weight);
-                });
-            });
+                pop.ConsumeEssential(cargoes);
+            }
+
+            foreach (var pop in Pops)
+            {
+                pop.ConsumeMaterial(cargoes);
+            }
+            
+            foreach (var pop in Pops)
+            {
+                pop.ConsumeLuxury(cargoes);
+            }
+            
+            Storages.Store(cargoes);
         }
 
         private void OptimizeWorkers()
@@ -140,16 +130,12 @@ namespace Model.Town {
             return Pops.Sum(pop => pop.Faith());
         }
 
-        private Storage? GetStorage(GoodsEntity target) {
-            return Storages.FirstOrDefault(storage => storage.Goods == target);
-        }
-
         private List<Pop> GetUnemployed()
         {
             return Pops.Where(pop => pop.Workplace == null).ToList();
         }
 
-        private List<IWorkplace> GetVacantWorkplaces()
+        private List<Workplace> GetVacantWorkplaces()
         {
             return GetWorkplaces().Where(ws => !Pops.Select(pop => pop.Workplace).Contains(ws)).ToList();
         }

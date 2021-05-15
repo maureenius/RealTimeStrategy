@@ -4,6 +4,7 @@ using Database;
 using Model.Goods;
 using Model.Race;
 using Model.Util;
+using Model.Pops;
 
 #nullable enable
 
@@ -12,18 +13,8 @@ namespace Model.Town.Building {
     {
         Guid Id { get; }
         IEnumerable<TerrainName> BuildableTerrainTypes { get; }
-        IEnumerable<IWorkplace> Workplaces { get; }
+        IEnumerable<Workplace> Workplaces { get; }
 
         public IBuildable Clone();
-    }
-
-    public interface IHasProduceAbility
-    {
-        IEnumerable<ProduceAbility> ProduceAbilities { get; }
-    }
-
-    public interface IHasConsumptionTrait
-    {
-        IEnumerable<ConsumptionTrait> ConsumptionTraits { get; }
     }
 }

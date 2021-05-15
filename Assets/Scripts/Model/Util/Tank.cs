@@ -5,6 +5,7 @@ using UniRx;
 
 namespace Model.Util
 {
+    // float量を持ち、消費と備蓄が可能なものを扱うクラス
     public class Tank
     {
         private readonly float limit;

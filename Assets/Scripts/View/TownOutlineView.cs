@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Model.Town;
 using TMPro;
 using UnityEngine;
 
@@ -50,12 +51,11 @@ namespace View
         public string TownType { get; }
         public List<(string goodsTypeName, float amount)> Storages { get; }
 
-        public TownOutlineData(string townName, string townType,
-            IEnumerable<(string goodsTypeName, float amount)> storages)
+        public TownOutlineData(string townName, string townType, TownStorage storages)
         {
             TownName = townName;
             TownType = townType;
-            Storages = new List<(string goodsTypeName, float amount)>(storages);
+            Storages = storages.Storages.Select(s => (goodsTypeName: s.Goods.DisplayName, amount: s.GoodsTank.Volume)).ToList();
         }
     }
 }

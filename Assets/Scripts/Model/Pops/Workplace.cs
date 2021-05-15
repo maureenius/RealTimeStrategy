@@ -3,19 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Model.Goods;
 using Model.Race;
-using Model.Town.Building;
 using Model.Util;
 
 #nullable enable
 
-namespace Model.Town
+namespace Model.Pops
 {
-    public interface IWorkplace : INamed, IHasProduceAbility, IHasConsumptionTrait
-    {
-        public Guid Id { get; }
-    }
-    
-    public class Workplace : IWorkplace
+    public class Workplace : INamed
     {
         public Guid Id { get; }
         public string SystemName { get; }

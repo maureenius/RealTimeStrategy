@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Database;
+using Model.Pops;
 
 #nullable enable
 
@@ -14,7 +15,7 @@ namespace Model.Town.Building {
         public string DisplayName { get; }
 
         public IEnumerable<TerrainName> BuildableTerrainTypes { get; }
-        public IEnumerable<IWorkplace> Workplaces { get; }
+        public IEnumerable<Workplace> Workplaces { get; }
 
         public SimpleProducer(BuildingData data) {
             BuildingData baseData = data;
@@ -25,7 +26,6 @@ namespace Model.Town.Building {
             BuildableTerrainTypes = new List<TerrainName>(baseData.BuildableTerrains);
             Workplaces = Enumerable.Range(0, baseData.Workplace.count)
                 .Select(index => new Workplace(baseData.Workplace.Workplace))
-                .Cast<IWorkplace>()
                 .ToList();
         }
 

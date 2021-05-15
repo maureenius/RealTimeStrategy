@@ -43,6 +43,6 @@ namespace Presenter
         private static TownOutlineData GetTownOutlineData(TownEntity entity) =>
             new TownOutlineData(entity.TownName,
                 entity.TownType.GetDescription(),
-                entity.GetStoredProducts());
+                entity.Storages);
     }
 }
