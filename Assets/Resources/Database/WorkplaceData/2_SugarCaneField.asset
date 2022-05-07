@@ -9,14 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c40a42367c484295885dd8914848f7d1, type: 3}
+  m_Script: {fileID: 11500000, guid: 1d8b28f35efd40fbb295cd987af81820, type: 3}
   m_Name: 2_SugarCaneField
   m_EditorClassIdentifier: 
   name: SugarCaneField
-  buildingName: 1
-  displayName: "\u3055\u3068\u3046\u304D\u3073\u7551"
   id: 2
-  buildableTerrains: 00000000
-  workplace:
-    workplace: {fileID: 11400000, guid: 95516d1287758304e92ca40913e4e534, type: 2}
-    count: 2
+  displayName: 
+  products:
+  - goods: {fileID: 11400000, guid: e4ff138b730fb3443a6677691fb0a6ff, type: 2}
+    amount: 1
+  consumptions: []
